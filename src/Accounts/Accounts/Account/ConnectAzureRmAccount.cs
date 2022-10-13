@@ -44,6 +44,7 @@ using Microsoft.WindowsAzure.Commands.Common;
 using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 using Microsoft.WindowsAzure.Commands.Common.Utilities;
 using Microsoft.WindowsAzure.Commands.Utilities.Common;
+using Microsoft.Azure.PowerShell.Common.Share.Survey;
 
 namespace Microsoft.Azure.Commands.Profile
 {
@@ -670,7 +671,7 @@ namespace Microsoft.Azure.Commands.Profile
             try
             {
 #endif
-                AzureSessionInitializer.InitializeAzureSession();
+                AzureSessionInitializer.InitializeAzureSession(WriteInitializationWarnings);
                 AzureSessionInitializer.MigrateAdalCache(AzureSession.Instance, GetAzureContextContainer, WriteInitializationWarnings);
 #if DEBUG
                 if (!TestMockSupport.RunningMocked)
@@ -680,7 +681,7 @@ namespace Microsoft.Azure.Commands.Profile
 #if DEBUG
                 }
 #endif
-
+                SurveyHelper.GetInstance().updateSurveyHelper(AzureSession.Instance.ExtendedProperties["InstallationId"]);
                 var autoSaveEnabled = AzureSession.Instance.ARMContextSaveMode == ContextSaveMode.CurrentUser;
                 var autosaveVariable = System.Environment.GetEnvironmentVariable(AzureProfileConstants.AzureAutosaveVariable);
 

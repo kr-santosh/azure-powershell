@@ -215,6 +215,13 @@ namespace Microsoft.Azure.Commands.Compute.Automation
         [ResourceIdCompleter("Microsoft.Compute galleries/images/versions")]
         public string ImageReferenceId { get; set; }
 
+        [Parameter(
+            Mandatory = false,
+            ParameterSetName = SimpleParameterSet,
+            HelpMessage = "Specifies the disk controller type configured for the VM and VirtualMachineScaleSet. This property is only supported for virtual machines whose operating system disk and VM sku supports Generation 2 (https://docs.microsoft.com/en-us/azure/virtual-machines/generation-2), please check the HyperVGenerations capability returned as part of VM sku capabilities in the response of Microsoft.Compute SKUs api for the region contains V2 (https://docs.microsoft.com/rest/api/compute/resourceskus/list) . <br> For more information about Disk Controller Types supported please refer to https://aka.ms/azure-diskcontrollertypes.")]
+        [PSArgumentCompleter("SCSI", "NVMe")]
+        public string DiskControllerType { get; set; }
+
         const int FirstPortRangeStart = 50000;
 
         sealed class Parameters : IParameters<VirtualMachineScaleSet>
@@ -407,7 +414,8 @@ namespace Microsoft.Azure.Commands.Compute.Automation
                     capacityReservationId: _cmdlet.IsParameterBound(c => c.CapacityReservationGroupId) ? _cmdlet.CapacityReservationGroupId : null,
                     userData: _cmdlet.IsParameterBound(c => c.UserData) ? _cmdlet.UserData : null,
                     imageReferenceId: _cmdlet.IsParameterBound(c => c.ImageReferenceId) ? _cmdlet.ImageReferenceId : null,
-                    auxAuthHeader: auxAuthHeader
+                    auxAuthHeader: auxAuthHeader,
+                    diskControllerType: _cmdlet.DiskControllerType
                     );
             }
 
@@ -539,10 +547,6 @@ namespace Microsoft.Azure.Commands.Compute.Automation
                 {
                     throw new Exception("UpgradePolicy is not currently supported for a VMSS with OrchestrationMode set to Flexible.");
                 }
-                else if (_cmdlet.SinglePlacementGroup == true)
-                {
-                    throw new Exception("The value provided for singlePlacementGroup cannot be used for a VMSS with OrchestrationMode set to Flexible. Please use SinglePlacementGroup 'false' instead.");
-                }
             }
         }
 
@@ -633,9 +637,9 @@ namespace Microsoft.Azure.Commands.Compute.Automation
                            ResourceIdentityType.SystemAssigned :
                            (SystemAssignedIdentity.IsPresent ? ResourceIdentityType.SystemAssignedUserAssigned : ResourceIdentityType.UserAssigned),
                     UserAssignedIdentities = isUserAssignedEnabled 
-                                             ? new Dictionary<string, VirtualMachineScaleSetIdentityUserAssignedIdentitiesValue>()
+                                             ? new Dictionary<string, UserAssignedIdentitiesValue>()
                                              {
-                                                 { UserAssignedIdentity, new VirtualMachineScaleSetIdentityUserAssignedIdentitiesValue()}
+                                                 { UserAssignedIdentity, new UserAssignedIdentitiesValue()}
                                              }
                                              : null,
                 }

@@ -46,6 +46,9 @@ Invoke-AzVMRunCommand -ResourceGroupName 'rgname' -VMName 'vmname' -CommandId 'R
 Invoke a run command 'RunPowerShellScript' with overriding the script 'sample.ps1' on a Windows VM named 'vmname' in resource group 'rgname'. Var1 and var2 are defined as parameters in the sample.ps1. Parameter value can be string type only and script is responsible for converting them to other types if needed. 
 
 ### Example 2: Invoke a command on Linux
+<!-- Skip: Output cannot be splitted from code -->
+
+
 ```powershell
 export param1=var1 param2=var2
 set -- var1 var2 var3
@@ -167,7 +170,7 @@ Accept wildcard characters: False
 ```
 
 ### -ScriptString
-{{ Fill ScriptString Description }}
+The script to be executed as a string.
 
 ```yaml
 Type: System.String

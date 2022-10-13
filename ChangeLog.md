@@ -1,3 +1,639 @@
+## 9.0.0 - October 2022
+#### Az.Accounts
+* Upgraded Azure.Core to 1.25.0 and Azure.Identity to 1.6.1
+* Upgraded Microsoft.Identity.Client to 4.46.2 and Microsoft.Identity.Client.Extensions.Msal to 2.23.0
+* Upgraded Microsoft.ApplicationInsights to 2.13.1
+* [Breaking Change] Changed target framework of AuthenticationAssemblyLoadContext to netcoreapp3.1.
+* [Breaking Change] Removed built-in environment of Azure Germany
+* Supported tenant domain as input while using 'Connect-AzAccount' with parameter 'Tenant'. [#19471]
+* Used the ArgumentCompleter attribute to replace the dynamic parameters of 'Get-AzContext'. [#18041]
+* Fixed issue that module cannot be imported when required file is locked [#19624]
+
+#### Az.Advisor
+* Bumped API version to 2020-01-01
+
+#### Az.Aks
+* [Breaking Change] Removed the alias 'Install-AzAksKubectl' of 'Install-AzAksCliTool'.
+
+#### Az.ApiManagement
+* [Breaking Change] Changed the type of parameter 'Sku' from Enum to String in 'Add-AzApiManagementRegion', 'New-AzApiManagement' and 'Update-AzApiManagementRegion'.
+
+#### Az.Attestation
+* [Breaking Change] Replaced 'New/Remove/Get-AzAttestation' with 'New/Remove/Get-AzAttestationProvider'
+* Added 'Get-AzAttestationDefaultProvider' and 'Update-AzAttestationProvider'
+* Upgraded API version from 2018-09-01-preview to 2020-10-01
+
+#### Az.Automation
+* Added cmdlets 'Remove-AzAutomationHybridRunbookWorker', 'Remove-AzAutomationHybridRunbookWorkerGroup', 'Set-AzAutomationHybridRunbookWorkerGroup', 'Get-AzAutomationHybridRunbookWorker', 'Get-AzAutomationHybridRunbookWorkerGroup', 'Move-AzAutomationHybridRunbookWorker', 'New-AzAutomationHybridRunbookWorker', 'New-AzAutomationHybridRunbookWorkerGroup' for Hybrid Runbook Worker group management.
+
+#### Az.Compute
+* Added the 'TimeCreated' property to the Virtual Machine and Virtual Machine Scale Set models.
+* Added Confidential VM functionality to multiple cmdlets.
+  * Added new parameter 'SecureVMDiskEncryptionSet' to cmdlet 'Set-AzDiskSecurityProfile'.
+  * Added new parameters 'SecureVMDiskEncryptionSet' and 'SecurityEncryptionType' to cmdlet 'Set-AzVMOSDisk'.
+* Improved cmdlet descriptions and parameter descriptions for VM/VMSS creation.
+* Added the 'BaseRegularPriorityCount' integer property to the following cmdlets: 'New-AzVmssConfig' and 'Update-AzVmssConfig'
+* Added the 'RegularPriorityPercentage' integer property to the following cmdlets: 'New-AzVmssConfig' and 'Update-AzVmssConfig'
+* Added Breaking Changes for Add-AzVMAdditionalUnattendContent and Get-AzGallery cmdlets
+* Added '-DiskControllerType' property to the following cmdlets: 'New-AzVm', 'New-AzVmss', 'New-AzVmConfig', 'Set-AzVmssStorageProfile'
+
+#### Az.Databricks
+* Upgraded API version to 2022-04-01-preview
+* Modified description of 'EnableNoPublicIP' parameter in the 'New-AzDatabricksWorkspace'. [#14381]
+
+#### Az.DataFactory
+* Updated ADF .Net SDK version to 6.4.0
+
+#### Az.EventGrid
+* Add remaining advanced filters
+  * StringNotContains
+  * StringNotBeginsWith
+  * StringNotEndsWith
+  * NumberInRange
+  * NumberNotInRange
+  * IsNullOrUndefined
+  * IsNotNull
+
+#### Az.EventHub
+* Most cmdlets in Az.EventHub module have been migrated to a new format and would witness breaking changes. Please refer our migration guide https://go.microsoft.com/fwlink/?linkid=2204690 to know breaking changes in detail.
+
+#### Az.Functions
+* Enabled support to create Node 18 Preview and Java 17 Preview function apps (fixes issues #19184 and #18925)
+* Removed the logic that checks for AzureGermanCloud in the cloud endpoints (fixes issue #19667)
+* Hided generated unused cmdlets (fixes #16666)
+
+#### Az.KeyVault
+* Fixed the exception content swallowed issue when exception.Response is null [#19531]
+* Added the existing parameters 'Exportable', 'Immutable', 'UseDefaultCVMPolicy', and 'ReleasePolicyPath'
+  to the parameter sets 'InteractiveCreate', 'InputObjectCreate', and 'ResourceIdCreate'.
+
+#### Az.MarketplaceOrdering
+* Upgraded API version to 2021-01-01.
+
+#### Az.Migrate
+* Updated ApiVersion to 2022-05-01
+* Added support for pause and resume
+  * 'Suspend-AzMigrateServerReplication'
+  * 'Resume-AzMigrateServerReplication'
+* [Breaking Change] Removed unless cmdlets
+  * 'Get-AzMigrateReplicationEligibilityResult'
+  * 'Get-AzMigrateReplicationProtectionIntent'
+  * 'Get-AzMigrateReplicationVaultSetting'
+  * 'Get-AzMigrateSupportedOperatingSystem'
+  * 'New-AzMigrateReplicationProtectionIntent'
+  * 'New-AzMigrateReplicationVaultSetting'
+
+#### Az.Monitor
+* [Breaking Change] Upgraded API version for ActivityLogAlert from 2017-04-01 to 2020-10-01, affected cmdlets:
+  * 'Get-AzActivityLogAlert'
+  * 'Remove-AzActivityLogAlert'
+  * 'Set-AzActivityLogAlert' replaced by 'New-AzActivityLogAlert'
+  * 'Disable-AzActivityLogAlert' replaced by 'Update-AzActivityLogAlert'
+  * 'Enable-AzActivityLogAlert' replaced by 'Update-AzActivityLogAlert'
+  * 'New-AzActionGroup' replaced by 'New-AzActivityLogAlertActionGroupObject'
+* [Breaking Change] Upgraded API version for DiagnosticSetting from 2017-05-01-preview to 2021-05-01-preview
+  * 'Get-AzDiagnosticSettingCategory'
+  * 'Get-AzDiagnosticSetting'
+  * 'New-AzDiagnosticSetting'
+  * 'Remove-AzDiagnosticSetting'
+  * 'Set-AzDiagnosticSetting' replaced by 'New-AzDiagnosticSetting'
+  * 'New-AzDiagnosticDetailSetting' replaced by 'New-AzDiagnosticSettingLogSettingsObject' and 'New-AzDiagnosticSettingMetricSettingsObject'
+  * 'Get-AzSubscriptionDiagnosticSettingCategory' replaced by 'Get-AzEventCategory'
+* [Breaking Change] Upgraded API version for Autoscale from 2015-04-01 to 2022-10-01
+  * 'Get-AzAutoscaleSetting' 
+  * 'Remove-AzAutoscaleSetting'
+  * 'Add-AzAutoscaleSetting' replaced by 'New-AzAutoscaleSetting'
+  * 'New-AzAutoscaleNotification' replaced by 'New-AzAutoscaleNotificationObject'
+  * 'New-AzAutoscaleProfile' replaced by 'New-AzAutoscaleProfileObject'
+  * 'New-AzAutoscaleRule' replaced by 'New-AzAutoscaleScaleRuleObject'
+  * 'New-AzAutoscaleWebhook' replaced by 'New-AzAutoscaleWebhookNotificationObject'
+* [Breaking Change] Upgraded API version for ScheduledQueryRule from 2018-04-16 to 2021-08-01
+  * 'Get-AzScheduledQueryRule'
+  * 'New-AzScheduledQueryRuleAlertingAction'
+  * 'New-AzScheduledQueryRuleAznActionGroup'
+  * 'New-AzScheduledQueryRule'
+  * 'New-AzScheduledQueryRuleLogMetricTrigger'
+  * 'New-AzScheduledQueryRuleSchedule'
+  * 'New-AzScheduledQueryRuleSource'
+  * 'New-AzScheduledQueryRuleTriggerCondition'
+  * 'Remove-AzScheduledQueryRule'
+  * 'Set-AzScheduledQueryRule'
+  * 'Update-AzScheduledQueryRule'
+
+#### Az.MySql
+* Added 'PublicNetworkAccess' to 'Update-AzMySqlServer' [#19189]
+
+#### Az.Network
+* Added a new endpoint switch 'AzureArcVM' in 'New-AzNetworkWatcherConnectionMonitor'
+* Updated 'New-AzVirtualNetworkGatewayConnection' to support bypassing the ExpressRoute gateway when accessing private-links
+* Updated 'Update-AzCustomIpPrefix' to support no-internet advertise CustomIpPrefix
+* Updated 'New-AzNetworkInterface' to support create/update nic with DisableTcpStateTracking property
+* Updated cmdlet to support specifying a VirtualRouterAsn on Virtual Hub
+  * 'New-AzVirtualHub'
+  * 'Update-AzVirtualHub'
+* Updated cmdlet to support specifying an ASN on VPN Gateway
+  * 'New-AzVpnGateway'
+  * 'Update-AzVpnGateway'
+* Updated 'New-AzRoutingConfiguration' to support bypassing NVA for spoke vNet traffic
+* Updated 'Update-AzCustomIpPrefix' to support new parameters: Asn, Geo, ExpressRouteAdvertise
+* Updated cmdlets to enable verification on client certificate revocation by using a new property VerifyClientRevocation in ApplicationGatewayClientAuthConfiguration
+  * 'New-AzApplicationGatewayClientAuthConfiguration'
+  * 'Set-AzApplicationGatewayClientAuthConfiguration'
+* Updated 'New-AzCustomIpPrefix' to support IPv4 Parent/Child CustomIpPrefix creation.
+* Added Uppercase Transform in New-AzApplicationGatewayFirewallCondition
+* Added DdosProtectionMode parameter in New-AzPublicIpAddress
+* Added ProbeThreshold parameter to Load Balancer Probe
+  * 'Add-AzLoadBalancerProbeConfig'
+  * 'New-AzLoadBalancerProbeConfig'
+  * 'Set-AzLoadBalancerProbeConfig'
+* Updated 'New-AzApplicationGatewayFirewallPolicyManagedRuleOverride' to support specifying an action for a managed rule override in Application Gateway WAF Policy
+* Added breaking change enum values/notification for the following network manager cmdlets
+  * 'Deploy-AzNetworkManagerCommit'
+  * 'New-AzNetworkManagerConnectivityConfiguration'
+  * 'New-AzNetworkManagerConnectivityGroupItem'
+  * 'New-AzNetworkManagerSecurityAdminRule'
+  * 'New-AzNetworkManagerSecurityAdminConfiguration'
+  * 'New-AzNetworkManagerAddressPrefixItem'
+  * 'New-AzNetworkManager'
+* Added 'EnableUDPLogOptimization' parameter to 'New-AzFirewall'
+* Fixed a bug that does not return HubIPAddresses and PrivateIPAddress during a Get-AzFirewall command
+* Replaced 'IdentifyTopFatFlow' parameter with 'EnableFatFlowLogging' parameter to 'New-AzFirewall'
+* Fixed a bug not able to add MSSQL application rules to an AZURE FIREWALL POLICY
+* Onboard Project AzureML Registries to Private Link Common Cmdlets
+
+#### Az.RecoveryServices
+* [Breaking Change] Added fix for Enable-AzRecoveryServicesBackupProtection cmdlet. Resolved the null refrence issue by making policy a mandatory parameter.
+* [Breaking Change] Removed status filter from Get-AzRecoveryServicesBackupContainer command
+* Added SubTasks Duration for IaasVM job
+
+#### Az.Resources
+* Removed unused reference to resource identifier in role assignment create cmdlet
+* Exposed parameter '-Count' for 'Get-AzADApplication', 'Get-AzADServicePrincipal', 'Get-AzADGroup' [#19476] 
+
+#### Az.SecurityInsights
+* Changed 'Az.SecurityInsights' to autorest-based module
+
+#### Az.ServiceBus
+* Most cmdlets in Az.ServiceBus module have been migrated to a new format and would witness breaking changes. Please refer our migration guide https://go.microsoft.com/fwlink/?linkid=2204584 to know breaking changes in detail.
+
+#### Az.Sql
+* Added new fields to the 'Get-AzSqlInstanceDatabaseLogReplay' cmdlet
+* Improved error handling in the 'Stop-AzSqlInstanceDatabaseLogReplay' cmdlet
+* Added StorageContainerIdentity parameter in the 'Start-AzSqlInstanceDatabaseLogReplay' cmdlet
+* Removed the following cmdlets: 'Clear-AzSqlServerAdvancedThreatProtectionSetting' and 'Clear-AzSqlDatabaseAdvancedThreatProtectionSetting'
+* Added the following cmdlets: 'Get-AzSqlInstanceDatabaseAdvancedThreatProtectionSetting', 'Get-AzSqlInstanceAdvancedThreatProtectionSetting', 'Update-AzSqlInstanceDatabaseAdvancedThreatProtectionSetting' and 'Update-AzSqlInstanceAdvancedThreatProtectionSetting'
+* Removed the following aliases: 'Enable-AzSqlServerAdvancedThreatProtection', 'Disable-AzSqlServerAdvancedThreatProtection', 'Get-AzSqlServerThreatDetectionSetting', 'Remove-AzSqlServerThreatDetectionSetting', 'Set-AzSqlServerThreatDetectionSetting', 'Get-AzSqlDatabaseThreatDetectionSetting', 'Set-AzSqlDatabaseThreatDetectionSetting' and 'Remove-AzSqlDatabaseThreatDetectionSetting'
+* Changed the returned object for the following cmdlets: 'Get-AzSqlServerAdvancedThreatProtectionSetting' and 'Get-AzSqlDatabaseAdvancedThreatProtectionSetting'
+* Changed the parameters for the following cmdlets: 'Update-AzSqlServerAdvancedThreatProtectionSetting' and 'Update-AzSqlDatabaseAdvancedThreatProtectionSetting'. Only 'Enable' parameter is now supported.
+* Changed endpoint used in SQL Server and SQL Instance from AD Graph to MS Graph
+
+#### Az.StackHCI
+* Made GraphAccessToken parameter obsolete in Register-AzStackHCI, Unregister-AzStackHCI and Set-AzStackHCI cmdlets. This is because Az.StackHCI module does not depend on Azure AD anymore.
+* Include API version for all Microsoft.AzStackHCI related AZ-Resource calls
+
+#### Az.Storage
+* Migrated following Azure File dataplane cmdlets from 'Microsoft.Azure.Storage.File 11.2.2' to 'Azure.Storage.Files.Shares 12.10.0'
+  * 'Get-AzStorageFile'
+  * 'Get-AzStorageFileCopyState'
+  * 'Get-AzStorageShare'
+  * 'Get-AzStorageShareStoredAccessPolicy'
+  * 'New-AzStorageDirectory'
+  * 'New-AzStorageFileSasToken'
+  * 'New-AzStorageShare'
+  * 'New-AzStorageShareSasToken'
+  * 'New-AzStorageShareStoredAccessPolicy'
+  * 'Remove-AzStorageDirectory'
+  * 'Remove-AzStorageFile'
+  * 'Remove-AzStorageShare'
+  * 'Remove-AzStorageShareStoredAccessPolicy'
+  * 'Set-AzStorageShareQuota'
+  * 'Set-AzStorageShareStoredAccessPolicy'
+  * 'Start-AzStorageFileCopy'
+  * 'Stop-AzStorageFileCopy'
+* Migrated Get/List blob to always use 'Azure.Storage.Blobs'
+  * 'Get-AzStorageBlob'
+* Fix create file sas failure with file object pipeline
+  * 'New-AzStorageFileSasToken'
+
+#### Az.Synapse
+* [Breaking Change] Updated models of Synapse Link for Azure Sql Database
+* Updated 'New-AzSynapseWorkspace' and 'Update-AzSynapseWorkspace' to support for user assigned managed identity (UAMI) by '-UserAssignedIdentityAction' and '-UserAssignedIdentityId'
+* Added EnablePublicNetworkAccess parameter to 'New-AzureSynapseWorkspace' and 'Update-AzSynapseWorkspace'
+
+### Thanks to our community contributors
+* Aliaksei Venski (@AliakseiVenski), Update New-AzServiceBusAuthorizationRuleSASToken.md (#19521)
+* Jason (@moo2u2), Fixed multiple hostnames param for app gateway http listener (#19451)
+* Jan-Hendrik Peters [MSFT] (@nyanhp), [Connect-AzConnectedMachine] Fixes error with return value processing (#19542)
+* @rahulbissa2727, PS changes for Uppercase Transform (#19546)
+
+## 8.3.0 - September 2022
+#### Az.Accounts
+* Supported returning all subscriptions with specified name while using 'Get-AzSubscription' with parameter 'SubscriptionName'. [#19295]
+* Fixed null reference exception when cmdlet uses AzureRestOperation [#18104]
+* Updated survey message and settings
+
+#### Az.Aks
+* Added support of 'FQDN' in 'Import-AzAksCredential' [#17711]
+* Added hint when 'Import-AzAksCredential' meets bad formatted kubernetes configuration file [#16741]
+* Added parameter '-NodeResourceGroup' for 'New-AzAksCluster'. [#19014]
+* Added support for 'Auto Upgrade' in 'New-AzAksCluster' and 'Set-AzAksCluster'.
+* Added support for 'Http Proxy' in 'New-AzAksCluster' and 'Set-AzAksCluster'.
+* Added parameter 'DisableLocalAccount' and 'DiskEncryptionSetID' in 'New-AzAksCluster' and 'Set-AzAksCluster'.
+* Added logic for installing 'kubelogin' in 'Install-AzAksKubectl'.
+
+#### Az.ApiManagement
+* Added warning message for upcoming breaking change: changed the type of parameter Sku from Enum to String
+* Supported GraphQL Specification Format
+
+#### Az.AppConfiguration
+* Added cmdlets 'Get-AzAppConfigurationDeletedStore' and 'Clear-AzAppConfigurationDeletedStore'
+* Updated ApiVersion to 2022-05-01.
+
+#### Az.Automation
+* Fixed bug: Export-AzAutomationRunbook no longer adds extra '\' to file names [#11101]
+* Fixed bug: Get-AzAutomationDscCompilationJobOutput returns complete summaries [#12322]
+* Fixed bug: Get-AzAutomationDscNode [#10404]
+* Fixed bug: Get-AzAutomationJob fails for some jobIds
+
+#### Az.Batch
+* Fixed a bug wherein creating a new JobSchedule does not properly submit Output Files.
+
+#### Az.Compute
+* Added Trusted Launch Generic Breaking Change warning for 'New-AzVM', 'New-AzDisk' and 'New-AzVMSS' cmdlets.
+* 'Get-AzVMRunCommand' now shows all the properties of VMRunCommand in a list format.
+* Added new Parameter '-PublicIpSku' to the 'NewAzVM' cmdlet with acceptable values : 'Basic' and 'Standard'. 
+* Added Generic Breaking Change PublicIpSku Warning and Overridden '-Zone' logic when '-PublicIpSku' is explicitly provided.
+* Added Disk Delete Optional parameters 'OsDisk Deletion Option' and 'Delete Option' to the 'Set-AzVmssStorageProfile' (OS Disk) and 'Add-AzVmssDataDisk' (Data Disk)
+* Improved printed output for 'Get-AzComputeResourceSku'
+* Updated 'Update-AzVm' to give constructive error messages when empty variables are passed in parameters. [#15081]
+* Added 'Zone' and 'IntentVMSizeList' optional parameters to the cmdlet 'New-AzProximityPlacementGroup'.
+* Added parameters to Gallery cmdlets for Community Galleries
+* For 'New-AzGalleryImageVersion', 'CVMEncryptionType' and 'CVMDiskEncryptionSetID' added as keys for parameter '-Target'.
+
+#### Az.DesktopVirtualization
+* Corrected parameter description of '-Force' in 'Remove-AzWvdUserSession'.
+
+#### Az.EventGrid
+* Updated to use the 2021-12-01 API version.
+* Added new features:
+    - System topic
+    - System topic event subscription
+    - System topic event subscription delivery attributes
+* Updated cmdlets:
+    - 'New-AzEventGridDomain':
+        - Add new optional parameters to support auto creation of topic with first subscription.
+        - Add new optional parameters to support auto deletion of topic with last subscription.
+        - Add optional parameters to support azure managed identity
+    - 'New-AzEventGridTopic'/'Update-AzEventGridTopic' :
+        - Add optional parameters to support azure managed identity
+    - 'New-AzEventGridSubscription '/'Update-AzEventGridSubscription ':
+        - Add new optional parameters to support advanced filtering on arrays.
+        - Add new optional parameters to support delivery attribute mapping.
+        - Add new optional parameters to support storage queue message ttl.
+
+#### Az.EventHub
+* In the upcoming major breaking change release in October 2022, Az.EventHub would be migrating most cmdlets to a new format
+for a better powershell experience and as a result would witness breaking changes. Please refer our migration guide to know more https://go.microsoft.com/fwlink/?linkid=2204690.
+
+#### Az.Functions
+* Made PowerShell 7.2 the default when creating a PowerShell function app
+
+#### Az.KeyVault
+* Fixed parameter validation logic of '-UseDefaultCVMPolicy'
+* Added parameter 'ContentType' in 'Import-AzKeyVaultCertificate' to support importing pem via certificate string
+* Allowed 'DnsName' in 'New-AzKeyVaultCertificatePolicy' to accept an empty list [#18954]
+
+#### Az.MarketplaceOrdering
+* Added a warning message for an upcoming breaking change to 'Get-AzMarketplaceTerms'.
+
+#### Az.Monitor
+* Added breaking change warning messages for 
+    - 'ActivityLogAlert'
+    - 'DiagnosticSetting'
+    - 'ScheduledQueryRule'
+    - 'Autoscale'
+
+#### Az.Network
+* Added breaking change notification for 'Get-AzFirewall', 'New-AzFirewall', 'Set-AzFirewall' and 'New-AzFirewallHubIpAddress'
+
+#### Az.OperationalInsights
+* Added new cmdlets for Table resource: 'New-AzOperationalInsightsRestoreTable', 'New-AzOperationalInsightsSearchTable', 'New-AzOperationalInsightsTable','Remove-AzOperationalInsightsTable','Update-AzOperationalInsightsTable', 'Convert-AzOperationalInsightsMigrateTable'
+* Added new property 'DefaultDataCollectionRuleResourceId' to 'Set-AzOperationalInsightsWorkspace' and to 'New-AzOperationalInsightsWorkspace' cmdlets
+
+#### Az.PolicyInsights
+* Updated parameter documentation for Get-AzPolicyState 
+
+#### Az.RecoveryServices
+* Added support for Archive smart tiering for AzureVM and MSSQL workloads.
+
+#### Az.Resources
+* Fixed bug '-Password' overwrite '-PasswordProfile' in 'New-AzADUser' [#19265]
+* Exposed 'EmployeeOrgData' 'Manager' for 'Get-AzADUSer' [#18205]
+* Exposed parameter '-Count' for 'Get-AzADUser' [#16874] 
+
+#### Az.ServiceBus
+* In the upcoming major breaking change release in October 2022, Az.ServiceBus would be migrating most cmdlets to a new format
+for a better powershell experience and as a result would witness breaking changes. Please refer our migration guide to know more https://go.microsoft.com/fwlink/?linkid=2204584.
+* Added -MinimumTlsVersion to New-AzServiceBusNamespace and Set-AzServiceBusNamespace
+
+#### Az.Storage
+* Supported to create or update Storage account with Azure Files Active Directory Domain Service Kerberos Authentication
+    -  'New-AzStorageAccount'
+    -  'Set-AzStorageAccount'
+* Supported create/upgrade storage account by enable sftp and enable localuser
+    -  'New-AzStorageAccount'
+    -  'Set-AzStorageAccount'
+* Supported manage local user of a storage account
+    -  'Set-AzStorageLocalUser'
+    -  'Get-AzStorageLocalUser'
+    -  'Remove-AzStorageLocalUser'
+    -  'New-AzStorageLocalUserSshPassword'
+    -  'Get-AzStorageLocalUserKey'
+    -  'New-AzStorageLocalUserSshPublicKey'
+    -  'New-AzStorageLocalUserPermissionScope'
+* Supported soft delete DataLake Gen2 item
+    - 'Get-AzDataLakeGen2DeletedItem'
+    - 'Restore-AzDataLakeGen2DeletedItem'
+
+#### Az.Synapse
+* Updated 'New-AzSynapseSparkPool' and 'Update-AzSynapseSparkPool' to support for setting spark pool dynamic executor allocation by '-EnableDynamicExecutorAllocation'
+
+#### Az.Websites
+* Fixed 'Import-AzWebAppKeyVaultCertificate' to use certificate naming convention same as Az-CLI
+
+#### Thanks to our community contributors
+* Harshit Aggarwal (@harshit283), Onboard EnergyServices to PrivatelinkCommonCmdlets (#19271)
+* Jarrad O'Brien (@jarrad-obrien), typo (#19153)
+* sravani saluru (@sravanisaluru), Update Set-AzSynapseSqlPoolAuditSetting.md (#18839)
+
+## 8.2.0 - August 2022
+#### Az.Accounts
+* Implemented 'SupportsShouldProcess' for 'Invoke-AzRestMethod'
+* Supported giving suggestions if an Azure PowerShell command cannot be found, for example when there is a typo in command name.
+
+#### Az.Aks
+* Removed the warning messages for MSGraph migration [#18856]
+
+#### Az.Compute
+* Added parameters 'PackageFileName', 'ConfigFileName' for 'New-AzGalleryApplicationVersion' 
+
+#### Az.ConfidentialLedger
+* General availability of 'Az.ConfidentialLedger'
+
+#### Az.EventHub
+* Added -MinimumTlsVersion to New-AzEventHubNamespace and Set-AzEventHubNamespace
+* Added -SupportsScaling to New-AzEventHubCluster and Set-AzEventHubCluster to support self serve clusters
+* Deprecation warning on a few parameters in cluster cmdlets that will be deprecated in the November major release
+
+#### Az.KeyVault
+* Removed the warning messages for MSGraph migration [#18856]
+
+#### Az.Migrate
+* Fixed a cross-subscription issue
+
+#### Az.Network
+* Updated cmdlets to add new property of 'ExplicitProxy' in Azure Firewall Policy.
+    - 'New-AzFirewallPolicyExplicitProxy'
+    - 'New-AzFirewallPolicy'
+    - 'Set-AzFirewallPolicy'
+* Added new cmdlets to create packet captures for Network Watcher:
+    - 'New-AzNetworkWatcherPacketCaptureV2'
+    - 'New-AzPacketCaptureScopeConfig'
+* Added support for CustomV2 ssl policies for Application Gateway.
+    - Added 'CustomV2' to the validation set of 'PolicyType'
+    - Added 'TLSv1_3' to the validation set of 'MinProtocolVersion'
+    - Removed validation for null or empty cipher suites list since there can be empty cipher suites list for min protocol version of tls1.3
+* Network Watcher Feature Change: Added new paramenter i.e. AzureVMSS as source endpoint in ConnectionMonitor.
+    - 'New-AzNetworkWatcherConnectionMonitorEndpointObject'
+* Added 'IdentifyTopFatFlow' parameter to 'AzureFirewall'
+    - 'New-AzFirewall'
+* Enabled Azure Firewall forced tunneling by default (AzureFirewallManagementSubnet and ManagementPublicIpAddress are required) whenever basic sku firewall is created.
+    - 'New-AzFirewall'
+* Fixed bug that causes an overflow due to incorrect SNAT private ranges IP validation.
+* Added new cmdlets to create/manage L4(TCP/TLS) objects for ApplicationGateway:
+	- 'Get-AzApplicationGatewayListener'	
+	- 'New-AzApplicationGatewayListener'	
+	- 'Add-AzApplicationGatewayListener'	
+	- 'Set-AzApplicationGatewayListener'	
+	- 'Remove-AzApplicationGatewayListener'
+	- 'Get-AzApplicationGatewayBackendSetting'
+	- 'New-AzApplicationGatewayBackendSetting'
+	- 'Add-AzApplicationGatewayBackendSetting'
+	- 'Set-AzApplicationGatewayBackendSetting'
+	- 'Remove-AzApplicationGatewayBackendSetting'
+	- 'Get-AzApplicationGatewayRoutingRule'
+	- 'New-AzApplicationGatewayRoutingRule'
+	- 'Add-AzApplicationGatewayRoutingRule'
+	- 'Set-AzApplicationGatewayRoutingRule'
+	- 'Remove-AzApplicationGatewayRoutingRule'
+* Updated cmdlet to add TCP/TLS Listener , BackendSetting , RoutingRule support for  Application Gateway:
+	- 'New-AzApplicationGateway'
+* Updated cmdlets to add TCP/TLS protocol support for Application gateway Health Probe configuration:
+	- 'Set-AzApplicationGatewayProbeConfig'
+	- 'Add-AzApplicationGatewayProbeConfig'
+	- 'New-AzApplicationGatewayProbeConfig'
+* Updated cmdlets to add basic sku support on Azure Firewall and Azure Firewall Policy:
+    - 'New-AzFirewall'
+    - 'New-AzFirewallPolicy'
+    - 'Set-AzFirewallPolicy'
+* Added new cmdlets to create/manage authorization objects for ExpressRoutePort:
+    - 'Add-AzExpressRoutePortAuthorization'
+    - 'Get-AzExpressRoutePortAuthorization'
+    - 'Remove-AzExpressRoutePortAuthorization'
+* Added option parameter 'AuthorizationKey' to cmdlet 'New-AzExpressRouteCircuit' to allow creating ExpressRoute Circuit on a ExpressRoutePort with a different owner.
+* Fixed bug that can't display CustomIpPrefix in PublicIpPrefix.
+* Updated cmdlets to add new property of 'HubRoutingPreference' in VirtualHub and set property of 'PreferredRoutingGateway' deprecated .
+    - 'New-AzVirtualHub'
+    - 'Update-AzVirtualHub'
+* Added optional parameter 'AuxiliaryMode' to cmdlet 'New-AzNetworkInterface' to enable this network interface as Sirius enabled. Allowed values are None(default) and MaxConnections.
+* Multipool feature change: Updated cmdlets to add new optional property: 'ConfigurationPolicyGroups' object for associating policy groups.
+    - 'Update-AzVpnServerConfiguration'
+    - 'New-AzVpnServerConfiguration'
+* Multipool feature change: Updated cmdlets to add new optional property: 'P2SConnectionConfiguration' object for specifying multiple Connection configurations.
+    - 'Update-AzP2sVpnGateway'
+    - 'New-AzP2sVpnGateway'
+* Multipool feature change: Added new cmdlets to support CRUD of Configuration policy groups for VpnServerConfiguration.
+    - 'Get-AzVpnServerConfigurationPolicyGroup'
+    - 'New-AzVpnServerConfigurationPolicyGroup'
+    - 'Update-AzVpnServerConfigurationPolicyGroup'
+    - 'Remove-AzVpnServerConfigurationPolicyGroup'
+* Added new cmdlets for RoutingIntent child resource of VirtualHub.
+    -'Add-AzRoutingPolicy'
+    -'Get-AzRoutingPolicy'
+    -'New-AzRoutingPolicy'
+    -'Remove-AzRoutingPolicy'
+    -'Set-AzRoutingPolicy'
+    -'Get-AzRoutingIntent'
+    -'New-AzRoutingIntent'
+    -'Remove-AzRoutingIntent'
+    -'Set-AzRoutingIntent'
+* Updated cmdlets to add new option of 'HubRoutingPreference' in RouteServer.
+    - 'New-AzRouteServer'
+    - 'Update-AzRouteServer'
+* Fixed bug that can't parse CustomIpPrefixParent parameter from swagger to powershell.
+* Added 'Any' operator in New-AzApplicationGatewayFirewallCondition
+* Made properties 'ApplicationSecurityGroups' and 'IpConfigurations' for 'PrivateEndpoint' updatable in the cmdlet 'Set-AzPrivateEndpoint'
+* Onboarded Device Update for IoT Hub to Private Link Common Cmdlets
+
+#### Az.RedisEnterpriseCache
+* Upgraded API version to 2022-01-01
+
+#### Az.Resources
+* Removed the warning messages for MSGraph migration [#18856]
+* [Breaking Change] Renamed cmdlet from '{}-AzADAppFederatedIdentityCredential' to '{}-AzADAppFederatedCredential'
+* [Breaking Change] Renamed '-Id' to '-FederatedCredentialId' for
+    - 'Get-AzADAppFederatedCredential'
+    - 'Remove-AzADAppFederatedCredential'
+    - 'Update-AzADAppFederatedCredential'
+* Upgraded API version from Beta to 1.0
+
+#### Az.Sql
+* Removed the warning messages for MSGraph migration [#18856] 
+* Moved SQL Server and SQL Instance from ActiveDirectoryClient to MicrosoftGraphClient
+* Supported cross-subscription Failover Group creation using 'PartnerSubscriptionId' parameter in 'New-AzSqlDatabaseFailoverGroup' cmdlet
+
+#### Az.Storage
+* Added check for storage account sas token is secured with the storage account key.
+    -  'New-AzStorageAccountSASToken'
+* Supported Management Policy rule filter BlobIndexMatch
+    -  Added a new cmdlet 'New-AzStorageAccountManagementPolicyBlobIndexMatchObject'
+    -  Added a new parameter 'BlobIndexMatch' in 'New-AzStorageAccountManagementPolicyFilter'
+
+#### Az.Synapse
+* Set 'ResourceGroupName' as optional for 'Set-AzSynapseSqlAuditSetting' cmdlet
+* Added LastCommitId parameter to 'New-AzureSynapseGitRepositoryConfig'
+* Fixed the issue that update spark pool version fail by 'Update-AzSynapseSparkPool'
+
+#### Az.Websites
+* Fixed 'Publish-AzWebapp' to handle relative paths properly [#18028]
+
+### Thanks to our community contributors
+* Harish Karthic (@hkarthik7), Updated parameter name from `-Type` to `-SkuName` (#18882)
+* Oscar de Groot (@odegroot), Fix "save as pfx" example (#19003)
+* @shiftychris, Update New-AzApplicationGatewayFirewallPolicyManagedRuleSet.md (#18972)
+
+## 8.1.0 - July 2022
+#### Az.Accounts
+* Supported exporting and importing configurations by 'Export-AzConfig' and 'Import-AzConfig'.
+* Fixed an issue that Az.Accounts may fail to be imported in parallel PowerShell processes. [#18321] 
+* Fixed incorrect access token [#18105]
+* Upgraded version of Microsoft.Identity.Client for .NET Framework. [#18495]
+* Fixed an issue that Az.Accounts failed to be imported if multiple environment variables, which only differ by case, are set. [#18304]
+
+#### Az.Aks
+* Added parameter 'CommandContextAttachmentZip' for 'Invoke-AzAksRunCommand'. [#17454]
+* Added ManagedIdentity support for Aks[#15656].
+* Added property 'PowerState' for the output of 'Get-AzAksCluster'[#18271]
+* Updated the logic of 'Set-AzAksCluster' for parameter 'NodeImageOnly'.
+* Added parameter 'NodeImageOnly' for 'Update-AzAksNodePool'.
+* Added parameter 'AvailabilityZone' for 'New-AzAksCluster'. [#18658]
+
+#### Az.ApplicationInsights
+* Fixed parameters for Set-AzApplicationInsightsDailyCap [#18315]
+* Fixed parameter 'DocumentType' for 'New-AzApplicationInsightsContinuousExport' and 'Set-AzApplicationInsightsContinuousExport' [#18350]
+* Fixed parameter 'ResourceId' for 'Get-AzApplicationInsights' [#18707]
+
+#### Az.Compute
+* Added image alias 'Win2022AzureEditionCore'
+* Added the '-DisableIntegrityMonitoring' switch parameter to the 'New-AzVM' cmdlet. 
+  Changed the default behavior for 'New-AzVM' and 'New-AzVmss' when these conditions are met:
+  1) '-DisableIntegrityMonitoring' is not true.
+  2) 'SecurityType' on the SecurityProfile is 'TrustedLaunch'.
+  3) 'VTpmEnabled' on the SecurityProfile is true.
+  4) 'SecureBootEnabled' on the SecurityProfile is true. 
+  Now 'New-AzVM' will install the 'Guest Attestation' extension to the new VM when these conditions are met.
+  Now 'New-AzVmss' will install the 'Guest Attestation' extension to the new Vmss when these conditions are met and installed to all VM instances in the Vmss.
+* Added '-UserAssignedIdentity' and '-FederatedClientId' to the following cmdlets:
+    - 'New-AzDiskEncryptionSetConfig'
+    - 'Update-AzDiskEncryptionSet'
+* Added '-TreatFailureAsDeploymentFailure' to cmdlets 'Add-AzVmGalleryApplication' and 'Add-AzVmssGalleryApplication'
+* Removed Exceptions for when SinglePlacementGroup is set to true in 'OrchestrationMode'
+
+#### Az.CosmosDB
+* Added support for partition key and id paths to be part of client encryption policy.
+* Fixed bug related to Update-AzCosmosDBSqlContainer command on containers with Client Encryption Policy.
+
+#### Az.DataFactory
+* Updated ADF .Net SDK version to 6.3.0
+
+#### Az.EventHub
+* Added cmdlets for CRUD operations on EventHub Application Groups. The added cmdlets include,
+    -New-AzEventHubApplicationGroup
+    -Set-AzEventHubApplicationGroup
+    -Remove-AzEventHubApplicationGroup
+    -Get-AzEventHubApplicationGroup
+    -New-AzEventHubThrottlingPolicyConfig
+* Get-AzEventHubNamespace returned a maximum of 100 namespaces for list by resource groups or list by subscriptions so far. From here onwards, for resource groups and subscriptions with over a 100 namespaces, the cmdlet will return all the namespaces. You will not see a change in the cmdlet behaviour if your resource groups or subscriptions have less than a 100 namespaces.
+* Added cmdlets for manual approval of EventHubs Private Endpoint Connections. The added cmdlets include,
+    -Approve-AzEventHubPrivateEndpointConnection
+    -Deny-AzEventHubPrivateEndpointConnection
+    -Get-AzEventHubPrivateEndpointConnection
+    -Remove-AzEventHubPrivateEndpointConnection
+    -Get-AzEventHubPrivateLink
+
+#### Az.KeyVault
+* Supported importing pem certificate by 'Import-AzKeyVaultCertificate' [#18494]
+* Supported accepting rotation policy in a JSON file 
+* [Breaking Change] Changed parameter 'ExpiresIn' in 'Set-AzKeyVaultKeyRotationPolicy' from TimeSpan? to string. It must be an ISO 8601 duration like 'P30D' for 30 days.
+* [Breaking Change] Changed output properties 'ExpiresIn', 'TimeAfterCreate' and 'TimeBeforeExpiry' of 'Set-AzKeyVaultKeyRotationPolicy' and 'Get-AzKeyVaultKeyRotationPolicy' from TimeSpan? to string.
+* Supported creating/updating key with release policy in a Managed HSM
+* Removed default value for 'EnabledForDeployment', 'EnabledForTemplateDeployment', 'EnabledForDiskEncryption' and 'EnableRbacAuthorization' during the process of key vault creation
+* Changed default access policies for Key Vault secret, certificate and storage as 'All'
+
+#### Az.Network
+* Added support for CustomV2 ssl policies for Application Gateway.
+    - Added 'CustomV2' to the validation set of 'PolicyType'
+    - Added 'TLSv1_3' to the validation set of 'MinProtocolVersion'
+    - Removed validation for null or empty cipher suites list since there can be empty cipher suites list for min protocol version of tls1.3
+* [Breaking Change] Changed default value of '-PrivateEndpointNetworkPoliciesFlag' to 'Disabled' in 'Add-AzVirtualNetworkSubnetConfig' and 'New-AzVirtualNetworkSubnetConfig'
+* Fixed bugs that cannot parse virtual network encryption paramemters when updating exsiting vnet.
+
+#### Az.PowerBIEmbedded
+* Updated SKU allowed values to support A7 and A8
+
+#### Az.RecoveryServices
+* Fixed delay in long running operations [#18567]
+
+#### Az.Resources
+* Added feedback when deleting role assignments even if passthru is not used
+* Fixed relative path failure in -AsJob scenario [#18084]
+* Fixed logic of 'createtime' and 'ChangedTime' in 'Get-AzResource --ExpandProperties'. [#18206]
+* Fixed role assignment latency for 'New-AzADServicePrincipal' [#16777]
+
+#### Az.ServiceBus
+* Added cmdlets for manual approval of Service Bus Private Endpoint Connections. The added cmdlets include,
+    -Approve-AzServiceBusPrivateEndpointConnection
+    -Deny-AzServiceBusPrivateEndpointConnection
+    -Get-AzServiceBusPrivateEndpointConnection
+    -Remove-AzServiceBusPrivateEndpointConnection
+    -Get-AzServiceBusPrivateLink
+
+#### Az.ServiceFabric
+* Fixed typo in verbose log message.
+* Added Tag support for managed cluster create and update
+
+#### Az.Sql
+* Added 'GeoZone' option to 'BackupStorageRedundancy' parameter to 'New-AzSqlDatabase', 'Set-AzSqlDatabase', 'New-AzSqlDatabaseCopy', 'New-AzSqlDatabaseSecondary', and 'Restore-AzSqlDatabase' to enable create, update, copy, geo secondary and PITR support for GeoZone hyperscale databases
+* Added additional input validation to 'Stop-AzSqlInstanceDatabaseLogReplay' cmdlet to ensure the target database was created by log replay service
+* Bug fix for cmdlet 'Restore-AzSqlDatabase'. The optional property 'Tags' was not working as expected
+* Added isManagedIdentityInUse get parameter for 'Get-AzSqlServerAudit' and 'Get-AzSqlDatabaseAudit'
+* Added new cmdlet 'Set-AzSqlInstanceDatabase'
+
+#### Az.StackHCI
+* Added support to Stack HCI Cluster
+* Added support to Stack HCI Extension
+* Added support to Stack HCI Arc Settings
+
+#### Az.Storage
+* Supported BaseBlob DaysAfterCreationGreaterThan in Management Policy
+    -  'Add-AzStorageAccountManagementPolicyAction'
+
+### Thanks to our community contributors
+* @ayeshurun, Update SKU allowed values for PowerBI Embedded capacities (#18670)
+* @JulianePadrao, [SQL] fix for deprecated term (#18620)
+* @kaushik-ms, powershell changes for new ssl policies in appgw (#18287)
+* Adrian Leonhard (@NaridaL), fix typo beging -> begin in 3 files (#18391)
+
 ## 8.0.0 - May 2022
 #### Az.Accounts
 * Added a preview feature allowing user to control the following configurations by using 'Get-AzConfig', 'Update-AzConfig' and 'Clear-AzConfig':

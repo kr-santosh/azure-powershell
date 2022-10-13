@@ -19,6 +19,15 @@
 -->
 ## Upcoming Release
 
+## Version 1.3.1
+* Made GraphAccessToken parameter obsolete in Register-AzStackHCI, Unregister-AzStackHCI and Set-AzStackHCI cmdlets. This is because Az.StackHCI module does not depend on Azure AD anymore.
+* Include API version for all Microsoft.AzStackHCI related AZ-Resource calls
+
+## Version 1.3.0
+* Added support to Stack HCI Cluster
+* Added support to Stack HCI Extension
+* Added support to Stack HCI Arc Settings
+
 ## Version 1.2.0
 * Improved Registration process for Register-AzStackHCI cmdlet
     - All Azure AD related operations are now moved to HCI Cloud Services
