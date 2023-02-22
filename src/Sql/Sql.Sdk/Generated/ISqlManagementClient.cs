@@ -434,14 +434,9 @@ namespace Microsoft.Azure.Management.Sql
         IRecommendedSensitivityLabelsOperations RecommendedSensitivityLabels { get; }
 
         /// <summary>
-        /// Gets the IManagedDatabaseRestoreDetailsOperations.
+        /// Gets the IIPv6FirewallRulesOperations.
         /// </summary>
-        IManagedDatabaseRestoreDetailsOperations ManagedDatabaseRestoreDetails { get; }
-
-        /// <summary>
-        /// Gets the IManagedDatabasesOperations.
-        /// </summary>
-        IManagedDatabasesOperations ManagedDatabases { get; }
+        IIPv6FirewallRulesOperations IPv6FirewallRules { get; }
 
         /// <summary>
         /// Gets the IReplicationLinksOperations.
@@ -477,6 +472,21 @@ namespace Microsoft.Azure.Management.Sql
         /// Gets the IManagedServerDnsAliasesOperations.
         /// </summary>
         IManagedServerDnsAliasesOperations ManagedServerDnsAliases { get; }
+
+        /// <summary>
+        /// Gets the IManagedInstanceDtcsOperations.
+        /// </summary>
+        IManagedInstanceDtcsOperations ManagedInstanceDtcs { get; }
+
+        /// <summary>
+        /// Gets the IManagedDatabasesOperations.
+        /// </summary>
+        IManagedDatabasesOperations ManagedDatabases { get; }
+
+        /// <summary>
+        /// Gets the IManagedDatabaseRestoreDetailsOperations.
+        /// </summary>
+        IManagedDatabaseRestoreDetailsOperations ManagedDatabaseRestoreDetails { get; }
 
     }
 }

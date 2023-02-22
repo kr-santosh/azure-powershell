@@ -18,6 +18,17 @@
         - Additional information about change #1
 -->
 ## Upcoming Release
+* Upgraded to API version 2023-01-31.
+* Federated identity credentials GA version is available now.
+
+## Version 1.1.0
+* Supported Create/Get/Update/Remove Federated Identity Credentials on a User Assigned Managed Identity
+  * `Get-AzFederatedIdentityCredentials`
+  * `New-AzFederatedIdentityCredentials`
+  * `Remove-AzFederatedIdentityCredentials`
+  * `Update-AzFederatedIdentityCredentials`
+* Supported List Associated Resources on a User Assigned Managed Identity
+  * `Get-AzUserAssignedIdentityAssociatedResource`
 
 ## Version 1.0.0
 * General availability of `Az.ManagedServiceIdentity`

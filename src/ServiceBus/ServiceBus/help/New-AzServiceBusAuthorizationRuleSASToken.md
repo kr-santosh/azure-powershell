@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.Azure.PowerShell.Cmdlets.ServiceBus.dll-Help.xml
 Module Name: Az.ServiceBus
-online version: https://docs.microsoft.com/powershell/module/az.servicebus/new-azservicebusauthorizationrulesastoken
+online version: https://learn.microsoft.com/powershell/module/az.servicebus/new-azservicebusauthorizationrulesastoken
 schema: 2.0.0
 ---
 
@@ -39,12 +39,12 @@ $EndTime = $StartTime.AddHours(2.0)
 $SasToken = New-AzServiceBusAuthorizationRuleSASToken -AuthorizationRuleId $updatedAuthRule.Id  -KeyType Primary -ExpiryTime $EndTime
 ```
 
-Generate SAS token for the given authorixation rule for Namespace with expiry time.
+Generate SAS token for the given authorization rule for Namespace with expiry time.
 
 ## PARAMETERS
 
 ### -AuthorizationRuleId
-ARM ResourceId of the Authoraization Rule
+ARM ResourceId of the Authorization Rule
 
 ```yaml
 Type: System.String

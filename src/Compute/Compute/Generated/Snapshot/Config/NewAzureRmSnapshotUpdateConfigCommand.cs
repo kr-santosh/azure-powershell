@@ -64,7 +64,7 @@ namespace Microsoft.Azure.Commands.Compute.Automation
         [Parameter(
             Mandatory = false,
             ValueFromPipelineByPropertyName = true,
-            HelpMessage = "Specify if Disk Supports Hibernation with $true of $false")]
+            HelpMessage = "Indicates if the OS on the snapshot supports hibernation with $true or $false")]
         public bool? SupportsHibernation { get; set; }
 
 
@@ -77,6 +77,12 @@ namespace Microsoft.Azure.Commands.Compute.Automation
             Mandatory = false,
             ValueFromPipelineByPropertyName = true)]
         public KeyVaultAndSecretReference DiskEncryptionKey { get; set; }
+
+        [Parameter(
+           Mandatory = false,
+           ValueFromPipelineByPropertyName = true,
+           HelpMessage = "Sets the edge zone name. If set, the query will be routed to the specified edgezone instead of the main region.")]
+        public string EdgeZone { get; set; }
 
         [Parameter(
             Mandatory = false,
@@ -131,6 +137,9 @@ namespace Microsoft.Azure.Commands.Compute.Automation
             // Encryption
             Encryption vEncryption = null;
 
+            // ExtendedLocation
+            ExtendedLocation vExtendedLocation = null;
+
             // Sku
             SnapshotSku vSku = null;
 
@@ -143,6 +152,11 @@ namespace Microsoft.Azure.Commands.Compute.Automation
                     vEncryptionSettingsCollection = new EncryptionSettingsCollection();
                 }
                 vEncryptionSettingsCollection.Enabled = (bool) this.EncryptionSettingsEnabled;
+            }
+
+            if (this.IsParameterBound(c => c.EdgeZone))
+            {
+                vExtendedLocation = new ExtendedLocation { Name = this.EdgeZone, Type = ExtendedLocationTypes.EdgeZone };
             }
 
             if (this.IsParameterBound(c => c.DiskEncryptionKey))

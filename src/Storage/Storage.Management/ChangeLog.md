@@ -19,7 +19,41 @@
 -->
 ## Upcoming Release
 
-## Version 4.10.0
+## Version 5.4.0
+* Added a warning message for the upcoming breaking change when creating a Storage account
+    - `New-AzStorageAccount`
+* Removed the ValidateSet of StandardBlobTier parameter
+    - `Copy-AzStorageBlob`
+    - `Set-AzStorageBlobContent` 
+    - `Start-AzStorageBlobCopy`
+
+## Version 5.3.0
+* Returned ListBlobProperties in blob list result
+    - `Get-AzStorageBlob`
+* Returned AllowedCopyScope in get account result
+    - `Get-AzStorageAccount`
+
+## Version 5.2.0
+* Supported MaxPageSize, Include, and Filter parameters for listing encryption scopes 
+    - `Get-AzStorageEncryptionScope`
+* Supported excludePrefix, includeDeleted, and many new schema fields in Blob Inventory
+    - `New-AzStorageBlobInventoryPolicyRule`
+
+## Version 5.1.0
+* Supported generate DataLakeGen2 Sas token with Encryption scope
+    -  `New-AzDataLakeGen2SasToken`
+* Supported blob type conversions in sync blob copy
+    - `Copy-AzStorageBlob`
+* Supported create/upgrade storage account with Keyvault from another tenant and access Keyvault with FederatedClientId
+  * `New-AzStorageAccount`
+  * `Set-AzStorageAccount`
+* Supported find blobs in a container with a blob tag filter sql expression
+  * `Get-AzStorageBlobByTag`
+* Migrated following Azure File dataplane cmdlets from 'Microsoft.Azure.Storage.File' to 'Azure.Storage.Files.Shares'
+  * `Get-AzStorageFileHandle`
+  * `Close-AzStorageFileHandle`
+
+## Version 5.0.0
 * Migrated following Azure File dataplane cmdlets from 'Microsoft.Azure.Storage.File 11.2.2' to 'Azure.Storage.Files.Shares 12.10.0'
   * `Get-AzStorageFile`
   * `Get-AzStorageFileCopyState`

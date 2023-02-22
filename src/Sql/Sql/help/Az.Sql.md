@@ -1,7 +1,7 @@
 ---
 Module Name: Az.Sql
 Module Guid: 150d9544-6348-4373-806f-10cd0b4de4cb
-Download Help Link: https://docs.microsoft.com/powershell/module/az.sql
+Download Help Link: https://learn.microsoft.com/powershell/module/az.sql
 Help Version: 4.4.0.0
 Locale: en-US
 ---
@@ -290,6 +290,9 @@ Gets all vulnerability assessment scan record(s) associated with a given managed
 ### [Get-AzSqlInstanceDatabaseVulnerabilityAssessmentSetting](Get-AzSqlInstanceDatabaseVulnerabilityAssessmentSetting.md)
 Gets the vulnerability assessment settings of a managed database.
 
+### [Get-AzSqlInstanceDtc](Get-AzSqlInstanceDtc.md)
+Gets an Azure SQL Managed Instance DTC.
+
 ### [Get-AzSqlInstanceEndpointCertificate](Get-AzSqlInstanceEndpointCertificate.md)
 Returns information about endpoint certificates.
 
@@ -352,6 +355,9 @@ Gets or lists Azure SQL Server DNS Alias.
 
 ### [Get-AzSqlServerFirewallRule](Get-AzSqlServerFirewallRule.md)
 Gets firewall rules for a SQL Database server.
+
+### [Get-AzSqlServerIpv6FirewallRule](Get-AzSqlServerIpv6FirewallRule.md)
+Gets IPv6 firewall rules for a SQL Database server.
 
 ### [Get-AzSqlServerKeyVaultKey](Get-AzSqlServerKeyVaultKey.md)
 Gets a SQL server's Key Vault keys.
@@ -485,6 +491,9 @@ This command creates a new Azure SQL Server DNS Alias.
 ### [New-AzSqlServerFirewallRule](New-AzSqlServerFirewallRule.md)
 Creates a firewall rule for a SQL Database server.
 
+### [New-AzSqlServerIpv6FirewallRule](New-AzSqlServerIpv6FirewallRule.md)
+Creates an IPv6 firewall rule for a SQL Database server.
+
 ### [New-AzSqlServerOutboundFirewallRule](New-AzSqlServerOutboundFirewallRule.md)
 Adds the allowed FQDN to the list of outbound firewall rules and creates a new outbound firewall rule for Azure SQL Database server.
 
@@ -604,6 +613,9 @@ Removes Azure SQL Server DNS Alias.
 
 ### [Remove-AzSqlServerFirewallRule](Remove-AzSqlServerFirewallRule.md)
 Deletes a firewall rule from a SQL Database server.
+
+### [Remove-AzSqlServerIpv6FirewallRule](Remove-AzSqlServerIpv6FirewallRule.md)
+Deletes an IPv6 firewall rule from a SQL Database server.
 
 ### [Remove-AzSqlServerKeyVaultKey](Remove-AzSqlServerKeyVaultKey.md)
 Removes a Key Vault key from a SQL server.
@@ -728,6 +740,9 @@ Sets the information types and sensitivity labels of columns in the Azure SQL Ma
 ### [Set-AzSqlInstanceDatabaseVulnerabilityAssessmentRuleBaseline](Set-AzSqlInstanceDatabaseVulnerabilityAssessmentRuleBaseline.md)
 Sets the vulnerability assessment rule baseline.
 
+### [Set-AzSqlInstanceDtc](Set-AzSqlInstanceDtc.md)
+Sets properties for an Azure SQL Managed Instance DTC
+
 ### [Set-AzSqlInstancePool](Set-AzSqlInstancePool.md)
 Sets properties for an Azure SQL Instance pool.
 
@@ -754,6 +769,9 @@ Modifies the server to which Azure SQL Server DNS Alias is pointing
 
 ### [Set-AzSqlServerFirewallRule](Set-AzSqlServerFirewallRule.md)
 Modifies a firewall rule in Azure SQL Database server.
+
+### [Set-AzSqlServerIpv6FirewallRule](Set-AzSqlServerIpv6FirewallRule.md)
+Modifies an IPv6 firewall rule in Azure SQL Database server.
 
 ### [Set-AzSqlServerMSSupportAudit](Set-AzSqlServerMSSupportAudit.md)
 Changes the Microsoft support operations auditing settings of an Azure SQL server.

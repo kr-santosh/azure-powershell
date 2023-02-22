@@ -2,7 +2,7 @@
 external help file: Microsoft.Azure.PowerShell.Cmdlets.Compute.dll-Help.xml
 Module Name: Az.Compute
 ms.assetid: 8F7AF1B8-D769-452C-92CF-4486C3EB894D
-online version: https://docs.microsoft.com/powershell/module/az.compute/set-azvmosdisk
+online version: https://learn.microsoft.com/powershell/module/az.compute/set-azvmosdisk
 schema: 2.0.0
 ---
 
@@ -191,7 +191,7 @@ New-AzVM -ResourceGroupName $ResourceGroupName -Location $loc -Vm $VirtualMachin
 $vm = Get-AzVm -ResourceGroupName $ResourceGroupName -Name $vmname;
 
 # Verify the SecurityEncryptionType value on the disk.
-# $vm.StorageProfile.OsDisk.ManagedDisk.SecurityProfile.SecurityEncryptionType == 'DiskWithVMGuestState';              
+# $vm.StorageProfile.OsDisk.ManagedDisk.SecurityProfile.SecurityEncryptionType == 'DiskWithVMGuestState';
 ```
 
 ## PARAMETERS

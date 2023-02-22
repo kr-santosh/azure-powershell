@@ -3,19 +3,22 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "namespace_name": {
-      "value": "namespaceNamec1leiv"
+      "value": "namespaceNamehjil09"
+    },
+    "system_assigned_namespace_name": {
+      "value": "namespaceNamembaip3"
     },
     "standard_namespace_name": {
-      "value": "namespaceNamereiw5s"
+      "value": "namespaceNametkv0jq"
     },
     "namespaceResourceId": {
-      "value": "/subscriptions/326100e2-f69d-4268-8503-075374f62b6e/resourceGroups/resourceGroupAutorest8pghli/providers/Microsoft.ServiceBus/namespaces/namespaceNamec1leiv"
+      "value": "/subscriptions/326100e2-f69d-4268-8503-075374f62b6e/resourceGroups/resourceGroupAutorestxe2h9c/providers/Microsoft.ServiceBus/namespaces/namespaceNamehjil09"
     },
     "peName1": {
-      "value": "pe1pfd7tg"
+      "value": "pe1w0yv9t"
     },
     "peName2": {
-      "value": "pe2o9yp1q"
+      "value": "pe2otyvgf"
     }
   }
 }

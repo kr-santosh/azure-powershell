@@ -88,6 +88,8 @@ Add means to add user assigned managed identities for workspace, Remove means to
 
         public const string NodeCount = "Number of nodes to be allocated in the specified Spark pool.";
 
+        public const string IsolatedCompute = "The Isolate Compute option is only available with the XXXLarge (80 vCPU / 504 GB) node size. Enabling this option offers isolation for Apache Spark compute for untrusted services. Isolated compute costs the same as the non-isolated VM of the same size. If you expect to enable Isolated Compute for spark pool, ensure that your Synapse workspace is created in an isolated compute supported region, please refer to this document for more details: https://learn.microsoft.com/en-us/azure/synapse-analytics/spark/apache-spark-pool-configurations#isolated-compute";
+
         public const string NodeSize = "Number of core and memory to be used for nodes allocated in the specified Spark pool. This parameter must be specified when Auto-scale is disabled";
 
         public const string EnableAutoScale = "Indicates whether Auto-scale should be enabled";
@@ -114,7 +116,9 @@ Add means to add user assigned managed identities for workspace, Remove means to
 
         public const string LibraryRequirementsFilePath = "Environment configuration file (\"PIP freeze\" output).";
 
-        public const string SparkConfigPropertiesFilePath = "Spark pool properties configuration file.";
+        public const string SparkConfigPropertiesFilePath = "[Deprecated] Spark pool properties configuration file. This parameter is deprecated, please use \"-SparkConfiguration\" instead.";
+
+        public const string SparkConfigurationResource = "Apache Spark configuration. When a job is submitted to the pool, the properties specified in the selected configuration will be referenced.";
 
         public const string Batch = "Indicates Spark batch.";
 
@@ -496,6 +500,10 @@ For more information, see https://docs.microsoft.com/en-us/sql/relational-databa
         public const string EncryptionKeyName = "The workspace encryption key name.";
 
         public const string EncryptionKeyIdentifier = "Key identifier should be in the format of: https://{keyvaultname}.vault.azure.net/keys/{keyname}.";
+
+        public const string UserAssignedIdentityInEncryption = "User assigned identity resource Id used in Workspace Encryption";
+
+        public const string UseSystemAssignedIdentityInEncryption = "specifying whether to use system assigned identity in Workspace Encryption or not";
 
         public const string WorkspaceKeyName = "The name of the workspace key.";
 

@@ -19,7 +19,29 @@
 -->
 ## Upcoming Release
 
-## Version 3.12.0
+## Version 4.3.0
+* Added an optional parameter `HAReplicaCount` to `Restore-AzSqlDatabase`
+* Added new cmdlets for managed instance DTC
+    `Get-AzSqlInstanceDtc`
+    `Set-AzSqlInstanceDtc`
+* Added `TargetSubscriptionId` to `Restore-AzSqlInstanceDatabase` in order to enable cross subscription restore
+* Enabled support for UserAssignedManagedIdentity in Auditing
+* Fixed WorkspaceResourceId parameter value in `Set-AzSqlServerAudit`
+
+## Version 4.2.0
+* Added a parameter named `UseIdentity` for `Set-AzSqlServerAudit`, `Set-AzSqlDatabaseAudit`, `Set-AzSqlServerMSSupportAudit`
+* Added `IsManagedIdentityInUse` property to the output of `Get-AzSqlServerMSSupportAudit`
+* Added `PreferredEnclaveType` parameter to `New-AzSqlDatabase`, `Get-AzSqlDatabase` and `Set-AzSqlDatabase` cmdlet
+
+## Version 4.1.0
+* Added new cmdlets for CRUD operations on SQL server IPv6 Firewall rules
+      `Get-AzSqlServerIpv6FirewallRule`
+      `New-AzSqlServerIpv6FirewallRule`
+      `Remove-AzSqlServerIpv6FirewallRule`
+      `Set-AzSqlServerIpv6FirewallRule`
+* StorageContainerSasToken parameter in the `Start-AzSqlInstanceDatabaseLogReplay` cmdlet is now optional
+
+## Version 4.0.0
 * Added new fields to the `Get-AzSqlInstanceDatabaseLogReplay` cmdlet
 * Improved error handling in the `Stop-AzSqlInstanceDatabaseLogReplay` cmdlet
 * Added StorageContainerIdentity parameter in the `Start-AzSqlInstanceDatabaseLogReplay` cmdlet
