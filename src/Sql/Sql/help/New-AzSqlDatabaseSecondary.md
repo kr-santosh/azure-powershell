@@ -20,23 +20,21 @@ New-AzSqlDatabaseSecondary [-DatabaseName] <String> [-SecondaryServiceObjectiveN
  -PartnerServerName <String> [-PartnerDatabaseName <String>] [-AllowConnections <AllowConnections>] [-AsJob]
  [-LicenseType <String>] [-BackupStorageRedundancy <String>] [-SecondaryType <String>]
  [-HighAvailabilityReplicaCount <Int32>] [-ZoneRedundant] [-AssignIdentity] [-EncryptionProtector <String>]
- [-UserAssignedIdentityId <System.Collections.Generic.List`1[System.String]>]
- [-KeyList <System.Collections.Generic.List`1[System.String]>] [-FederatedClientId <Guid>]
- [-ServerName] <String> [-ResourceGroupName] <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-UserAssignedIdentityId <String[]>] [-KeyList <String[]>] [-FederatedClientId <Guid>]
+ [-EncryptionProtectorAutoRotation] [-ServerName] <String> [-ResourceGroupName] <String>
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### VcoreBasedDatabase
 ```
 New-AzSqlDatabaseSecondary [-DatabaseName] <String> [-Tags <Hashtable>] -PartnerResourceGroupName <String>
  -PartnerServerName <String> [-PartnerDatabaseName <String>] [-AllowConnections <AllowConnections>] [-AsJob]
- -SecondaryComputeGeneration <String> -SecondaryVCore <Int32> [-LicenseType <String>]
- [-BackupStorageRedundancy <String>] [-SecondaryType <String>] [-HighAvailabilityReplicaCount <Int32>]
- [-ZoneRedundant] [-AssignIdentity] [-EncryptionProtector <String>]
- [-UserAssignedIdentityId <System.Collections.Generic.List`1[System.String]>]
- [-KeyList <System.Collections.Generic.List`1[System.String]>] [-FederatedClientId <Guid>]
- [-ServerName] <String> [-ResourceGroupName] <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ -SecondaryComputeGeneration <String> -SecondaryVCore <Int32> [-SecondaryComputeModel <String>] [-LicenseType <String>]
+ [-AutoPauseDelayInMinutes <Int32>] [-MinimumCapacity <Double>] [-BackupStorageRedundancy <String>] [-SecondaryType <String>] [-HighAvailabilityReplicaCount <Int32>]
+ [-ZoneRedundant] [-AssignIdentity] [-EncryptionProtector <String>] [-UserAssignedIdentityId <String[]>]
+ [-KeyList <String[]>] [-FederatedClientId <Guid>] [-EncryptionProtectorAutoRotation] [-ServerName] <String>
+ [-ResourceGroupName] <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -95,10 +93,25 @@ Accept wildcard characters: False
 ```
 
 ### -AssignIdentity
-Generate and assign an Azure Active Directory Identity for this database for use with key management services like Azure KeyVault.
+Generate and assign a Microsoft Entra identity for this database for use with key management services like Azure KeyVault.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AutoPauseDelayInMinutes
+The auto pause delay in minutes for database(serverless only), -1 to opt out
+
+```yaml
+Type: System.Int32
 Parameter Sets: (All)
 Aliases:
 
@@ -170,6 +183,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -EncryptionProtectorAutoRotation
+The AKV Key Auto Rotation status
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -FederatedClientId
 The federated client id for the SQL Database. It is used for cross tenant CMK scenario.
 
@@ -204,7 +232,7 @@ Accept wildcard characters: False
 The list of AKV keys for the SQL Database copy.
 
 ```yaml
-Type: System.Collections.Generic.List`1[System.String]
+Type: System.String[]
 Parameter Sets: (All)
 Aliases:
 
@@ -222,6 +250,22 @@ The license type for the Azure Sql database.
 Type: System.String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MinimumCapacity
+The Minimal capacity that the secondary database will always have allocated, if not paused.
+For serverless Azure Sql databases only.
+
+```yaml
+Type: System.Double
+Parameter Sets: (All)
+Aliases: MinVCore, MinCapacity
 
 Required: False
 Position: Named
@@ -275,6 +319,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -PartnerSubscriptionId
+Specifies the subscription of the Azure SQL database server if it is different from the source.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ResourceGroupName
 Specifies the name of the Azure Resource Group to which this cmdlet assigns the primary database.
 
@@ -299,6 +358,21 @@ Parameter Sets: VcoreBasedDatabase
 Aliases: Family
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SecondaryComputeModel
+The compute model for Azure Sql database secondary. Serverless or Provisioned
+
+```yaml
+Type: System.String
+Parameter Sets: VcoreBasedDatabase
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -336,7 +410,7 @@ Accept wildcard characters: False
 ```
 
 ### -SecondaryType
-The secondary type of the database if it is a secondary.  Valid values are Geo and Named.
+The secondary type of the database if it is a secondary. Valid values are Geo, Named and Standby.
 
 ```yaml
 Type: System.String
@@ -401,7 +475,7 @@ Accept wildcard characters: False
 The list of user assigned identity for the SQL Database copy.
 
 ```yaml
-Type: System.Collections.Generic.List`1[System.String]
+Type: System.String[]
 Parameter Sets: (All)
 Aliases:
 

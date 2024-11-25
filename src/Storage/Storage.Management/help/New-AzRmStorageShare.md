@@ -16,14 +16,16 @@ Creates a Storage file share.
 ```
 New-AzRmStorageShare [-ResourceGroupName] <String> [-StorageAccountName] <String> -Name <String>
  [-QuotaGiB <Int32>] [-Metadata <Hashtable>] [-AccessTier <String>] [-Snapshot] [-EnabledProtocol <String>]
- [-RootSquash <String>] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-RootSquash <String>] [-DefaultProfile <IAzureContextContainer>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### AccountObject
 ```
 New-AzRmStorageShare -StorageAccount <PSStorageAccount> -Name <String> [-QuotaGiB <Int32>]
  [-Metadata <Hashtable>] [-AccessTier <String>] [-Snapshot] [-EnabledProtocol <String>] [-RootSquash <String>]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,10 +35,11 @@ The **New-AzRmStorageShare** cmdlet creates a Storage file share.
 
 ### Example 1: Create a Storage file share with Storage account name and share name, with metadata and share quota as 100 GiB.
 ```powershell
-New-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -QuotaGiB 100 -Metadata @{"tag1" = "value1"; "tag2" = "value2" } 
+New-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -QuotaGiB 100 -Metadata @{"tag1" = "value1"; "tag2" = "value2" }
 ```
+
 ```output
-   ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
+ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
 Name     QuotaGiB EnabledProtocol AccessTier Deleted Version ShareUsageBytes
 ----     -------- --------------- ---------- ------- ------- ---------------
@@ -49,8 +52,9 @@ This command creates a Storage file share with metadata and share quota as 100 G
 ```powershell
 Get-AzStorageAccount -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" | New-AzRmStorageShare -Name "myshare"
 ```
+
 ```output
-   ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
+ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
 Name     QuotaGiB EnabledProtocol AccessTier Deleted Version ShareUsageBytes
 ----     -------- --------------- ---------- ------- ------- ---------------
@@ -61,8 +65,10 @@ This command creates a Storage file share with Storage account object and share 
 
 ### Example 3: Create a Storage file share with accesstier as Hot
 <!-- Skip: Output cannot be splitted from code -->
+
+
 ```
-PS C:\>$share = New-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -AccessTier Hot
+$share = New-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -AccessTier Hot
 
    ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
@@ -75,8 +81,10 @@ This command creates a Storage file share with accesstier as Hot.
 
 ### Example 4: Create a Storage file share snapshot of an existing share
 <!-- Skip: Output cannot be splitted from code -->
+
+
 ```
-PS C:\>$shareSnapshot = New-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -Snapshot
+$shareSnapshot = New-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -Snapshot
 
    ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
@@ -89,10 +97,12 @@ This command creates a Storage file share snapshot of an existing base file shar
 
 ### Example 5: Create a Storage file share with EnabledProtocol proeprty as NFS, and RootSquash property as NoRootSquash
 <!-- Skip: Output cannot be splitted from code -->
-```
-PS C:\>$share = New-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -EnabledProtocol NFS -RootSquash NoRootSquash 
 
-PS C:\> $share
+
+```
+$share = New-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -EnabledProtocol NFS -RootSquash NoRootSquash 
+
+$share
 
    ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
@@ -100,7 +110,7 @@ Name     QuotaGiB EnabledProtocols AccessTier Deleted Version ShareUsageBytes
 ----     -------- ---------------- ---------- ------- ------- ---------------
 myshare           NFS
 
-PS C:\> $share.RootSquash
+$share.RootSquash
 NoRootSquash
 ```
 

@@ -17,14 +17,11 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
     using Common;
     using global::Azure.Storage.Files.Shares;
     using global::Azure.Storage.Files.Shares.Models;
-    using Microsoft.Azure.Storage;
-    using Microsoft.Azure.Storage.File;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Management.Automation;
     using System.Security.Permissions;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// create a new stored access policy to a specific azure share.
@@ -53,7 +50,10 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
         public DateTime? StartTime { get; set; }
 
         [Parameter(HelpMessage = "Expiry Time")]
-        public DateTime? ExpiryTime { get; set; }
+        public DateTime? ExpiryTime { get; set; }        
+        
+        // Overwrite the useless parameter
+        public override SwitchParameter DisAllowTrailingDot { get; set; }
 
         /// <summary>
         /// execute command

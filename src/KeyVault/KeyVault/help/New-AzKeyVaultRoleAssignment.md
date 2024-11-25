@@ -15,46 +15,52 @@ Assigns the specified RBAC role to the specified principal, at the specified sco
 ### DefinitionNameSignInName (Default)
 ```
 New-AzKeyVaultRoleAssignment [-HsmName] <String> [-Scope <String>] -RoleDefinitionName <String>
- -SignInName <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ -SignInName <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### DefinitionNameApplicationId
 ```
 New-AzKeyVaultRoleAssignment [-HsmName] <String> [-Scope <String>] -RoleDefinitionName <String>
- -ApplicationId <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ -ApplicationId <String> [-DefaultProfile <IAzureContextContainer>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### DefinitionNameObjectId
 ```
 New-AzKeyVaultRoleAssignment [-HsmName] <String> [-Scope <String>] -RoleDefinitionName <String>
- -ObjectId <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ -ObjectId <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### DefinitionIdApplicationId
 ```
 New-AzKeyVaultRoleAssignment [-HsmName] <String> [-Scope <String>] -RoleDefinitionId <String>
- -ApplicationId <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ -ApplicationId <String> [-DefaultProfile <IAzureContextContainer>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### DefinitionIdObjectId
 ```
 New-AzKeyVaultRoleAssignment [-HsmName] <String> [-Scope <String>] -RoleDefinitionId <String>
- -ObjectId <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ -ObjectId <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### DefinitionIdSignInName
 ```
 New-AzKeyVaultRoleAssignment [-HsmName] <String> [-Scope <String>] -RoleDefinitionId <String>
- -SignInName <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ -SignInName <String> [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 Use the `New-AzKeyVaultRoleAssignment` command to grant access.
 Access is granted by assigning the appropriate RBAC role to them at the right scope.
 The subject of the assignment must be specified.
-To specify a user, use SignInName or Azure AD ObjectId parameters.
-To specify a security group, use Azure AD ObjectId parameter.
-And to specify an Azure AD application, use ApplicationId or ObjectId parameters.
+To specify a user, use SignInName or Microsoft Entra ObjectId parameters.
+To specify a security group, use Microsoft Entra ObjectId parameter.
+And to specify a Microsoft Entra application, use ApplicationId or ObjectId parameters.
 The role that is being assigned must be specified using the RoleDefinitionName pr RoleDefinitionId parameter. The scope at which access is being granted may be specified. It defaults to the selected subscription.
 
 The cmdlet may call below Microsoft Graph API according to input parameters:

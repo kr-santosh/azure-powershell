@@ -16,13 +16,15 @@ Delete the integration runtime node.
 ```
 Remove-AzDataMigrationSqlServiceNode -ResourceGroupName <String> -SqlMigrationServiceName <String>
  [-SubscriptionId <String>] [-IntegrationRuntimeName <String>] [-NodeName <String>]
- [-DefaultProfile <PSObject>] [-PassThru] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <PSObject>] [-PassThru] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### DeleteViaIdentityExpanded
 ```
 Remove-AzDataMigrationSqlServiceNode -InputObject <IDataMigrationIdentity> [-IntegrationRuntimeName <String>]
- [-NodeName <String>] [-DefaultProfile <PSObject>] [-PassThru] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-NodeName <String>] [-DefaultProfile <PSObject>] [-PassThru] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -211,22 +213,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.PowerShell.Cmdlets.DataMigration.Models.Api20220330Preview.IDeleteNode
 
 ## NOTES
-
-ALIASES
-
-COMPLEX PARAMETER PROPERTIES
-
-To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
-
-
-`INPUTOBJECT <IDataMigrationIdentity>`: Identity Parameter
-  - `[Id <String>]`: Resource identity path
-  - `[ManagedInstanceName <String>]`: 
-  - `[ResourceGroupName <String>]`: Name of the resource group that contains the resource. You can obtain this value from the Azure Resource Manager API or the portal.
-  - `[SqlDbInstanceName <String>]`: 
-  - `[SqlMigrationServiceName <String>]`: Name of the SQL Migration Service.
-  - `[SqlVirtualMachineName <String>]`: 
-  - `[SubscriptionId <String>]`: Subscription ID that identifies an Azure subscription.
-  - `[TargetDbName <String>]`: The name of the target database.
 
 ## RELATED LINKS

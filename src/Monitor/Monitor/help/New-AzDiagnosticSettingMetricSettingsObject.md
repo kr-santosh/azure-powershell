@@ -14,7 +14,8 @@ Create an in-memory object for MetricSettings.
 
 ```
 New-AzDiagnosticSettingMetricSettingsObject -Enabled <Boolean> [-Category <String>]
- [-RetentionPolicyDay <Int32>] [-RetentionPolicyEnabled <Boolean>] [-TimeGrain <TimeSpan>] [<CommonParameters>]
+ [-RetentionPolicyDay <Int32>] [-RetentionPolicyEnabled <Boolean>] [-TimeGrain <TimeSpan>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -118,7 +119,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.PowerShell.Cmdlets.Monitor.DiagnosticSetting.Models.Api20210501Preview.MetricSettings
 
 ## NOTES
-
-ALIASES
 
 ## RELATED LINKS

@@ -93,7 +93,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         string vaultName = resourceIdentifier.ResourceName;
                         string resourceGroupName = resourceIdentifier.ResourceGroupName;
 
-                        if (Token != "" && Token != null && !this.DeleteBackupData)
+                        if (Token != "" && Token != null && !this.DeleteBackupData && RetainRecoveryPointsAsPerPolicy.IsPresent)
                         {
                             throw new ArgumentException(String.Format(Resources.DisableWithRetainBackupNotCrititcal));
                         }
@@ -116,7 +116,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         IPsBackupProvider psBackupProvider =
                             providerManager.GetProviderInstance(Item.WorkloadType,
                             Item.BackupManagementType);
-
+                         
                         if(DeleteBackupData)
                         {
                             #region Archived RPs 
@@ -125,17 +125,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                             string containerUri = HelperUtils.GetContainerUri(uriDict, Item.Id);
                             string protectedItemName = HelperUtils.GetProtectedItemUri(uriDict, Item.Id);
 
-                            ODataQuery<ServiceClientModel.BMSRPQueryObject> queryFilter = null;
+                            ODataQuery<ServiceClientModel.BmsrpQueryObject> queryFilter = null;
                             if (string.Compare(Item.BackupManagementType.ToString(), BackupManagementType.AzureWorkload.ToString()) == 0)
                             {
                                 var restorePointQueryType = "FullAndDifferential";
 
-                                string queryFilterString = QueryBuilder.Instance.GetQueryString(new ServiceClientModel.BMSRPQueryObject()
+                                string queryFilterString = QueryBuilder.Instance.GetQueryString(new ServiceClientModel.BmsrpQueryObject()
                                 {      
                                     RestorePointQueryType = restorePointQueryType,
                                     ExtendedInfo = true
                                 });
-                                queryFilter = new ODataQuery<ServiceClientModel.BMSRPQueryObject>();
+                                queryFilter = new ODataQuery<ServiceClientModel.BmsrpQueryObject>();
                                 queryFilter.Filter = queryFilterString;
                             }                            
 

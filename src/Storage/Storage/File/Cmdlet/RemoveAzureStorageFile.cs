@@ -15,8 +15,6 @@
 namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
 {
     using global::Azure.Storage.Files.Shares;
-    using Microsoft.Azure.Storage.File;
-    using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
     using Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel;
     using Microsoft.WindowsAzure.Commands.Storage.Common;
     using System.Globalization;
@@ -34,37 +32,34 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
         public string ShareName { get; set; }
 
         [Parameter(
-            Position = 0,
+            Position = 0, 
             Mandatory = true,
             ValueFromPipeline = true,
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = Constants.ShareParameterSetName,
-            HelpMessage = "CloudFileShare object indicated the share where the file would be removed.")]
+            HelpMessage = "ShareClient object indicated the share where the file would be removed.")]
         [ValidateNotNull]
-        [Alias("CloudFileShare")]
-        public CloudFileShare Share { get; set; }
+        public ShareClient ShareClient { get; set; }
 
         [Parameter(
-            Position = 0,
+            Position = 0, 
             Mandatory = true,
             ValueFromPipeline = true,
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = Constants.DirectoryParameterSetName,
-            HelpMessage = "CloudFileDirectory object indicated the cloud directory where the file would be removed.")]
+            HelpMessage = "ShareDirectoryClient object indicated the base folder where the file would be removed.")]
         [ValidateNotNull]
-        [Alias("CloudFileDirectory")]
-        public CloudFileDirectory Directory { get; set; }
+        public ShareDirectoryClient ShareDirectoryClient { get; set; }
 
         [Parameter(
-            Position = 0,
+            Position = 0, 
             Mandatory = true,
             ValueFromPipeline = true,
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = Constants.FileParameterSetName,
-            HelpMessage = "CloudFile object indicated the file to be removed.")]
+            HelpMessage = "ShareFileClient object indicated the file would be removed.")]
         [ValidateNotNull]
-        [Alias("CloudFile")]
-        public CloudFile File { get; set; }
+        public ShareFileClient ShareFileClient { get; set; }
 
         [Parameter(
             Position = 1,
@@ -93,14 +88,8 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
             switch (this.ParameterSetName)
             {
                 case Constants.FileParameterSetName:
-                    fileToBeRemoved = AzureStorageFile.GetTrack2FileClient(this.File, ClientOptions);
-
-                    // Build and set storage context for the output object when
-                    // 1. input track1 object and storage context is missing 2. the current context doesn't match the context of the input object 
-                    if (ShouldSetContext(this.Context, this.File.ServiceClient))
-                    {
-                        this.Context = GetStorageContextFromTrack1FileServiceClient(this.File.ServiceClient, DefaultContext);
-                    }
+                    CheckContextForObjectInput((AzureStorageContext)this.Context);
+                    fileToBeRemoved = this.ShareFileClient;
                     break;
 
                 case Constants.ShareNameParameterSetName:
@@ -110,25 +99,13 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
                     break;
 
                 case Constants.ShareParameterSetName:
-                    fileToBeRemoved = AzureStorageFileDirectory.GetTrack2FileDirClient(this.Share.GetRootDirectoryReference(), ClientOptions).GetFileClient(this.Path);
-
-                    // Build and set storage context for the output object when
-                    // 1. input track1 object and storage context is missing 2. the current context doesn't match the context of the input object 
-                    if (ShouldSetContext(this.Context, this.Share.ServiceClient))
-                    {
-                        this.Context = GetStorageContextFromTrack1FileServiceClient(this.Share.ServiceClient, DefaultContext);
-                    }
+                    CheckContextForObjectInput((AzureStorageContext)this.Context);
+                    fileToBeRemoved = this.ShareClient.GetRootDirectoryClient().GetFileClient(this.Path);
                     break;
 
                 case Constants.DirectoryParameterSetName:
-                    fileToBeRemoved = AzureStorageFileDirectory.GetTrack2FileDirClient(this.Directory, ClientOptions).GetFileClient(this.Path);
-
-                    // Build and set storage context for the output object when
-                    // 1. input track1 object and storage context is missing 2. the current context doesn't match the context of the input object 
-                    if (ShouldSetContext(this.Context, this.Directory.ServiceClient))
-                    {
-                        this.Context = GetStorageContextFromTrack1FileServiceClient(this.Directory.ServiceClient, DefaultContext);
-                    }
+                    CheckContextForObjectInput((AzureStorageContext)this.Context);
+                    fileToBeRemoved = this.ShareDirectoryClient.GetFileClient(this.Path);
                     break;
 
                 default:

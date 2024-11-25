@@ -14,13 +14,10 @@
 
 namespace Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel
 {
-    using Microsoft.Azure.Storage.Blob;
     using System;
     using Microsoft.WindowsAzure.Commands.Common.Attributes;
     using Microsoft.Azure.Storage.File;
-    using Microsoft.WindowsAzure.Commands.Storage;
     using global::Azure.Storage.Files.Shares;
-    using global::Azure.Storage;
     using Microsoft.WindowsAzure.Commands.Storage.Common;
     using global::Azure.Storage.Files.Shares.Models;
     using Microsoft.Azure.Storage.Auth;
@@ -30,13 +27,6 @@ namespace Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel
     /// </summary>
     public class AzureStorageFile : AzureStorageBase
     {
-        /// <summary>
-        /// File object
-        /// </summary>    
-        [Ps1Xml(Label = "Share Uri", Target = ViewControl.Table, GroupByThis = true, ScriptBlock = "$_.CloudFile.Share.Uri")]
-        [Ps1Xml(Label = "Name", Target = ViewControl.Table, ScriptBlock = "$_.Name", Position = 0, TableColumnWidth = 20)]
-        public CloudFile CloudFile { get; private set; }
-
         /// <summary>
         /// File length
         /// </summary>
@@ -56,10 +46,6 @@ namespace Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel
         {
             get
             {
-                if (privateFileClient == null)
-                {
-                    privateFileClient = GetTrack2FileClient(this.CloudFile, this.shareClientOptions);
-                }
                 return privateFileClient;
             }
         }
@@ -90,22 +76,6 @@ namespace Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel
         private ShareClientOptions shareClientOptions { get; set; }
 
         /// <summary>
-        /// Azure storage file constructor from track1 file object
-        /// </summary>
-        /// <param name="file">Cloud file object</param>
-        /// <param name="storageContext"></param>
-        /// <param name="clientOptions"></param>
-        public AzureStorageFile(CloudFile file, AzureStorageContext storageContext, ShareClientOptions clientOptions = null)
-        {
-            Name = file.Name;
-            CloudFile = file;
-            Length = file.Properties.Length;
-            LastModified = file.Properties.LastModified;
-            Context = storageContext;
-            shareClientOptions = clientOptions;
-        }
-
-        /// <summary>
         /// Azure storage file constructor from Track2 list file item
         /// </summary>
         /// <param name="shareFileClient"></param>
@@ -116,7 +86,6 @@ namespace Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel
         {
             Name = shareFileClient.Name;
             this.privateFileClient = shareFileClient;
-            CloudFile = GetTrack1FileClient(shareFileClient, storageContext.StorageAccount.Credentials);
             if (shareFileItem != null)
             {
                 ListFileProperties = shareFileItem;
@@ -144,7 +113,6 @@ namespace Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel
         {
             Name = shareFileClient.Name;
             this.privateFileClient = shareFileClient;
-            CloudFile = GetTrack1FileClient(shareFileClient, storageContext.StorageAccount.Credentials);
             if (shareFileProperties != null)
             {
                 privateFileProperties = shareFileProperties;
@@ -156,8 +124,18 @@ namespace Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel
         }
 
         // Convert Track2 File object to Track 1 file object
-        public static CloudFile GetTrack1FileClient(ShareFileClient shareFileClient, StorageCredentials credentials)
+        public static CloudFile GetTrack1FileClient(ShareFileClient shareFileClient, StorageCredentials credentials, ShareClientOptions clientOptions = null)
         {
+            // Track1 File not support Oauth
+            if (credentials.IsToken)
+            {
+                return new InvalidCloudFile(shareFileClient.Uri, credentials);
+            }
+            // Track1 File not support Trailing Dot
+            if (Util.PathContainsTrailingDot(shareFileClient.Path) && (clientOptions != null && clientOptions.AllowTrailingDot != null && clientOptions.AllowTrailingDot.Value))
+            {
+                return new InvalidCloudFile(shareFileClient.Uri, credentials);
+            }
             if (credentials.IsSAS) // the Uri already contains credentail.
             {
                 credentials = null;
@@ -165,38 +143,6 @@ namespace Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel
             CloudFile track1CloudFile;
             track1CloudFile = new CloudFile(shareFileClient.Uri, credentials);
             return track1CloudFile;
-        }
-
-        // Convert Track1 File object to Track 2 file Client
-        public static ShareFileClient GetTrack2FileClient(CloudFile cloudFile, ShareClientOptions clientOptions = null)
-        {
-            ShareFileClient fileClient;
-            if (cloudFile.ServiceClient.Credentials.IsSAS) //SAS
-            {
-                string sas = Util.GetSASStringWithoutQuestionMark(cloudFile.ServiceClient.Credentials.SASToken);
-                string fullUri = cloudFile.SnapshotQualifiedUri.ToString();
-                if (cloudFile.Share.IsSnapshot)
-                {
-                    // Since snapshot URL already has '?', need remove '?' in the first char of sas
-                    fullUri = fullUri + "&" + sas;
-                }
-                else
-                {
-                    fullUri = fullUri + "?" + sas;
-                }
-                fileClient = new ShareFileClient(new Uri(fullUri), clientOptions);
-            }
-            else if (cloudFile.ServiceClient.Credentials.IsSharedKey) //Shared Key
-            {
-                fileClient = new ShareFileClient(cloudFile.SnapshotQualifiedUri,
-                    new StorageSharedKeyCredential(cloudFile.ServiceClient.Credentials.AccountName, cloudFile.ServiceClient.Credentials.ExportBase64EncodedKey()), clientOptions);
-            }
-            else //Anonymous
-            {
-                fileClient = new ShareFileClient(cloudFile.SnapshotQualifiedUri, clientOptions);
-            }
-
-            return fileClient;
         }
     }
 }

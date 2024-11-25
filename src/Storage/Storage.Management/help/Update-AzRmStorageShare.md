@@ -16,28 +16,30 @@ Modifies a Storage file share.
 ```
 Update-AzRmStorageShare [-ResourceGroupName] <String> [-StorageAccountName] <String> -Name <String>
  [-QuotaGiB <Int32>] [-Metadata <Hashtable>] [-AccessTier <String>] [-RootSquash <String>]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### AccountObject
 ```
 Update-AzRmStorageShare -Name <String> -StorageAccount <PSStorageAccount> [-QuotaGiB <Int32>]
  [-Metadata <Hashtable>] [-AccessTier <String>] [-RootSquash <String>]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ShareResourceId
 ```
 Update-AzRmStorageShare [-ResourceId] <String> [-QuotaGiB <Int32>] [-Metadata <Hashtable>]
- [-AccessTier <String>] [-RootSquash <String>] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-AccessTier <String>] [-RootSquash <String>] [-DefaultProfile <IAzureContextContainer>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### ShareObject
 ```
 Update-AzRmStorageShare -InputObject <PSShare> [-QuotaGiB <Int32>] [-Metadata <Hashtable>]
- [-AccessTier <String>] [-RootSquash <String>] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-AccessTier <String>] [-RootSquash <String>] [-DefaultProfile <IAzureContextContainer>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -47,10 +49,12 @@ The **New-AzRmStorageShare** cmdlet modifies a Storage file share.
 
 ### Example 1: Modifies a Storage file share's metadata and share quota with Storage account name and share name
 <!-- Skip: Output cannot be splitted from code -->
-```
-PS C:\>$share = Update-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -QuotaGiB 200 -Metadata @{tag0="value0";tag1="value1"}
 
-PS C:\>$share
+
+```
+$share = Update-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -QuotaGiB 200 -Metadata @{tag0="value0";tag1="value1"}
+
+$share
 
    ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
@@ -58,7 +62,7 @@ Name     QuotaGiB EnabledProtocols AccessTier Deleted Version ShareUsageBytes
 ----     -------- ---------------- ---------- ------- ------- ---------------
 myshare  200
 
-PS C:\>$share.Metadata
+$share.Metadata
 
 Key  Value  
 ---  ----- 
@@ -82,7 +86,7 @@ Get-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "m
 ```
 
 ```output
-   ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
+ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
 Name     QuotaGiB EnabledProtocols AccessTier Deleted Version ShareUsageBytes
 ----     -------- ---------------- ---------- ------- ------- ---------------
@@ -98,7 +102,7 @@ $share = Update-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAc
 ```
 
 ```output
-   ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
+ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
 Name     QuotaGiB EnabledProtocols AccessTier Deleted Version ShareUsageBytes
 ----     -------- ---------------- ---------- ------- ------- ---------------
@@ -109,10 +113,12 @@ This command modifies a Storage file share with accesstier as Cool.
 
 ### Example 5: Modifies rootsquash for a file shares in a Storage account
 <!-- Skip: Output cannot be splitted from code -->
-```
-PS C:\>$share = Update-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -RootSquash NoRootSquash 
 
-PS C:\>$share
+
+```
+$share = Update-AzRmStorageShare -ResourceGroupName "myresourcegroup" -StorageAccountName "mystorageaccount" -Name "myshare" -RootSquash NoRootSquash 
+
+$share
 
    ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
@@ -120,7 +126,7 @@ Name     QuotaGiB EnabledProtocols AccessTier Deleted Version ShareUsageBytes
 ----     -------- ---------------- ---------- ------- ------- ---------------
 myshare  
 
-PS C:\> $share.RootSquash
+$share.RootSquash
 NoRootSquash
 ```
 

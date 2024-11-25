@@ -30,7 +30,7 @@ function Test-ExportPolicy
     $doubleUsage = 2 * $usageThreshold
     #$resourceLocation = Get-ProviderLocation "Microsoft.NetApp" "eastus" -UseCanonical
     #$resourceLocation = "eastus2euap"
-    $resourceLocation = "eastus"
+    $resourceLocation = "westus2"
 
     $subnetName = "default"
     $poolSize = 4398046511104
@@ -77,9 +77,7 @@ function Test-ExportPolicy
 
         Assert-AreEqual $retrievedVolume.ProtocolTypes[0] 'NFSv3'
         Assert-NotNull $retrievedVolume.MountTargets
-        Assert-Null $retrievedVolume.VolumeType
-        Assert-Null $retrievedVolume.DataProtection
-
+        
         # use the NFSv4.1
         $protocolTypesv4 = New-Object string[] 1
         $protocolTypesv4[0] = "NFSv4.1"

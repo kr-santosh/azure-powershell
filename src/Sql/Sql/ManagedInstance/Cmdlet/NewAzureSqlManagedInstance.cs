@@ -185,7 +185,8 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Cmdlet
             Mandatory = true,
             HelpMessage = "The SKU name for the instance e.g. 'GP_Gen4', 'BC_Gen4'.")]
         [ValidateNotNullOrEmpty]
-        [PSArgumentCompleter(Constants.GeneralPurposeGen4, Constants.GeneralPurposeGen5, Constants.BusinessCriticalGen4, Constants.BusinessCriticalGen5)]
+        [PSArgumentCompleter(Constants.GeneralPurposeGen5, Constants.GeneralPurposeG8IH, Constants.GeneralPurposeG8IM,
+                             Constants.BusinessCriticalGen5, Constants.BusinessCriticalG8IH, Constants.BusinessCriticalG8IM)]
         public string SkuName { get; set; }
 
         /// <summary>
@@ -205,7 +206,7 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Cmdlet
             Mandatory = true,
             HelpMessage = "The compute generation for the instance.")]
         [ValidateNotNullOrEmpty]
-        [PSArgumentCompleter(Constants.ComputeGenerationGen4, Constants.ComputeGenerationGen5)]
+        [PSArgumentCompleter(Constants.ComputeGenerationGen5, Constants.ComputeGenerationG8IH, Constants.ComputeGenerationG8IM)]
         public string ComputeGeneration { get; set; }
 
         /// <summary>
@@ -277,7 +278,7 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Cmdlet
         /// Gets or sets whether or not to assign identity for instance
         /// </summary>
         [Parameter(Mandatory = false,
-            HelpMessage = "Generate and assign an Azure Active Directory Identity for this instance for use with key management services like Azure KeyVault.")]
+            HelpMessage = "Generate and assign a Microsoft Entra identity for this instance for use with key management services like Azure KeyVault.")]
         public SwitchParameter AssignIdentity { get; set; }
 
         /// <summary>
@@ -376,14 +377,14 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Cmdlet
         /// Azure Active Directory display name for a user or group
         /// </summary>
         [Parameter(Mandatory = false,
-            HelpMessage = "Specifies the display name of the user, group or application which is the Azure Active Directory administrator for the server. This display name must exist in the active directory associated with the current subscription.")]
+            HelpMessage = "Specifies the display name of the user, group or application which is the Microsoft Entra administrator for the server. This display name must exist in the active directory associated with the current subscription.")]
         public string ExternalAdminName { get; set; }
 
         /// <summary>
         /// Azure Active Directory object id for a user, group or application
         /// </summary>
         [Parameter(Mandatory = false,
-            HelpMessage = "Specifies the object ID of the user, group or application which is the Azure Active Directory administrator.")]
+            HelpMessage = "Specifies the object ID of the user, group or application which is the Microsoft Entra administrator.")]
         public Guid? ExternalAdminSID { get; set; }
 
         /// <summary>
@@ -400,6 +401,51 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Cmdlet
         [ValidateSet("None", "SystemAssigned")]
         [PSArgumentCompleter("SystemAssigned", "None")]
         public string ServicePrincipalType { get; set; }
+
+        /// <summary>
+        /// Specifies the internal format of instance databases specific to the SQL engine version
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = "The instance databases specific to the SQL engine version")]
+        [PSArgumentCompleter("AlwaysUpToDate", "SQLServer2022")]
+        public string DatabaseFormat { get; set; }
+
+        /// <summary>
+        /// Specifies weather or not Managed Instance is freemium
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = "Weather or not Managed Instance is freemium")]
+        [PSArgumentCompleter("Regular", "Freemium")]
+        public string PricingModel { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether or not this is a GPv2 variant of General Purpose edition.
+        /// </summary>
+        [Parameter(Mandatory = false,
+            HelpMessage = "Whether or not this is a GPv2 variant of General Purpose edition.",
+            ParameterSetName = NewBySkuNameParameterSet)]
+        [Parameter(Mandatory = false,
+            HelpMessage = "Whether or not this is a GPv2 variant of General Purpose edition.",
+            ParameterSetName = NewByEditionAndComputeGenerationParameterSet)]
+        public bool? IsGeneralPurposeV2 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Storage IOps for instance
+        /// </summary>
+        [Parameter(Mandatory = false,
+            HelpMessage = "Determines how much Storage IOps to associate with instance.",
+            ParameterSetName = NewBySkuNameParameterSet)]
+        [Parameter(Mandatory = false,
+            HelpMessage = "Determines how much Storage IOps to associate with instance.",
+            ParameterSetName = NewByEditionAndComputeGenerationParameterSet)]
+        public int StorageIOps { get; set; }
+        
+        /// <summary>
+        /// Specifies weather or not Managed Instance is freemium
+        /// </summary>
+        [Parameter(Mandatory = false,
+            HelpMessage = "Preferred metadata to use for authentication of synced on-prem users. Default is AzureAD.")]
+        [ValidateSet("AzureAD", "Paired", "Windows")]
+        [PSArgumentCompleter("AzureAD", "Paired", "Windows")]
+        public string AuthenticationMetadata { get; set; }
 
         /// <summary>
         /// Overriding to add warning message
@@ -564,13 +610,22 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Cmdlet
                 KeyId = this.KeyId,
                 Administrators = new Management.Sql.Models.ManagedInstanceExternalAdministrator()
                 {
-                    AzureADOnlyAuthentication = (this.EnableActiveDirectoryOnlyAuthentication.IsPresent) ? (bool?)true : null,
+                    AzureAdOnlyAuthentication = (this.EnableActiveDirectoryOnlyAuthentication.IsPresent) ? (bool?)true : null,
                     Login = this.ExternalAdminName,
                     Sid = this.ExternalAdminSID
                 },
                 ZoneRedundant = this.ZoneRedundant.IsPresent ? this.ZoneRedundant.ToBool() : (bool?)null,
-                ServicePrincipal = ResourceServicePrincipalHelper.GetServicePrincipalObjectFromType(this.ServicePrincipalType ?? null)
-            }); ;
+                ServicePrincipal = ResourceServicePrincipalHelper.GetServicePrincipalObjectFromType(this.ServicePrincipalType ?? null),
+                DatabaseFormat = this.DatabaseFormat,
+                PricingModel = this.PricingModel,
+                IsGeneralPurposeV2 = this.IsGeneralPurposeV2,
+                // `-StorageIOps 0` as a parameter to this cmdlet means "use default".
+                // For non-MI database, we can just pass in 0 and the server will treat 0 as default.
+                // However this is (currently) not the case for MI. We need to convert the 0 to null
+                // here in client before sending to the server.
+                StorageIOps = SqlSkuUtils.ValueIfNonZero(this.StorageIOps),
+                AuthenticationMetadata = this.AuthenticationMetadata
+            });
             return newEntity;
         }
 

@@ -19,6 +19,85 @@
 -->
 ## Upcoming Release
 
+## Version 6.0.0
+* Added `Start-AzSqlInstanceLinkFailover` cmdlet for Managed Instance Link.
+* Updated `New-AzSqlInstanceLink` with new input parameters
+	- Added `DistributedAvailabilityGroupName`, `FailoverMode`, `InstanceLinkRole`, `SeedingMode`
+	- Renamed `SecondaryAvailabilityGroupName` -> `InstanceAvailabilityGroupName`
+			  `SourceEndpoint` -> `PartnerEndpoint`
+			  `PrimaryAvailabilityGroupName` -> `PartnerAvailabilityGroupName`
+	- `TargetDatabase` -> `Database`, parameter type is changed from string to string[].
+* Updated `AzureSqlManagedInstanceLinkModel` that is a return type of `New-AzSqlInstanceLink`, `Get-AzSqlInstanceLink`, `Update-AzSqlInstanceLink` ,`Remove-AzSqlInstanceLink`
+* Added new optional parameter for `New-AzSqlDatabaseSecondary` to support cross-subscription geo-replication.
+
+## Version 5.3.0
+* Fixed secrets exposure in example documentation.
+* Fixed issues regarding Active Directory Administrator in `Set-AzSqlInstanceActiveDirectoryAdministrator` and `Set-AzSqlInstance` cmdlets.
+* Added new parameter AuthenticationMetadata to `New-AzSqlInstance` and `Set-AzSqlInstance`
+
+## Version 5.2.0
+* Added breaking change announcement for cmdlets: `New-AzSqlInstanceLink`, `Get-AzSqlInstanceLink`, `Remove-AzSqlInstanceLink`, `Update-AzSqlInstanceLink`.
+* Added `IsGeneralPurposeV2` and `StorageIOps` parameters to `New-AzSqlInstance`, `Set-AzSqlInstance` to enable the creation of GPv2 instances
+* Added IsGeneralPurposeV2 and StorageIOps fields to the model of the managed instance so that it displays information about GPv2 instances that are returned by `Get-AzSqlInstance`.
+* Added new cmdlet `Set-AzSqlDatabaseReplicationLink` for updating replication link type
+* Updated `Get-AzSqlDatabaseReplicationLink` to use the new sdk
+
+## Version 5.1.0
+* Added cross-subscription support for `Copy-AzSqlInstanceDatabase`, `Move-AzSqlInstanceDatabase`
+* Added new parameter SecondaryType to `Add-AzSqlDatabaseFromFailoverGroup`
+
+## Version 5.0.0
+* Added multi-secondary support for `Get-AzSqlDatabaseFailoverGroup`, `Remove-AzSqlDatabaseFromFailoverGroup` and `Add-AzSqlDatabaseFromFailoverGroup`
+* Changed default FailoverPolicy value for `New-AzSqlDatabaseFailoverGroup`, `Set-AzSqlDatabaseFailoverGroup` from `Automatic` to `Manual`
+* Added `ManualCutover` and `PerformCutover` parameters to `Set-AzSqlInstance` for Azure Sql Sterling database to Azure Sql Hyperscale database
+* Added `OperationPhaseDetails` parameter to `Get-AzSqlDatabaseActivity` and updated `DatabaseOperations` Api to version `2022-11-01-preview` for .Net Sdk
+
+## Version 4.14.1
+* Made 1.2 as default for MinimalTlsVersion when creating new Sql Server from Powershell
+* Fixed an existing issue with `Set-AzSqlInstanceActiveDirectoryAdministrator`
+
+## Version 4.14.0
+* Added `DatabaseFormat` and `PricingModel` parameters to `New-AzSqlInstance`, `Set-AzSqlInstance`
+* Added breaking change message for `New-AzSqlDatabaseFailoverGroup` and `Set-AzSqlDatabaseFailoverGroup`
+    - The default value of `FailoverPolicy` parameter will be changed from `Automatic` to `Manual`
+* Added a new cmdlet for Azure SQL Managed Instance refresh external governance status
+  - 'Invoke-AzSqlInstanceExternalGovernanceStatusRefresh'
+* Updated `Get-AzSqlInstance` to support returning the `ExternalGovernanceStatus` property
+
+## Version 4.13.0
+* Fixed `Set-AzSqlDatabaseFailoverGroup` when going from multi-secondary to single secondary
+* Added `SecondaryComputeModel`, `AutoPauseDelayInMinutes` and `MinimumCapacity` parameters within `New-AzSqlDatabaseSecondary`
+
+## Version 4.12.0
+* Added new parameters `MaintenanceConfigurationId`, `DnsZone` to `AzSqlInstancePool` cmdlets
+
+## Version 4.11.0
+* Added new parameters to `New-AzSqlDatabaseFailoverGroup`, `Set-AzSqlDatabaseFailoverGroup`
+    - PartnerServers
+    - ReadOnlyEndpointTargetServer
+* Added `UseFreeLimit` and `FreeLimitExhaustionBehavior` parameters to `New-AzSqlDatabase`, `Get-AzSqlDatabase`, `Set-AzSqlDatabase`
+* Added new cmdlets for Elastic Job Private Endpoints `Get-AzSqlElasticJobPrivateEndpoint`, `New-AzSqlElasticJobPrivateEndpoint`, `Remove-AzSqlElasticJobPrivateEndpoint`
+* Added new parameters `WorkerCount`, `SkuName`, `Identity` to `AzSqlElasticJobAgent` cmdlets
+* Added support for optional SQL auth for Elastic Job Agent cmdlets
+*   - The following parameters are now optional: `CredentialName`, `OutputCredentialName`, `RefreshCredentialName`
+
+## Version 4.10.0
+* Fixed cmdlets to use 2018-06-01-preview api version
+    - 'Set-AzSqlInstanceDatabaseSensitivityClassification',
+    - 'Remove-AzSqlInstanceDatabaseSensitivityClassification',
+    - 'Enable-AzSqlInstanceDatabaseSensitivityRecommendation',
+    - 'Disable-AzSqlInstanceDatabaseSensitivityRecommendation',
+* Added `EncryptionProtectorAutoRotation` parameter to `New-AzSqlDatabase`, `Get-AzSqlDatabase`, `Set-AzSqlDatabase`, `New-AzSqlDatabaseCopy`, `New-AzSqlDatabaseSecondary`, `Restore-AzSqlDatabase` cmdlets
+
+## Version 4.9.0
+* Added new cmdlets for Azure SQL Managed Instance start/stop schedule
+    - 'Start-AzSqlInstance',
+    - 'Stop-AzSqlInstance',
+    - 'Get-AzSqlInstanceStartStopSchedule',
+    - 'New-AzSqlInstanceStartStopSchedule',
+    - 'Remove-AzSqlInstanceStartStopSchedule',
+    - 'New-AzSqlInstanceScheduleItem'
+
 ## Version 4.8.0
 * Added `TryPlannedBeforeForcedFailover` parameter to `Switch-AzSqlDatabaseFailoverGroup`
 * Added new cmdlets for managed database move and copy operations

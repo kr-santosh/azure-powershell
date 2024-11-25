@@ -16,28 +16,31 @@ Creates an encryption scope for a Storage account.
 ```
 New-AzStorageEncryptionScope [-ResourceGroupName] <String> [-StorageAccountName] <String>
  -EncryptionScopeName <String> [-StorageEncryption] [-RequireInfrastructureEncryption]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### AccountNameKeyVault
 ```
 New-AzStorageEncryptionScope [-ResourceGroupName] <String> [-StorageAccountName] <String>
  -EncryptionScopeName <String> [-KeyvaultEncryption] -KeyUri <String> [-RequireInfrastructureEncryption]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### AccountObject
 ```
 New-AzStorageEncryptionScope -StorageAccount <PSStorageAccount> -EncryptionScopeName <String>
- [-StorageEncryption] [-RequireInfrastructureEncryption] [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-StorageEncryption] [-RequireInfrastructureEncryption] [-DefaultProfile <IAzureContextContainer>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### AccountObjectKeyVault
 ```
 New-AzStorageEncryptionScope -StorageAccount <PSStorageAccount> -EncryptionScopeName <String>
  [-KeyvaultEncryption] -KeyUri <String> [-RequireInfrastructureEncryption]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -49,8 +52,9 @@ The **New-AzStorageEncryptionScope** cmdlet creates an encryption scope for a St
 ```powershell
 New-AzStorageEncryptionScope -ResourceGroupName "myresourcegroup" -AccountName "mystorageaccount"  -EncryptionScopeName testscope -StorageEncryption
 ```
+
 ```output
-   ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
+ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
 Name      State    Source            KeyVaultKeyUri RequireInfrastructureEncryption                                         
 ----      -----    ------            -------------- -------------------------------                                         
@@ -63,10 +67,11 @@ This command creates an encryption scope with Storage Encryption.
 ```powershell
 New-AzStorageEncryptionScope -ResourceGroupName "myresourcegroup" -AccountName "mystorageaccount" `
 	-EncryptionScopeName testscope -KeyvaultEncryption -KeyUri "https://keyvalutname.vault.azure.net:443/keys/keyname/34a0ba563b4243d9a0ef2b1d3c0c7d57" `
-	-RequireInfrastructureEncryption 
+	-RequireInfrastructureEncryption
 ```
+
 ```output
-   ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
+ResourceGroupName: myresourcegroup, StorageAccountName: mystorageaccount
 
 Name         State   Source           KeyVaultKeyUri                                                                          RequireInfrastructureEncryption                                       
 ----         -----   ------             --------------                                                                        -------------------------------                                     
@@ -245,7 +250,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

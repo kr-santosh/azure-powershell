@@ -32,5 +32,11 @@ namespace Microsoft.Azure.Commands.Shared.Config
         public const string EnableLoginByWam = "EnableLoginByWam";
         public const string TestCoverageLocation = "TestCoverageLocation";
         public const string DisplayRegionIdentified = "DisplayRegionIdentified";
+        public const string EnableErrorRecordsPersistence = "EnableErrorRecordsPersistence";
+        public const string DisableInstanceDiscovery = "DisableInstanceDiscovery";
+        public const string CheckForUpgrade = "CheckForUpgrade";
+        public const string EnvCheckForUpgrade = "AZUREPS_CHECK_FOR_UPGRADE";
+        public const string DisplaySecretsWarning = "DisplaySecretsWarning";
+        public const string LoginExperienceV2 = "LoginExperienceV2";
     }
 }

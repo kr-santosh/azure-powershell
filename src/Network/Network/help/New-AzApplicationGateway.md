@@ -34,8 +34,9 @@ New-AzApplicationGateway -Name <String> -ResourceGroupName <String> -Location <S
  [-RedirectConfigurations <PSApplicationGatewayRedirectConfiguration[]>]
  [-WebApplicationFirewallConfiguration <PSApplicationGatewayWebApplicationFirewallConfiguration>]
  [-AutoscaleConfiguration <PSApplicationGatewayAutoscaleConfiguration>] [-EnableHttp2] [-EnableFIPS]
- [-ForceFirewallPolicyAssociation] [-Zone <String[]>] [-Tag <Hashtable>] [-UserAssignedIdentityId <String>]
- [-Force] [-AsJob] [-CustomErrorConfiguration <PSApplicationGatewayCustomError[]>]
+ [-EnableRequestBuffering <Boolean>] [-EnableResponseBuffering <Boolean>] [-ForceFirewallPolicyAssociation]
+ [-Zone <String[]>] [-Tag <Hashtable>] [-UserAssignedIdentityId <String>] [-Force] [-AsJob]
+ [-CustomErrorConfiguration <PSApplicationGatewayCustomError[]>]
  [-PrivateLinkConfiguration <PSApplicationGatewayPrivateLinkConfiguration[]>]
  [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -61,8 +62,9 @@ New-AzApplicationGateway -Name <String> -ResourceGroupName <String> -Location <S
  [-RedirectConfigurations <PSApplicationGatewayRedirectConfiguration[]>]
  [-WebApplicationFirewallConfiguration <PSApplicationGatewayWebApplicationFirewallConfiguration>]
  [-FirewallPolicyId <String>] [-AutoscaleConfiguration <PSApplicationGatewayAutoscaleConfiguration>]
- [-EnableHttp2] [-EnableFIPS] [-ForceFirewallPolicyAssociation] [-Zone <String[]>] [-Tag <Hashtable>] [-Force]
- [-AsJob] [-CustomErrorConfiguration <PSApplicationGatewayCustomError[]>]
+ [-EnableHttp2] [-EnableFIPS] [-EnableRequestBuffering <Boolean>] [-EnableResponseBuffering <Boolean>]
+ [-ForceFirewallPolicyAssociation] [-Zone <String[]>] [-Tag <Hashtable>] [-Force] [-AsJob]
+ [-CustomErrorConfiguration <PSApplicationGatewayCustomError[]>]
  [-PrivateLinkConfiguration <PSApplicationGatewayPrivateLinkConfiguration[]>]
  [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -89,7 +91,8 @@ New-AzApplicationGateway -Name <String> -ResourceGroupName <String> -Location <S
  [-WebApplicationFirewallConfiguration <PSApplicationGatewayWebApplicationFirewallConfiguration>]
  [-FirewallPolicy <PSApplicationGatewayWebApplicationFirewallPolicy>]
  [-AutoscaleConfiguration <PSApplicationGatewayAutoscaleConfiguration>] [-EnableHttp2] [-EnableFIPS]
- [-ForceFirewallPolicyAssociation] [-Zone <String[]>] [-Tag <Hashtable>] [-Force] [-AsJob]
+ [-EnableRequestBuffering <Boolean>] [-EnableResponseBuffering <Boolean>] [-ForceFirewallPolicyAssociation]
+ [-Zone <String[]>] [-Tag <Hashtable>] [-Force] [-AsJob]
  [-CustomErrorConfiguration <PSApplicationGatewayCustomError[]>]
  [-PrivateLinkConfiguration <PSApplicationGatewayPrivateLinkConfiguration[]>]
  [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -116,8 +119,9 @@ New-AzApplicationGateway -Name <String> -ResourceGroupName <String> -Location <S
  [-RedirectConfigurations <PSApplicationGatewayRedirectConfiguration[]>]
  [-WebApplicationFirewallConfiguration <PSApplicationGatewayWebApplicationFirewallConfiguration>]
  [-AutoscaleConfiguration <PSApplicationGatewayAutoscaleConfiguration>] [-EnableHttp2] [-EnableFIPS]
- [-ForceFirewallPolicyAssociation] [-Zone <String[]>] [-Tag <Hashtable>] -Identity <PSManagedServiceIdentity>
- [-Force] [-AsJob] [-CustomErrorConfiguration <PSApplicationGatewayCustomError[]>]
+ [-EnableRequestBuffering <Boolean>] [-EnableResponseBuffering <Boolean>] [-ForceFirewallPolicyAssociation]
+ [-Zone <String[]>] [-Tag <Hashtable>] -Identity <PSManagedServiceIdentity> [-Force] [-AsJob]
+ [-CustomErrorConfiguration <PSApplicationGatewayCustomError[]>]
  [-PrivateLinkConfiguration <PSApplicationGatewayPrivateLinkConfiguration[]>]
  [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -134,6 +138,9 @@ An application gateway requires the following:
 - A request routing rule that binds the listener and the back-end server pool. The rule defines which back-end server pool the traffic should be directed to when it hits a particular listener.
 A listener has a front-end port, front-end IP address, protocol (HTTP or HTTPS) and Secure Sockets
 Layer (SSL) certificate name (if configuring SSL offload).
+
+> [!NOTE]
+> There is a limitation that does not allow users to deploy a V2 application gateway that utilizes customer key vault for certificate storage and has a WAF policy associated to it. In the four parameter sets provided by the New-AzApplicationGateway cmdlet, the `-Identity` switch never coincides with the `-FirewallPolicy` or `-FirewallPolicyID` switch. Therefore, this cannot be done in one operation. The workaround is to have this done in multiple operations. Users must deploy a standard V2 Application Gateway with the managed identity, then change the sku to WAF_v2 and add the WAF policy.
 
 ## EXAMPLES
 
@@ -350,6 +357,36 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableRequestBuffering
+Whether Request Buffering is enabled.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: True
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableResponseBuffering
+Whether Response Buffering is enabled.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: True
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -19,7 +19,7 @@ $fileShareFriendlyName = "fs1"
 $skuName="Standard_LRS"
 $saName = "afspstestsa" # "pstestsa8895"
 $saRgName = "afs-pstest-rg" # "pstestrg8895"
-$fileShareName = "azurefileshare;7f34af6cfe2f3f3204cfd4d18cd6b37f7dec2c84a2d759ffab3d1367f9e17356" #"AzureFileShare;fs1"
+$fileShareName = "azurefileshare;d10" # "AzureFileShare;fs1"
 $targetSaName = "afspstesttargetsa" #"pstesttargetsa8896"
 $targetFileShareName = "fs1"
 $targetFolder = "pstestfolder3rty7d7s"
@@ -51,6 +51,40 @@ $newPolicyName = "NewAFSBackupPolicy"
 #		-WorkloadType AzureFiles `
 #		-RetentionPolicy $retentionPolicy `
 #		-SchedulePolicy $schedulePolicy
+
+function Test-AzureFSRestoreToAnotherRegion
+{
+	# testing AFS restore to different region and resource group than the source
+	$targetFileShareName = "drfs"
+	$targetSaName = "afsrestorediffregion2"
+
+	try
+	{
+		$vault = Get-AzRecoveryServicesVault -ResourceGroupName $resourceGroupName -Name $vaultName
+		Enable-Protection $vault $fileShareFriendlyName $saName
+
+		$items = Get-AzRecoveryServicesBackupItem -VaultId $vault.ID -BackupManagementType AzureStorage -WorkloadType AzureFiles
+
+		$backupJob = Backup-Item $vault $items[0]
+
+		$backupStartTime = $backupJob.StartTime.AddMinutes(-1);
+		$backupEndTime = $backupJob.EndTime.AddMinutes(1);
+
+		$rp = Get-AzRecoveryServicesBackupRecoveryPoint `
+			-VaultId $vault.ID `
+			-StartDate $backupStartTime `
+			-EndDate $backupEndTime `
+			-Item $items[0];
+			
+		$restoreJob = Restore-AzRecoveryServicesBackupItem -RecoveryPoint $rp[0] -ResolveConflict Overwrite -VaultId $vault.ID -VaultLocation $vault.Location -TargetStorageAccountName $targetSaName -TargetFileShareName $targetFileShareName | Wait-AzRecoveryServicesBackupJob -VaultId $vault.ID
+
+		Assert-True { $restoreJob.Status -eq "Completed" }
+	}
+	finally
+	{
+		Cleanup-Vault $vault $items $container
+	}
+}
 
 function Test-AzureFSItem
 {
@@ -381,6 +415,6 @@ function Test-AzureFSFullRestore
 	}
 	finally
 	{
-		# Cleanup-Vault $vault $item $container
+		Cleanup-Vault $vault $item $container
 	}
 }

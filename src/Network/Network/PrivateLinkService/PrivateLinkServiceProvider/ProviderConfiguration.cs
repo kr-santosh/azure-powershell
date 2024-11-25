@@ -36,11 +36,14 @@ namespace Microsoft.Azure.Commands.Network.PrivateLinkService.PrivateLinkService
             RegisterConfiguration("Microsoft.DesktopVirtualization/workspaces", "2021-09-03-preview", true, false);
             RegisterConfiguration("Microsoft.Devices/IotHubs", "2020-03-01", true, true);
             RegisterConfiguration("Microsoft.Devices/ProvisioningServices", "2020-03-01", true, true);
-            RegisterConfiguration("Microsoft.DeviceUpdate/accounts", "2020-03-01-preview", true, true);
+            RegisterConfiguration("Microsoft.DeviceUpdate/accounts", "2023-07-01", true, true);
             RegisterConfiguration("Microsoft.DigitalTwins/digitalTwinsInstances", "2020-12-01", true, true);
             RegisterConfiguration("Microsoft.DocumentDB/databaseAccounts", "2019-08-01-preview", true, true);
+            RegisterConfiguration("Microsoft.ElasticSan/elasticSans", "2022-12-01-preview", true, false);
             RegisterConfiguration("Microsoft.EventGrid/topics", "2020-04-01-preview", true, true);
             RegisterConfiguration("Microsoft.EventGrid/domains", "2020-04-01-preview", true, true);
+            RegisterConfiguration("Microsoft.EventGrid/partnerNamespaces", "2021-06-01-preview", true, true);
+            RegisterConfiguration("Microsoft.EventGrid/namespaces", "2023-06-01-preview", true, true);
             RegisterConfiguration("Microsoft.EventHub/namespaces", "2018-01-01-preview", true, false);
             RegisterConfiguration("Microsoft.HardwareSecurityModules/cloudHsmClusters", "2022-08-31-preview", true, true);
             RegisterConfiguration("Microsoft.HealthcareApis/services", "2020-03-30", false, true);
@@ -78,6 +81,9 @@ namespace Microsoft.Azure.Commands.Network.PrivateLinkService.PrivateLinkService
             RegisterConfiguration("Microsoft.BotService/botServices", "2021-05-01-preview", true, true);
             RegisterConfiguration("Microsoft.OpenEnergyPlatform/energyServices", "2022-07-21-preview", true, true);
             RegisterConfiguration("Microsoft.DBforMySQL/flexibleServers", "2022-09-30-privatepreview", true, true);
+            RegisterConfiguration("Microsoft.DBforPostgreSQL/flexibleServers", "2023-06-01-preview", true, true);
+            RegisterConfiguration("Microsoft.App/managedEnvironments", "2024-02-02-preview", true, true);
+            RegisterConfiguration("Microsoft.VideoIndexer/accounts", "2024-06-01-preview", true, true, true);
         }
         /// <summary>
         /// Register priavte endopoint connection and private link resource configuration

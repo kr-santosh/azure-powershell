@@ -15,12 +15,14 @@ Creates a blob query configuration object, which can be used in Get-AzStorageBlo
 ### Csv (Default)
 ```
 New-AzStorageBlobQueryConfig [-AsCsv] [-RecordSeparator <String>] [-ColumnSeparator <String>]
- [-QuotationCharacter <Char>] [-EscapeCharacter <Char>] [-HasHeader] [-AsJob] [<CommonParameters>]
+ [-QuotationCharacter <Char>] [-EscapeCharacter <Char>] [-HasHeader] [-AsJob]
+ [<CommonParameters>]
 ```
 
 ### Json
 ```
-New-AzStorageBlobQueryConfig [-AsJson] [-RecordSeparator <String>] [-AsJob] [<CommonParameters>]
+New-AzStorageBlobQueryConfig [-AsJson] [-RecordSeparator <String>] [-AsJob]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -40,6 +42,7 @@ $result = Get-AzStorageBlobQueryResult -Container $containerName -Blob $blobName
 
 $result
 ```
+
 ```output
 BytesScanned FailureCount BlobQueryError
 ------------ ------------ --------------
@@ -176,7 +179,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

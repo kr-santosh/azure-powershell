@@ -17,7 +17,6 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
     using Common;
     using global::Azure.Storage.Files.Shares;
     using global::Azure.Storage.Files.Shares.Models;
-    using Microsoft.Azure.Storage.File;
     using Model.Contract;
     using System;
     using System.Collections.Generic;
@@ -29,7 +28,7 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
     /// <summary>
     /// create a new azure container
     /// </summary>
-    [Cmdlet("Get", Azure.Commands.ResourceManager.Common.AzureRMConstants.AzurePrefix + "StorageShareStoredAccessPolicy"), OutputType(typeof(SharedAccessFilePolicy))]
+    [Cmdlet("Get", Azure.Commands.ResourceManager.Common.AzureRMConstants.AzurePrefix + "StorageShareStoredAccessPolicy"), OutputType(typeof(PSObject))]
     public class GetAzureStorageShareStoredAccessPolicy : AzureStorageFileCmdletBase
     {
         [Alias("N", "Name")]
@@ -44,7 +43,10 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
         [Parameter(Position = 1,
             HelpMessage = "Policy Identifier",
             ValueFromPipelineByPropertyName = true)]
-        public string Policy { get; set; }
+        public string Policy { get; set; }        
+        
+        // Overwrite the useless parameter
+        public override SwitchParameter DisAllowTrailingDot { get; set; }
 
         internal async Task GetAzureShareStoredAccessPolicyAsync(long taskId, IStorageFileManagement localChannel, string shareName, string policyName)
         {

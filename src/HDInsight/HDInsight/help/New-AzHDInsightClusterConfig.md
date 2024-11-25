@@ -22,7 +22,8 @@ New-AzHDInsightClusterConfig [-StorageAccountResourceId <String>] [-StorageAccou
  [-CertificatePassword <String>] [-AadTenantId <Guid>] [-MinSupportedTlsVersion <String>]
  [-AssignedIdentity <String>] [-EncryptionAlgorithm <String>] [-EncryptionKeyName <String>]
  [-EncryptionKeyVersion <String>] [-EncryptionVaultUri <String>] [-EncryptionInTransit <Boolean>]
- [-EncryptionAtHost <Boolean>] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-EncryptionAtHost <Boolean>] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -73,7 +74,7 @@ This command creates a cluster configuration object.
 ## PARAMETERS
 
 ### -AadTenantId
-Specifies the Azure AD Tenant ID that will be used when accessing Azure Data Lake Store.
+Specifies the Microsoft Entra tenant ID that will be used when accessing Azure Data Lake Store.
 
 ```yaml
 Type: System.Guid
@@ -176,7 +177,6 @@ The Premium tier can only be used with Linux clusters, and it enables the use of
 Type: System.String
 Parameter Sets: (All)
 Aliases:
-Accepted values: Standard, Premium
 
 Required: False
 Position: Named
@@ -245,7 +245,6 @@ Gets or sets the encryption algorithm.
 Type: System.String
 Parameter Sets: (All)
 Aliases:
-Accepted values: RSA-OAEP, RSA-OAEP-256, RSA1_5
 
 Required: False
 Position: Named
@@ -377,7 +376,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectId
-Specifies the Azure AD object ID (a GUID) of the Azure AD Service Principal that represents the cluster.
+Specifies the Microsoft Entra object ID (a GUID) of the Microsoft Entra service principal that represents the cluster.
 The cluster will use this when accessing Azure Data Lake Store.
 
 ```yaml
@@ -503,5 +502,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Add-AzHDInsightStorage](./Add-AzHDInsightStorage.md)
-
-

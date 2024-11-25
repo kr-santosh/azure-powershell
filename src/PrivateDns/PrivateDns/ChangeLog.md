@@ -18,6 +18,15 @@
         - Additional information about change #1
 -->
 ## Upcoming Release
+
+## Version 1.1.0
+* Updated new property ResolutionPolicy to Get, New and Set virtual network link cmdlets.
+* Created autorest generated sdk in PrivateDns.Management.Sdk folder
+
+## Version 1.0.5
+* Removed the outdated deps.json file.
+
+## Version 1.0.4
 * Removed length validation for DNS TXT record to make it consistent with Azure CLI and Azure portal.
 
 ## Version 1.0.3

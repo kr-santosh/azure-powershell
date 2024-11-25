@@ -13,7 +13,7 @@ Creates a new Azure Firewall Policy Intrusion Detection to associate with Firewa
 ## SYNTAX
 
 ```
-New-AzFirewallPolicyIntrusionDetection -Mode <String>
+New-AzFirewallPolicyIntrusionDetection -Mode <String> [-Profile <String>]
  [-SignatureOverride <PSAzureFirewallPolicyIntrusionDetectionSignatureOverride[]>]
  [-BypassTraffic <PSAzureFirewallPolicyIntrusionDetectionBypassTrafficSetting[]>] [-PrivateRange <String[]>]
  [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -55,6 +55,14 @@ New-AzFirewallPolicy -Name fp1 -Location "westus2" -ResourceGroupName TestRg -Sk
 ```
 
 This example creates intrusion detection with bypass traffic setting
+
+### Example 5: Create firewall policy with intrusion detection profile setting
+```powershell
+$intrusionDetection = New-AzFirewallPolicyIntrusionDetection -Mode "Deny" -Profile �Advanced�
+New-AzFirewallPolicy -Name fp1 -Location "westus2" -ResourceGroupName TestRg -SkuTier "Premium" -IntrusionDetection $intrusionDetection
+```
+
+This example creates intrusion detection with Alert and Deny mode and Advanced signatures Profile. 
 
 ## PARAMETERS
 
@@ -115,6 +123,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Profile
+Sets IDPS signatures profile.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: For newly created policy the default IDPS profile is �Standard� and for existing policy without IDPS profile setting,  the default is �Advanced�
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

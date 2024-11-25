@@ -13,6 +13,7 @@
 // ----------------------------------------------------------------------------------
 
 using Azure.Core;
+using Azure.Identity;
 using Microsoft.Azure.Commands.Common.Authentication;
 using Microsoft.Azure.Commands.Common.Authentication.Abstractions;
 using Microsoft.Azure.PowerShell.Authenticators.Factories;
@@ -20,7 +21,6 @@ using Microsoft.WindowsAzure.Commands.Common;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Azure.PowerShell.Authenticators.Identity;
 
 namespace Microsoft.Azure.PowerShell.Authenticators
 {
@@ -37,13 +37,15 @@ namespace Microsoft.Azure.PowerShell.Authenticators
             var scopes = AuthenticationHelpers.GetScope(onPremise, resource);
             var authority = spParameters.Environment.ActiveDirectoryAuthority;
 
-            var requestContext = new TokenRequestContext(scopes);
+            var requestContext = new TokenRequestContext(scopes, isCaeEnabled: true);
             AzureSession.Instance.TryGetComponent(nameof(AzureCredentialFactory), out AzureCredentialFactory azureCredentialFactory);
 
             var options = new ClientAssertionCredentialOptions()
             {
+                AuthorityHost = new Uri(authority),
                 TokenCachePersistenceOptions = spParameters.TokenCacheProvider.GetTokenCachePersistenceOptions()
             };
+            options.DisableInstanceDiscovery = spParameters.DisableInstanceDiscovery ?? options.DisableInstanceDiscovery;
             options.Diagnostics.IsTelemetryEnabled = false; // disable telemetry to avoid error thrown from Azure.Core that AssemblyInformationalVersion is null
             TokenCredential tokenCredential = new ClientAssertionCredential(tenantId, spParameters.ClientId, () => GetClientAssertion(spParameters), options);
             string parametersLog = $"- ClientId:'{spParameters.ClientId}', TenantId:'{tenantId}', ClientAssertion:'***' Scopes:'{string.Join(",", scopes)}'";

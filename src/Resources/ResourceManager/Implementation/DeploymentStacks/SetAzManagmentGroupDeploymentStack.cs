@@ -16,19 +16,15 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.Implementation
 {
     using Microsoft.Azure.Commands.ResourceManager.Cmdlets.Implementation.CmdletBase;
     using Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkModels;
-    using Microsoft.Azure.Commands.ResourceManager.Cmdlets.Utilities;
+    using Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkModels.DeploymentStacks;
+    using Microsoft.Azure.Commands.ResourceManager.Common.Tags;
     using Microsoft.Azure.Management.Resources.Models;
-    using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
-    using Microsoft.WindowsAzure.Commands.Utilities.Common;
     using System;
     using System.Collections;
-    using System.IO;
     using System.Management.Automation;
-    using ProjectResources = Microsoft.Azure.Commands.ResourceManager.Cmdlets.Properties.Resources;
 
     [Cmdlet("Set", Common.AzureRMConstants.AzureRMPrefix + "ManagementGroupDeploymentStack",
         SupportsShouldProcess = true, DefaultParameterSetName = ParameterlessTemplateFileParameterSetName), OutputType(typeof(PSDeploymentStack))]
-    [CmdletPreview("The cmdlet is in preview and under development.")]
     public class SetAzManagementGroupDeploymentStack : DeploymentStacksCreateCmdletBase
     {
         #region Cmdlet Parameters
@@ -44,9 +40,8 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.Implementation
         [ValidateNotNullOrEmpty]
         public string ManagementGroupId { get; set; }
 
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true,
+        [Parameter(Mandatory = false, ValueFromPipelineByPropertyName = true,
             HelpMessage = "The subscription Id at which the deployment should be created.")]
-        [ValidateNotNullOrEmpty]
         public string DeploymentSubscriptionId { get; set; }
 
         [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true,
@@ -58,14 +53,10 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.Implementation
             HelpMessage = "Description for the stack.")]
         public string Description { get; set; }
 
-        [Parameter(Mandatory = false, HelpMessage = "Signal to delete both unmanaged Resources and ResourceGroups after deleting stack.")]
-        public SwitchParameter DeleteAll { get; set; }
-
-        [Parameter(Mandatory = false, HelpMessage = "Signal to delete unmanaged stack Resources after deleting stack.")]
-        public SwitchParameter DeleteResources { get; set; }
-
-        [Parameter(Mandatory = false, HelpMessage = "Signal to delete unmanaged stack ResourceGroups after deleting stack.")]
-        public SwitchParameter DeleteResourceGroups { get; set; }
+        [Parameter(Mandatory = true, HelpMessage = "Action to take on resources that become unmanaged on deletion or update of the deployment stack. Possible values include: " +
+            "'detachAll' (do not delete any unmanaged resources), 'deleteResources' (delete all unmanaged resources that are not RGs or MGs)," +
+            " and 'deleteAll' (delete every unmanaged resource).")]
+        public PSActionOnUnmanage ActionOnUnmanage { get; set; }
 
         [Parameter(Mandatory = true, HelpMessage = "Mode for DenySettings. Possible values include: 'denyDelete', 'denyWriteAndDelete', and 'none'.")]
         public PSDenySettingsMode DenySettingsMode { get; set; }
@@ -81,7 +72,6 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.Implementation
         public SwitchParameter DenySettingsApplyToChildScopes { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "The tags to put on the deployment.")]
-        [ValidateNotNullOrEmpty]
         public Hashtable Tag { get; set; }
 
         [Parameter(Mandatory = false,
@@ -91,6 +81,10 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.Implementation
         [Parameter(Mandatory = false, HelpMessage = "Run cmdlet in the background.")]
         public SwitchParameter AsJob { get; set; }
 
+        [Parameter(Mandatory = false, HelpMessage = "Bypass errors for the stack being out of sync when running the operation. If the stack is out of sync and this parameter " +
+            "is not set, the operation will fail. Only include this parameter if instructed to do so on a failed stack operation.")]
+        public SwitchParameter BypassStackOutOfSyncError { get; set; }
+
         #endregion
 
         #region Cmdlet Overrides
@@ -99,136 +93,51 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.Implementation
         {
             try
             {
-                Hashtable parameters = new Hashtable();
-                string filePath = "";
-                string parameterFilePath = "";
+                var shouldDeleteResources = (ActionOnUnmanage is PSActionOnUnmanage.DeleteAll || ActionOnUnmanage is PSActionOnUnmanage.DeleteResources) ? true : false;
+                var shouldDeleteResourceGroups = (ActionOnUnmanage is PSActionOnUnmanage.DeleteAll) ? true : false;
+                var shouldDeleteManagementGroups = (ActionOnUnmanage is PSActionOnUnmanage.DeleteAll) ? true : false;
 
-                if (BicepUtility.IsBicepparamFile(TemplateParameterFile) && !BicepUtility.IsBicepFile(TemplateFile))
+                string deploymentScope = null;
+                if (DeploymentSubscriptionId != null)
                 {
-                    throw new NotSupportedException($"Bicepparam file {TemplateParameterFile} is only supported with a Bicep template file");
+                    deploymentScope = "/subscriptions/" + DeploymentSubscriptionId;
                 }
 
-                switch (ParameterSetName)
+                var currentStack = DeploymentStacksSdkClient.GetManagementGroupDeploymentStack(ManagementGroupId, Name, throwIfNotExists: false);
+                if (currentStack != null && Tag == null)
                 {
-                    case ParameterlessTemplateFileParameterSetName:
-                    case ParameterUriTemplateFileParameterSetName:
-                        filePath = this.TryResolvePath(TemplateFile);
-                        if (!File.Exists(filePath))
-                        {
-                            throw new PSInvalidOperationException(
-                                string.Format(ProjectResources.InvalidFilePath, TemplateFile));
-                        }
-                        filePath = ResolveBicepFile(filePath);
-                        TemplateUri = filePath;
-                        break;
-                    case ParameterFileTemplateSpecParameterSetName:
-                    case ParameterFileTemplateUriParameterSetName:
-                        parameterFilePath = this.TryResolvePath(TemplateParameterFile);
-                        if (!File.Exists(parameterFilePath))
-                        {
-                            throw new PSInvalidOperationException(
-                                string.Format(ProjectResources.InvalidFilePath, TemplateParameterFile));
-                        }
-                        parameters = this.GetParameterObject(parameterFilePath);
-
-                        // contruct the protected template URI if a query string was provided
-                        if (!string.IsNullOrEmpty(QueryString))
-                        {
-                            if (QueryString.Substring(0, 1) == "?")
-                                protectedTemplateUri = TemplateUri + QueryString;
-                            else
-                                protectedTemplateUri = TemplateUri + "?" + QueryString;
-                        }
-                        break;
-                    case ParameterFileTemplateFileParameterSetName:
-                        filePath = this.TryResolvePath(TemplateFile);
-                        if (!File.Exists(filePath))
-                        {
-                            throw new PSInvalidOperationException(
-                                string.Format(ProjectResources.InvalidFilePath, TemplateFile));
-                        }
-                        filePath = ResolveBicepFile(filePath);
-
-                        parameterFilePath = this.TryResolvePath(TemplateParameterFile);
-                        if (!File.Exists(parameterFilePath))
-                        {
-                            throw new PSInvalidOperationException(
-                                string.Format(ProjectResources.InvalidFilePath, TemplateParameterFile));
-                        }
-                        parameters = this.GetParameterObject(ResolveBicepParameterFile(parameterFilePath));
-                        TemplateUri = filePath;
-                        break;
-                    case ParameterObjectTemplateFileParameterSetName:
-                        filePath = this.TryResolvePath(TemplateFile);
-                        if (!File.Exists(filePath))
-                        {
-                            throw new PSInvalidOperationException(
-                                string.Format(ProjectResources.InvalidFilePath, TemplateFile));
-                        }
-                        filePath = ResolveBicepFile(filePath);
-                        TemplateUri = filePath;
-                        parameters = GetTemplateParameterObject(TemplateParameterObject);
-                        break;
-                    case ParameterObjectTemplateSpecParameterSetName:
-                    case ParameterObjectTemplateUriParameterSetName:
-                        parameters = GetTemplateParameterObject(TemplateParameterObject);
-
-                        // contruct the protected template URI if a query string was provided
-                        if (!string.IsNullOrEmpty(QueryString))
-                        {
-                            if (QueryString.Substring(0, 1) == "?")
-                                protectedTemplateUri = TemplateUri + QueryString;
-                            else
-                                protectedTemplateUri = TemplateUri + "?" + QueryString;
-                        }
-                        break;
-                    case ParameterlessTemplateUriParameterSetName:
-                        // contruct the protected template URI if a query string was provided
-                        if (!string.IsNullOrEmpty(QueryString))
-                        {
-                            if (QueryString.Substring(0, 1) == "?")
-                                protectedTemplateUri = TemplateUri + QueryString;
-                            else
-                                protectedTemplateUri = TemplateUri + "?" + QueryString;
-                        }
-                        break;
+                    Tag = TagsConversionHelper.CreateTagHashtable(currentStack.tags);
                 }
-
-                var shouldDeleteResources = (DeleteAll.ToBool() || DeleteResources.ToBool()) ? true : false;
-                var shouldDeleteResourceGroups = (DeleteAll.ToBool() || DeleteResourceGroups.ToBool()) ? true : false;
-
-                // construct deploymentScope if ResourceGroup was provided
-                var deploymentScope = "/subscriptions/" + DeploymentSubscriptionId;
 
                 Action createOrUpdateAction = () =>
                 {
                     var deploymentStack = DeploymentStacksSdkClient.ManagementGroupCreateOrUpdateDeploymentStack(
-                            deploymentStackName: Name,
-                            managementGroupId: ManagementGroupId,
-                            location: Location,
-                            templateUri: !string.IsNullOrEmpty(protectedTemplateUri) ? protectedTemplateUri : TemplateUri,
-                            templateSpec: TemplateSpecId,
-                            parameterUri: TemplateParameterUri,
-                            parameters: parameters,
-                            description: Description,
-                            resourcesCleanupAction: shouldDeleteResources ? "delete" : "detach",
-                            resourceGroupsCleanupAction: shouldDeleteResourceGroups ? "delete" : "detach",
-                            managementGroupsCleanupAction: "detach",
-                            deploymentScope: deploymentScope,
-                            denySettingsMode: DenySettingsMode.ToString(),
-                            denySettingsExcludedPrincipals: DenySettingsExcludedPrincipal,
-                            denySettingsExcludedActions: DenySettingsExcludedAction,
-                            denySettingsApplyToChildScopes: DenySettingsApplyToChildScopes.IsPresent,
-                            tags: Tag
-                        );
+                        deploymentStackName: Name,
+                        managementGroupId: ManagementGroupId,
+                        location: Location,
+                        templateFile: TemplateFile,
+                        templateUri: !string.IsNullOrEmpty(protectedTemplateUri) ? protectedTemplateUri : TemplateUri,
+                        templateSpec: TemplateSpecId,
+                        templateObject: TemplateObject,
+                        parameterUri: TemplateParameterUri,
+                        parameters: GetTemplateParameterObject(),
+                        description: Description,
+                        resourcesCleanupAction: shouldDeleteResources ? "delete" : "detach",
+                        resourceGroupsCleanupAction: shouldDeleteResourceGroups ? "delete" : "detach",
+                        managementGroupsCleanupAction: shouldDeleteManagementGroups ? "delete" : "detach",
+                        deploymentScope: deploymentScope,
+                        denySettingsMode: DenySettingsMode.ToString(),
+                        denySettingsExcludedPrincipals: DenySettingsExcludedPrincipal,
+                        denySettingsExcludedActions: DenySettingsExcludedAction,
+                        denySettingsApplyToChildScopes: DenySettingsApplyToChildScopes.IsPresent,
+                        tags: Tag,
+                        bypassStackOutOfSyncError: BypassStackOutOfSyncError.IsPresent
+                    );
 
                     WriteObject(deploymentStack);
                 };
 
-                if (!Force.IsPresent && DeploymentStacksSdkClient.GetManagementGroupDeploymentStack(
-                        ManagementGroupId,
-                        Name,
-                        throwIfNotExists: false) == null)
+                if (!Force.IsPresent && currentStack == null)
                 {
                     string confirmationMessage =
                         $"The DeploymentStack '{Name}' you're trying to modify does not exist in the current subscription scope. Do you want to create a new stack?";

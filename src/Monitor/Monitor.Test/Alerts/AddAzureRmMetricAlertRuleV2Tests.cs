@@ -27,9 +27,10 @@ using System.Management.Automation;
 using System.Threading;
 using Xunit;
 using Xunit.Abstractions;
+using Microsoft.WindowsAzure.Commands.Test.Utilities.Common;
 namespace Microsoft.Azure.Commands.Insights.Test.Alerts
 {
-    public class AddAzureRmMetricAlertRuleV2Tests
+    public class AddAzureRmMetricAlertRuleV2Tests : RMTestBase
     {
         private readonly AddAzureRmMetricAlertRuleV2Command _cmdlet;
         private readonly Mock<IMetricAlertsOperations> _insightsMetricAlertsOperationsMock;
@@ -203,9 +204,6 @@ namespace Microsoft.Azure.Commands.Insights.Test.Alerts
 
             Func<MetricAlertResource, bool> verify = metricAlert =>
             {
-                Assert.Contains(_cmdlet.TargetResourceId, metricAlert.Scopes);
-                Assert.Contains(webtestCriteria.ComponentId, metricAlert.Scopes);
-
                 Assert.Contains($"hidden-link:{webtestCriteria.WebTestId}", metricAlert.Tags.Keys);
                 Assert.Contains($"hidden-link:{webtestCriteria.ComponentId}", metricAlert.Tags.Keys);
 

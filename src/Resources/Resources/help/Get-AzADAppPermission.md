@@ -14,12 +14,14 @@ Lists API permissions the application has requested.
 
 ### ObjectIdParameterSet (Default)
 ```
-Get-AzADAppPermission -ObjectId <Guid> [-DefaultProfile <PSObject>] [<CommonParameters>]
+Get-AzADAppPermission -ObjectId <Guid> [-DefaultProfile <PSObject>]
+ [<CommonParameters>]
 ```
 
 ### AppIdParameterSet
 ```
-Get-AzADAppPermission -ApplicationId <Guid> [-DefaultProfile <PSObject>] [<CommonParameters>]
+Get-AzADAppPermission -ApplicationId <Guid> [-DefaultProfile <PSObject>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -98,7 +100,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.MicrosoftGraphApplicationApiPermission
 
 ## NOTES
-
-ALIASES
 
 ## RELATED LINKS

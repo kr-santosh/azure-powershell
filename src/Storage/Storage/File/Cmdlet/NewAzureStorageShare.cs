@@ -15,10 +15,8 @@
 namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
 {
     using System.Management.Automation;
-    using Azure.Storage.File;
     using global::Azure.Storage.Files.Shares;
     using global::Azure.Storage.Files.Shares.Models;
-    using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
     using Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel;
     using Microsoft.WindowsAzure.Commands.Storage.Common;
 
@@ -33,6 +31,9 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
             HelpMessage = "Name of the file share to be created.")]
         [ValidateNotNullOrEmpty]
         public string Name { get; set; }
+
+        // Overwrite the useless parameter
+        public override SwitchParameter DisAllowTrailingDot { get; set; }
 
         public override void ExecuteCmdlet()
         {

@@ -16,7 +16,7 @@ Creates a key vault.
 ```
 New-AzKeyVault [-Name] <String> [-ResourceGroupName] <String> [-Location] <String> [-EnabledForDeployment]
  [-EnabledForTemplateDeployment] [-EnabledForDiskEncryption] [-EnablePurgeProtection]
- [-EnableRbacAuthorization] [-SoftDeleteRetentionInDays <Int32>] [-PublicNetworkAccess <String>]
+ [-DisableRbacAuthorization] [-SoftDeleteRetentionInDays <Int32>] [-PublicNetworkAccess <String>]
  [-Sku <String>] [-Tag <Hashtable>] [-NetworkRuleSet <PSKeyVaultNetworkRuleSet>]
  [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [-SubscriptionId <String>]
  [<CommonParameters>]
@@ -164,6 +164,7 @@ Network Rule Set                 :
                                  
 Tags                             :
 ```
+
 Creating a key vault and specifies network rules to allow access to the specified IP address from the virtual network identified by $myNetworkResId. See `New-AzKeyVaultNetworkRuleSetObject` for more information.
 
 ## PARAMETERS
@@ -175,6 +176,21 @@ The credentials, account, tenant, and subscription used for communication with a
 Type: Microsoft.Azure.Commands.Common.Authentication.Abstractions.Core.IAzureContextContainer
 Parameter Sets: (All)
 Aliases: AzContext, AzureRmContext, AzureCredential
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisableRbacAuthorization
+If specified, disables to authorize data actions by Role Based Access Control (RBAC), and then the access policies specified in vault properties will be honored. Note that management actions are always authorized with RBAC.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
@@ -231,21 +247,6 @@ Accept wildcard characters: False
 
 ### -EnablePurgeProtection
 If specified, protection against immediate deletion is enabled for this vault; requires soft delete to be enabled as well.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EnableRbacAuthorization
-If specified, enables to authorize data actions by Role Based Access Control (RBAC), and then the access policies specified in vault properties will be ignored. Note that management actions are always authorized with RBAC.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

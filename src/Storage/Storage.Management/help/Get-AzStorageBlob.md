@@ -18,7 +18,8 @@ Lists blobs in a container.
 Get-AzStorageBlob [[-Blob] <String>] [-Container] <String> [-IncludeDeleted] [-IncludeTag] [-MaxCount <Int32>]
  [-ContinuationToken <BlobContinuationToken>] [-TagCondition <String>] [-Context <IStorageContext>]
  [-ServerTimeoutPerRequest <Int32>] [-ClientTimeoutPerRequest <Int32>]
- [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>]
+ [<CommonParameters>]
 ```
 
 ### SingleBlobSnapshotTime
@@ -35,7 +36,8 @@ Get-AzStorageBlob [-Blob] <String> [-Container] <String> [-IncludeDeleted] [-Inc
 Get-AzStorageBlob [-Blob] <String> [-Container] <String> [-IncludeDeleted] [-IncludeTag] -VersionId <String>
  [-MaxCount <Int32>] [-ContinuationToken <BlobContinuationToken>] [-TagCondition <String>]
  [-Context <IStorageContext>] [-ServerTimeoutPerRequest <Int32>] [-ClientTimeoutPerRequest <Int32>]
- [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>]
+ [<CommonParameters>]
 ```
 
 ### BlobPrefix
@@ -43,7 +45,8 @@ Get-AzStorageBlob [-Blob] <String> [-Container] <String> [-IncludeDeleted] [-Inc
 Get-AzStorageBlob [-Prefix <String>] [-Container] <String> [-IncludeDeleted] [-IncludeVersion] [-IncludeTag]
  [-MaxCount <Int32>] [-ContinuationToken <BlobContinuationToken>] [-Context <IStorageContext>]
  [-ServerTimeoutPerRequest <Int32>] [-ClientTimeoutPerRequest <Int32>]
- [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -62,8 +65,9 @@ This command uses a blob name and wildcard to get a blob.
 ```powershell
 Get-AzStorageContainer -Name container* | Get-AzStorageBlob -IncludeDeleted
 ```
+
 ```output
-   Container Uri: https://storageaccountname.blob.core.windows.net/container1
+Container Uri: https://storageaccountname.blob.core.windows.net/container1
 
 Name                 BlobType  Length          ContentType                    LastModified         AccessTier SnapshotTime         IsDeleted 
 ----                 --------  ------          -----------                    ------------         ---------- ------------         --------- 
@@ -108,10 +112,11 @@ The final command uses the **Echo** command to display the total.
 
 ### Example 5: Get all blobs in a container include blob version
 ```powershell
-Get-AzStorageBlob -Container "containername"  -IncludeVersion 
+Get-AzStorageBlob -Container "containername"  -IncludeVersion
 ```
+
 ```output
-   AccountName: storageaccountname, ContainerName: containername
+AccountName: storageaccountname, ContainerName: containername
 
 Name                 BlobType  Length          ContentType                    LastModified         AccessTier SnapshotTime                 IsDeleted  VersionId                     
 ----                 --------  ------          -----------                    ------------         ---------- ------------                 ---------  ---------                     
@@ -126,10 +131,11 @@ This command gets all blobs in a container include blob version.
 
 ### Example 6: Get a single blob version
 ```powershell
-Get-AzStorageBlob -Container "containername" -Blob blob2 -VersionId "2020-07-03T16:19:16.2883167Z" 
+Get-AzStorageBlob -Container "containername" -Blob blob2 -VersionId "2020-07-03T16:19:16.2883167Z"
 ```
+
 ```output
-   AccountName: storageaccountname, ContainerName: containername
+AccountName: storageaccountname, ContainerName: containername
 
 Name                 BlobType  Length          ContentType                    LastModified         AccessTier SnapshotTime                 IsDeleted  VersionId                     
 ----                 --------  ------          -----------                    ------------         ---------- ------------                 ---------  ---------                     
@@ -142,8 +148,9 @@ This command gets a single blobs verion with VersionId.
 ```powershell
 Get-AzStorageBlob -Container "containername" -Blob blob1 -SnapshotTime "2020-07-06T06:56:06.8588431Z"
 ```
+
 ```output
-   AccountName: storageaccountname, ContainerName: containername
+AccountName: storageaccountname, ContainerName: containername
 
 Name                 BlobType  Length          ContentType                    LastModified         AccessTier SnapshotTime                 IsDeleted  VersionId                     
 ----                 --------  ------          -----------                    ------------         ---------- ------------                 ---------  ---------                     
@@ -157,9 +164,9 @@ This command gets a single blobs snapshot with SnapshotTime.
 
 
 ```
-PS C:\> $blobs = Get-AzStorageBlob -Container "containername" -IncludeTag
+$blobs = Get-AzStorageBlob -Container "containername" -IncludeTag
 
-PS C:\> $blobs
+$blobs
 
    AccountName: storageaccountname, ContainerName: containername
 
@@ -169,7 +176,7 @@ testblob             BlockBlob 2097152         application/octet-stream       20
 testblob2            BlockBlob 2097152         application/octet-stream       2020-07-23 09:35:04Z Hot                                     False      2020-07-23T09:35:04.0856187Z *
 
 
-PS C:\> $blobs[0].Tags
+$blobs[0].Tags
 Name          Value 
 ----          -----
 tag1          value1
@@ -182,8 +189,9 @@ This command lists blobs from a container with blob tags, and show the tags of t
 ```powershell
 Get-AzStorageBlob -Container "containername" -Blob testblob -TagCondition """tag1""='value1'"
 ```
+
 ```output
-   AccountName: storageaccountname, ContainerName: containername
+AccountName: storageaccountname, ContainerName: containername
 
 Name                 BlobType  Length          ContentType                    LastModified         AccessTier SnapshotTime                 IsDeleted  VersionId                     
 ----                 --------  ------          -----------                    ------------         ---------- ------------                 ---------  ---------                     
@@ -192,6 +200,21 @@ testblob             BlockBlob 2097152         application/octet-stream       20
 
 This command gets a single blob with blob tag condition. 
 The cmdlet will only success when the blob contains a tag with name "tag1" and value "value1", else the cmdlet will fail with error code 412.
+
+### Example 10: Get blob properties (example: ImmutabilityPolicy) of a single blob
+```powershell
+$blobProperties = (Get-AzStorageBlob -Container "ContainerName" -Blob "blob" -Context $ctx).BlobProperties
+$blobProperties.ImmutabilityPolicy
+```
+
+```output
+ExpiresOn                   PolicyMode
+---------                   ----------
+9/17/2024 2:49:32 AM +00:00   Unlocked
+```
+
+This example command gets the immutability property of a single blob. You can get a detailed list of blob prTooperties from the **BlobProperties** property, including but not limited to: LastModified, ContentLength, ContentHash, BlobType, LeaseState, AccessTier, ETag, ImmutabilityPolicy, etc...
+To list multiple blobs (execute the cmdlet without blob name), use **ListBlobProperties.Properties** instead of **BlobProperties** for better performance.
 
 ## PARAMETERS
 
@@ -485,5 +508,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Remove-AzStorageBlob](./Remove-AzStorageBlob.md)
 
 [Set-AzStorageBlobContent](./Set-AzStorageBlobContent.md)
-
-

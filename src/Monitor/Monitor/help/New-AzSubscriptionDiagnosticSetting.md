@@ -16,7 +16,8 @@ Creates or updates subscription diagnostic settings for the specified resource.
 New-AzSubscriptionDiagnosticSetting -Name <String> [-SubscriptionId <String>]
  [-EventHubAuthorizationRuleId <String>] [-EventHubName <String>] [-Log <ISubscriptionLogSettings[]>]
  [-MarketplacePartnerId <String>] [-ServiceBusRuleId <String>] [-StorageAccountId <String>]
- [-WorkspaceId <String>] [-DefaultProfile <PSObject>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-WorkspaceId <String>] [-DefaultProfile <PSObject>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -232,17 +233,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.PowerShell.Cmdlets.Monitor.DiagnosticSetting.Models.Api20210501Preview.ISubscriptionDiagnosticSettingsResource
 
 ## NOTES
-
-ALIASES
-
-COMPLEX PARAMETER PROPERTIES
-
-To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
-
-
-`LOG <ISubscriptionLogSettings[]>`: The list of logs settings.
-  - `Enabled <Boolean>`: a value indicating whether this log is enabled.
-  - `[Category <String>]`: Name of a Subscription Diagnostic Log category for a resource type this setting is applied to.
-  - `[CategoryGroup <String>]`: Name of a Subscription Diagnostic Log category group for a resource type this setting is applied to.
 
 ## RELATED LINKS

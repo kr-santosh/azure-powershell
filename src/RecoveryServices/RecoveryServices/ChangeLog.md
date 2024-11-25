@@ -19,6 +19,57 @@
 -->
 ## Upcoming Release
 
+## Version 7.3.0
+* Added CRR support for southeastus, westus3 regions.
+* Added support for enabling Disk access settings for managed VM restores.
+
+## Version 7.2.1
+* Fixed bug in `Set-ASRReplicationProtectedItem` cmdlet of H2A for replication to MD scenario.
+
+## Version 7.2.0
+* Fixed bug for making RecoveryAzureStorageAccountId parameter optional in `New-ASRReplicationProtectedItem` cmdlet of H2A.
+
+## Version 7.1.0
+* Added MUA support for CMK Encryption properties of Recovery Services Vault. Updated the  VaultProperty command to use underlying Vault APIs.
+* Added additional properties to the output of Get-AzRecoveryServicesVault cmdlet - MoveDetails, MoveState, RedundancySettings, SecureScore, BcdrSecurityLevel, EncryptionProperty.
+
+## Version 7.0.0
+* [Breaking Change] Renamed the property `ResouceType` of `ASRVaultSettings` to `ResourceType`.
+
+## Version 6.9.0
+* Added support for MUA for disabling vault Immutability, increasing RPO for policy schedule, restore, stop protection with retain data.
+* Added support for Enabling/Disabling the azure monitor and email notification alerts for site recovery in recovery services vault.
+
+## Version 6.8.0
+* Added option to set snapshot consistency type in policy cmdlets for creating or updating enhanced AzureVM policies.
+* Fixed an issue while setting soft delete vault property.
+
+## Version 6.7.1
+* Added CRR support for taiwannorth, taiwannorthwest region.
+* Added breaking change notification for cmdlets whose output type is `ASRVaultSettings`.
+* Added warning for Standard to Enhanced policy migration for AzureVMs.
+* Updated Unregister-AzRecoveryServicesBackupContainer cmdlet to ouptput Job object if PassThru not given.
+* Fixed issue with Get-AzRecoveryServicesVaultSettingsFile cmdlet to return private endpoint state for backup.
+
+## Version 6.7.0
+* Added support Edge zone VM restore
+* Added cross zonal restore for snapshot recovery point
+
+## Version 6.6.2
+* Removed outdated upcoming breaking change warning
+
+## Version 6.6.1
+* Fixed minor issues
+
+## Version 6.6.0
+* Added support for custom RG with suffix while creating or modifying policy for workload type AzureVM.
+* Added TLaD warning https://aka.ms/TLaD for Azure Site Recovery and Backup.
+* Added support for setting AlwaysON soft delete state for recovery services vault.
+
+## Version 6.5.1
+* Added StorageAccountName property to AzureFileShare job.
+* Added support for AFS restore to alternate storage account in different region and resource group than source storage account.
+
 ## Version 6.5.0
 * Added CRR support for new regions malaysiasouth, chinanorth3, chinaeast3, jioindiacentral, jioindiawest.
 * Regenerated CRR SDK. Fixed issues with SQL CRR.
@@ -162,13 +213,13 @@
 
 ## Version 3.4.0
 * modified policy validation limits as per backup service.
-* Added Zone Redundancy for Recovery Service Vaults. 
+* Added Zone Redundancy for Recovery Service Vaults.
 * Azure Site Recovery support for Proximity placement group for VMware to Azure and HyperV to Azure providers.
 * Azure Site Recovery support for Availability zone for VMware to Azure and HyperV to Azure providers.
 * Azure Site Recovery support for UseManagedDisk for HyperV to Azure provider
 
 ## Version 3.3.0
-* Added Cross Region Restore feature.  
+* Added Cross Region Restore feature.
 * Blocked getting workload config when target item is an availability group.
 
 ## Version 3.2.0
@@ -240,7 +291,7 @@
 ## Version 2.6.0
 * Azure Backup Added filtering of backup item based on friendly name.
 * Fixed Vault credential file download for backup and site recovery service
-* Fixes for few properties for update policy of H2A 
+* Fixes for few properties for update policy of H2A
 
 ## Version 2.5.0
 * Azure Site Recovery support for removing a replicated disk.
@@ -253,7 +304,7 @@
 * Azure Site Recovery support to update replication protected item with disk encryption set Map for HyperV to Azure.
 
 * Azure Site Recovery support to update failover and test failover disk names.
-* Azure Site Recovery support to update failover and test failover virtual machine names. 
+* Azure Site Recovery support to update failover and test failover virtual machine names.
 * Azure Site Recovery support for new test failover networking configurations.
 * Azure Site Recovery support to update failover and test failover configurations of multiple NICs through powershell.
 
@@ -324,12 +375,12 @@
 * Updated table format for SQL in azure VM
 * Added alternate method to fetch location in AzureFileShare
 * Updated ScheduleRunDays in SchedulePolicy object according to timezone
-* Made some attibutes read-only in Get-AzRecoveryServicesBackupWorkloadRecoveryConfig 
+* Made some attibutes read-only in Get-AzRecoveryServicesBackupWorkloadRecoveryConfig
 
 ## Version 1.2.0
 * Added SnapshotRetentionInDays in Azure VM policy to support Instant RP
 * Added pipe support for unregister container
- 
+
 ## Version 1.1.0
 * Added Sql server in Azure VM support
 * SDK Update

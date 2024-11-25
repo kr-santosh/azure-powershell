@@ -16,8 +16,6 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Common
 {
     using Microsoft.WindowsAzure.Commands.Utilities.Common;
     using Microsoft.Azure.Storage.Blob;
-    using Microsoft.Azure.Storage.File;
-    using Microsoft.Azure.Storage.Queue;
     using Microsoft.Azure.Cosmos.Table;
     using System;
     using System.Collections.Generic;
@@ -42,9 +40,7 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Common
         internal static void SetupAccessPolicy<T>(T policy, DateTime? startTime, DateTime? expiryTime, string permission, bool noStartTime = false, bool noExpiryTime = false)
         {
             if (!(typeof(T) == typeof(SharedAccessTablePolicy) ||
-                typeof(T) == typeof(SharedAccessFilePolicy) ||
-                typeof(T) == typeof(SharedAccessBlobPolicy) ||
-                (typeof(T) == typeof(SharedAccessQueuePolicy))))
+                typeof(T) == typeof(SharedAccessBlobPolicy)))
             {
                 throw new ArgumentException(Resources.InvalidAccessPolicyType);
             }
@@ -119,17 +115,9 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Common
                 {
                     ((SharedAccessTablePolicy)(Object)policy).Permissions = SharedAccessTablePermissions.None;
                 }
-                else if (typeof(T) == typeof(SharedAccessFilePolicy))
-                {
-                    ((SharedAccessFilePolicy)(Object)policy).Permissions = SharedAccessFilePermissions.None;
-                }
                 else if (typeof(T) == typeof(SharedAccessBlobPolicy))
                 {
                     ((SharedAccessBlobPolicy)(Object)policy).Permissions = SharedAccessBlobPermissions.None;
-                }
-                else if ((typeof(T) == typeof(SharedAccessQueuePolicy)))
-                {
-                    ((SharedAccessQueuePolicy)(Object)policy).Permissions = SharedAccessQueuePermissions.None;
                 }
                 else
                 {
@@ -146,17 +134,9 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Common
                     string convertedPermission = permission.Replace('q', 'r');
                     ((SharedAccessTablePolicy)(Object)policy).Permissions = SharedAccessTablePolicy.PermissionsFromString(convertedPermission);
                 }
-                else if (typeof(T) == typeof(SharedAccessFilePolicy))
-                {
-                    ((SharedAccessFilePolicy)(Object)policy).Permissions = SharedAccessFilePolicy.PermissionsFromString(permission);
-                }
                 else if (typeof(T) == typeof(SharedAccessBlobPolicy))
                 {
                     ((SharedAccessBlobPolicy)(Object)policy).Permissions = SharedAccessBlobPolicy.PermissionsFromString(permission);
-                }
-                else if ((typeof(T) == typeof(SharedAccessQueuePolicy)))
-                {
-                    ((SharedAccessQueuePolicy)(Object)policy).Permissions = SharedAccessQueuePolicy.PermissionsFromString(permission);
                 }
                 else
                 {
@@ -172,9 +152,9 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Common
         internal static PSObject ConstructPolicyOutputPSObject<T>(IDictionary<string, T> sharedAccessPolicies, string policyName)
         {
             if (!(typeof(T) == typeof(SharedAccessTablePolicy) ||
-               typeof(T) == typeof(SharedAccessBlobPolicy) ||
-               (typeof(T) == typeof(SharedAccessQueuePolicy)) ||
-               (typeof(T) == typeof(SharedAccessFilePolicy))))
+               typeof(T) == typeof(SharedAccessBlobPolicy)))
+               //||
+               //(typeof(T) == typeof(SharedAccessFilePolicy))))
             {
                 throw new ArgumentException(Resources.InvalidAccessPolicyType);
             }
@@ -201,6 +181,8 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Common
             }
 
             var accessPolicy = (identifier).GetType().GetProperty("AccessPolicy").GetValue(identifier);
+            string policyStartsOn = typeof(T) == typeof(QueueSignedIdentifier) ? "StartsOn" : "PolicyStartsOn";
+            string policyExpiresOn = typeof(T) == typeof(QueueSignedIdentifier) ? "ExpiresOn" : "PolicyExpiresOn";
 
             return PowerShellUtilities.ConstructPSObject(
                 typeof(PSObject).FullName,
@@ -209,9 +191,37 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Common
                 "Permissions",
                 (accessPolicy).GetType().GetProperty("Permissions").GetValue(accessPolicy) is null ? null: (accessPolicy).GetType().GetProperty("Permissions").GetValue(accessPolicy).ToString(),
                 "StartTime",
-                (accessPolicy).GetType().GetProperty("PolicyStartsOn").GetValue(accessPolicy),
+                (accessPolicy).GetType().GetProperty(policyStartsOn).GetValue(accessPolicy),
                 "ExpiryTime",
-                (accessPolicy).GetType().GetProperty("PolicyExpiresOn").GetValue(accessPolicy));
+                (accessPolicy).GetType().GetProperty(policyExpiresOn).GetValue(accessPolicy));
+        }
+
+        /// <summary>
+        /// Sort characters of rawPermission in the order of fullPermission
+        /// </summary>
+        /// <param name="fullPermission"></param>
+        /// <param name="rawPermission"></param>
+        /// <returns></returns>
+        internal static string OrderPermission(string fullPermission, string rawPermission)
+        {
+            string orderedPermission = "";
+            int rawLength = rawPermission.Length;
+            foreach (char c in fullPermission)
+            {
+                if (rawPermission.Contains(c.ToString()))
+                {
+                    orderedPermission += c.ToString();
+                    rawLength--;
+                }
+            }
+            if (rawLength == 0)
+            {
+                return orderedPermission;
+            }
+            else // some permission in rawstringLength not in current full permission list, so can't order. will use the raw permission string to try best to set permission.
+            {
+                return rawPermission;
+            }
         }
 
         /// <summary>
@@ -220,24 +230,16 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Common
         public static string OrderBlobPermission(string rawPermission)
         {
             string fullBlobPermission = "racwdxyltfmeopi";
-            string OrderedPermission = "";
-            int rawLength = rawPermission.Length;
-            foreach (char c in fullBlobPermission)
-            {
-                if (rawPermission.Contains(c.ToString()))
-                {
-                    OrderedPermission = OrderedPermission + c.ToString();
-                    rawLength--;
-                }
-            }
-            if (rawLength == 0)
-            {
-                return OrderedPermission;
-            }
-            else // some permission in rawstringLength not in current full permission list, so can't order. will use the raw permission string to try best to set permission.
-            {
-                return rawPermission;
-            }
+            return OrderPermission(fullBlobPermission, rawPermission);
+        }
+
+        /// <summary>
+        /// Order Queue permission
+        /// </summary>
+        public static string OrderQueuePermission(string rawPermission)
+        {
+            string fullQueuePermission = "raup";
+            return OrderPermission(fullQueuePermission, rawPermission);
         }
     }
 }

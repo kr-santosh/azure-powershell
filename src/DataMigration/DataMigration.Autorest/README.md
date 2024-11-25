@@ -3,9 +3,6 @@
 This directory contains the PowerShell module for the DataMigration service.
 
 ---
-## Status
-[![Az.DataMigration](https://img.shields.io/powershellgallery/v/Az.DataMigration.svg?style=flat-square&label=Az.DataMigration "Az.DataMigration")](https://www.powershellgallery.com/packages/Az.DataMigration/)
-
 ## Info
 - Modifiable: yes
 - Generated: all
@@ -30,7 +27,7 @@ For information on how to develop for `Az.DataMigration`, see [how-to.md](how-to
 > see https://aka.ms/autorest
 
 ``` yaml
-branch: e8c359d8821038f133695c9b1f4cf40d330cbc80
+commit: e8c359d8821038f133695c9b1f4cf40d330cbc80
 require:
   - $(this-folder)/../../readme.azure.noprofile.md
 input-file: 
@@ -38,6 +35,10 @@ input-file:
 
 title: DataMigration
 module-version: 0.1.0
+
+# For new modules, please avoid setting 3.x using the use-extension method and instead, use 4.x as the default option
+use-extension:
+  "@autorest/powershell": "3.x"
 
 directive:
 
@@ -88,7 +89,7 @@ directive:
 
   - from: swagger-document
     where: $.paths["/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Sql/servers/{sqlDbInstanceName}/providers/Microsoft.DataMigration/databaseMigrations/{targetDbName}"].put
-    transform: $["description"] = "Create a new database migration to a given SQL Db."
+    transform: $["description"] = "Create a new database migration to a given SQL Db. This command can migrate data from the selected source database tables to the target database tables. If the target database have no table existing, please use [New-AzDataMigrationSqlServerSchema](https://learn.microsoft.com/powershell/module/az.datamigration/new-azdatamigrationsqlserverschema) command to migrate schema objects from source database to target databse."
 
   - from: swagger-document
     where: $.paths["/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataMigration/sqlMigrationServices/{sqlMigrationServiceName}"].delete
@@ -340,19 +341,23 @@ directive:
   - where:
       subject: (^SqlService)
     set:
-      preview-message: This is a SQL Service resource and can only be accessed using cmdlets that have SqlService in their name. (For example Get-AzDataMigrationSqlService should be used to access a data migration SQL Service and NOT Get-AzDataMigrationService)
+      preview-announcement:
+        preview-message: This is a SQL Service resource and can only be accessed using cmdlets that have SqlService in their name. (For example Get-AzDataMigrationSqlService should be used to access a data migration SQL Service and NOT Get-AzDataMigrationService)
   - where:
       subject: (^ToSqlManagedInstance)
     set:
-      preview-message: Only use cmdlets containing ToSqlManagedInstance in their name for getting or deleting or performing cutover on a migration created using New-AzDataMigrationToSqlManagedInstance
+      preview-announcement:
+        preview-message: Only use cmdlets containing ToSqlManagedInstance in their name for getting or deleting or performing cutover on a migration created using New-AzDataMigrationToSqlManagedInstance
   - where:
       subject: (^ToSqlVM)
     set:
-      preview-message: Only use cmdlets containing ToSqlVM in their name for getting or deleting or performing cutover on a migration created using New-AzDataMigrationToSqlVM
+      preview-announcement:
+        preview-message: Only use cmdlets containing ToSqlVM in their name for getting or deleting or performing cutover on a migration created using New-AzDataMigrationToSqlVM
   - where:
       subject: (^ToSqlDb)
     set:
-      preview-message: Only use cmdlets containing ToSqlDb in their name for getting or stopping or deleting a migration created using New-AzDataMigrationToSqlDb
+      preview-announcement:
+        preview-message: Only use cmdlets containing ToSqlDb in their name for getting or stopping or deleting a migration created using New-AzDataMigrationToSqlDb
 
   # Making parameters required/optional
   - from: swagger-document

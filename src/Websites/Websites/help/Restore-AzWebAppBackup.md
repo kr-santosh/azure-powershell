@@ -1,6 +1,6 @@
 ---
 external help file: Microsoft.Azure.PowerShell.Cmdlets.Websites.dll-Help.xml
-Module Name: Az.WebSites
+Module Name: Az.Websites
 ms.assetid: DC400E32-CAB9-4354-99B2-ABA4AA776030
 online version: https://learn.microsoft.com/powershell/module/az.websites/restore-azwebappbackup
 schema: 2.0.0
@@ -25,7 +25,8 @@ Restore-AzWebAppBackup [-AppServicePlan <String>] [-Databases <DatabaseBackupSet
 ```
 Restore-AzWebAppBackup [-AppServicePlan <String>] [-Databases <DatabaseBackupSetting[]>]
  [-IgnoreConflictingHostNames] [-WebApp] <PSSite> [-DefaultProfile <IAzureContextContainer>]
- [-StorageAccountUrl] <String> [-BlobName] <String> [-Overwrite] [<CommonParameters>]
+ [-StorageAccountUrl] <String> [-BlobName] <String> [-Overwrite]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,7 +39,7 @@ The **Restore-AzWebAppBackup** cmdlet restores an Azure Web App Backup.
 Restore-AzWebAppBackup -ResourceGroupName "Default-Web-WestUS" -Name "ContosoWebApp" -StorageAccountUrl "https://storageaccount.file.core.windows.net" -BlobName "myBlob"
 ```
 
-Restores a backup of the specified app ContosoWebApp that is within resource group Default-Web-WestUS in blob "myBlob" located at https://storageaccount.file.core.windows.net
+Restores a backup of the specified app ContosoWebApp that is within resource group Default-Web-WestUS in blob "myBlob" located at `https://storageaccount.file.core.windows.net`
 
 ### Example 2
 

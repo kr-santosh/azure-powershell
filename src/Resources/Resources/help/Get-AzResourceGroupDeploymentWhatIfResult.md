@@ -16,7 +16,8 @@ Gets a template What-If result for a deployment at resource group scope.
 ```
 Get-AzResourceGroupDeploymentWhatIfResult [-Name <String>] -ResourceGroupName <String> [-Mode <DeploymentMode>]
  [-ResultFormat <WhatIfResultFormat>] [-ExcludeChangeType <String[]>] -TemplateFile <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateObjectAndParameterObject
@@ -83,6 +84,14 @@ Get-AzResourceGroupDeploymentWhatIfResult [-Name <String>] -ResourceGroupName <S
  [<CommonParameters>]
 ```
 
+### ByParameterFileWithNoTemplate
+```
+Get-AzResourceGroupDeploymentWhatIfResult [-Name <String>] -ResourceGroupName <String> [-Mode <DeploymentMode>]
+ [-ResultFormat <WhatIfResultFormat>] [-ExcludeChangeType <String[]>] -TemplateParameterFile <String>
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
+```
+
 ### ByTemplateObjectAndParameterUri
 ```
 Get-AzResourceGroupDeploymentWhatIfResult [-Name <String>] -ResourceGroupName <String> [-Mode <DeploymentMode>]
@@ -119,21 +128,24 @@ Get-AzResourceGroupDeploymentWhatIfResult [-Name <String>] -ResourceGroupName <S
 ```
 Get-AzResourceGroupDeploymentWhatIfResult [-Name <String>] -ResourceGroupName <String> [-Mode <DeploymentMode>]
  [-ResultFormat <WhatIfResultFormat>] [-ExcludeChangeType <String[]>] -TemplateObject <Hashtable>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateUriWithNoParameters
 ```
 Get-AzResourceGroupDeploymentWhatIfResult [-Name <String>] -ResourceGroupName <String> [-Mode <DeploymentMode>]
  [-ResultFormat <WhatIfResultFormat>] [-ExcludeChangeType <String[]>] -TemplateUri <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateSpecResourceId
 ```
 Get-AzResourceGroupDeploymentWhatIfResult [-Name <String>] -ResourceGroupName <String> [-Mode <DeploymentMode>]
  [-ResultFormat <WhatIfResultFormat>] [-ExcludeChangeType <String[]>] -TemplateSpecId <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -173,6 +185,14 @@ The command uses the *TemplateFile* parameter to specify a template file.
 The command uses the *TemplateParameterFile* parameter to specify a template parameter file.
 The command uses the *ResultFormat* parameter to set the What-If result to only contain resource IDs.
 
+### Example 3: Use a .bicepparam file to calculate What-If
+```powershell
+Get-AzResourceGroupDeploymentWhatIfResult -ResourceGroupName "myRG1" -TemplateParameterFile "./parameters.bicepparam"
+```
+
+This command gets a What-If result at the resource group scope by using a .bicepparam file on disk.
+The command uses the *TemplateParameterFile* parameter to specify a .bicepparam file.
+
 ## PARAMETERS
 
 ### -DefaultProfile
@@ -209,7 +229,7 @@ Accept wildcard characters: False
 The deployment mode.
 
 ```yaml
-Type: Microsoft.Azure.Management.ResourceManager.Models.DeploymentMode
+Type: Microsoft.Azure.Management.Resources.Models.DeploymentMode
 Parameter Sets: (All)
 Aliases:
 Accepted values: Incremental, Complete
@@ -270,7 +290,7 @@ Accept wildcard characters: False
 The What-If result format.
 
 ```yaml
-Type: Microsoft.Azure.Management.ResourceManager.Models.WhatIfResultFormat
+Type: Microsoft.Azure.Management.Resources.Models.WhatIfResultFormat
 Parameter Sets: (All)
 Aliases:
 Accepted values: ResourceIdOnly, FullResourcePayloads
@@ -330,11 +350,11 @@ Accept wildcard characters: False
 ```
 
 ### -TemplateParameterFile
-A file that has the template parameters.
+Parameter file to use for the template.
 
 ```yaml
 Type: System.String
-Parameter Sets: ByTemplateObjectAndParameterFile, ByTemplateFileAndParameterFile, ByTemplateUriAndParameterFile, ByTemplateSpecResourceIdAndParams
+Parameter Sets: ByTemplateObjectAndParameterFile, ByTemplateFileAndParameterFile, ByTemplateUriAndParameterFile, ByTemplateSpecResourceIdAndParams, ByParameterFileWithNoTemplate
 Aliases:
 
 Required: True

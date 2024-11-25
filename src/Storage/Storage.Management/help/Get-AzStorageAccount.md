@@ -63,6 +63,7 @@ $account = Get-AzStorageAccount -ResourceGroupName "myresourcegoup" -Name "mysto
 
 $account.BlobRestoreStatus
 ```
+
 ```output
 Status     RestoreId                            FailureReason Parameters.TimeToRestore     Parameters.BlobRanges                 
 ------     ---------                            ------------- ------------------------     ---------------------                 
@@ -176,7 +177,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -195,5 +196,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Remove-AzStorageAccount](./Remove-AzStorageAccount.md)
 
 [Set-AzStorageAccount](./Set-AzStorageAccount.md)
-
-

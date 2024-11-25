@@ -17,7 +17,8 @@ Validates a resource group deployment.
 ```
 Test-AzResourceGroupDeployment -ResourceGroupName <String> [-Mode <DeploymentMode>] [-RollbackToLastDeployment]
  [-RollBackDeploymentName <String>] [-QueryString <String>] -TemplateFile <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateObjectAndParameterObject
@@ -84,6 +85,14 @@ Test-AzResourceGroupDeployment -ResourceGroupName <String> [-Mode <DeploymentMod
  [<CommonParameters>]
 ```
 
+### ByParameterFileWithNoTemplate
+```
+Test-AzResourceGroupDeployment -ResourceGroupName <String> [-Mode <DeploymentMode>] [-RollbackToLastDeployment]
+ [-RollBackDeploymentName <String>] [-QueryString <String>] -TemplateParameterFile <String>
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
+```
+
 ### ByTemplateObjectAndParameterUri
 ```
 Test-AzResourceGroupDeployment -ResourceGroupName <String> [-Mode <DeploymentMode>] [-RollbackToLastDeployment]
@@ -120,21 +129,24 @@ Test-AzResourceGroupDeployment -ResourceGroupName <String> [-Mode <DeploymentMod
 ```
 Test-AzResourceGroupDeployment -ResourceGroupName <String> [-Mode <DeploymentMode>] [-RollbackToLastDeployment]
  [-RollBackDeploymentName <String>] [-QueryString <String>] -TemplateObject <Hashtable>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateUriWithNoParameters
 ```
 Test-AzResourceGroupDeployment -ResourceGroupName <String> [-Mode <DeploymentMode>] [-RollbackToLastDeployment]
  [-RollBackDeploymentName <String>] [-QueryString <String>] -TemplateUri <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateSpecResourceId
 ```
 Test-AzResourceGroupDeployment -ResourceGroupName <String> [-Mode <DeploymentMode>] [-RollbackToLastDeployment]
  [-RollBackDeploymentName <String>] [-QueryString <String>] -TemplateSpecId <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -160,6 +172,14 @@ Test-AzResourceGroupDeployment -ResourceGroupName testRG01 -TemplateFile "D:\Azu
 
 This command tests a deployment in the given resource group and resource using the provided template file and a parameter file.
 
+### Example 3: Use a .bicepparam file to validate a deployment
+```powershell
+Test-AzResourceGroupDeployment -ResourceGroupName "myRG1" -TemplateParameterFile "./parameters.bicepparam"
+```
+
+This command validates the deployment at the resource group scope by using a .bicepparam file on disk.
+The command uses the *TemplateParameterFile* parameter to specify a .bicepparam file.
+
 ## PARAMETERS
 
 ### -DefaultProfile
@@ -184,7 +204,7 @@ The acceptable values for this parameter are:
 - Complete
 
 ```yaml
-Type: Microsoft.Azure.Management.ResourceManager.Models.DeploymentMode
+Type: Microsoft.Azure.Management.Resources.Models.DeploymentMode
 Parameter Sets: (All)
 Aliases:
 Accepted values: Incremental, Complete
@@ -321,7 +341,7 @@ Specifies the full path of a JSON file that contains the names and values of the
 
 ```yaml
 Type: System.String
-Parameter Sets: ByTemplateObjectAndParameterFile, ByTemplateFileAndParameterFile, ByTemplateUriAndParameterFile, ByTemplateSpecResourceIdAndParams
+Parameter Sets: ByTemplateObjectAndParameterFile, ByTemplateFileAndParameterFile, ByTemplateUriAndParameterFile, ByTemplateSpecResourceIdAndParams, ByParameterFileWithNoTemplate
 Aliases:
 
 Required: True
@@ -417,5 +437,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Remove-AzResourceGroupDeployment](./Remove-AzResourceGroupDeployment.md)
 
 [Stop-AzResourceGroupDeployment](./Stop-AzResourceGroupDeployment.md)
-
-

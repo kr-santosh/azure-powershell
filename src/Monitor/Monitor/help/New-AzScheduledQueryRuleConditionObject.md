@@ -16,7 +16,8 @@ Create an in-memory object for Condition.
 New-AzScheduledQueryRuleConditionObject [-Dimension <IDimension[]>]
  [-FailingPeriodMinFailingPeriodsToAlert <Int64>] [-FailingPeriodNumberOfEvaluationPeriod <Int64>]
  [-MetricMeasureColumn <String>] [-MetricName <String>] [-Operator <ConditionOperator>] [-Query <String>]
- [-ResourceIdColumn <String>] [-Threshold <Double>] [-TimeAggregation <TimeAggregation>] [<CommonParameters>]
+ [-ResourceIdColumn <String>] [-Threshold <Double>] [-TimeAggregation <TimeAggregation>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -206,17 +207,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.PowerShell.Cmdlets.Monitor.ScheduledQueryRule.Models.Api20210801.Condition
 
 ## NOTES
-
-ALIASES
-
-COMPLEX PARAMETER PROPERTIES
-
-To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
-
-
-`DIMENSION <IDimension[]>`: List of Dimensions conditions.
-  - `Name <String>`: Name of the dimension
-  - `Operator <DimensionOperator>`: Operator for dimension values
-  - `Value <String[]>`: List of dimension values
 
 ## RELATED LINKS

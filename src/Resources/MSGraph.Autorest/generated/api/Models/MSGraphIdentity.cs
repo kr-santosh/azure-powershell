@@ -12,12 +12,26 @@ namespace Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models
         Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.IMSGraphIdentityInternal
     {
 
+        /// <summary>Backing field for <see cref="AppRoleAssignmentId" /> property.</summary>
+        private string _appRoleAssignmentId;
+
+        /// <summary>key: id of appRoleAssignment</summary>
+        [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Origin(Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.PropertyOrigin.Owned)]
+        public string AppRoleAssignmentId { get => this._appRoleAssignmentId; set => this._appRoleAssignmentId = value; }
+
         /// <summary>Backing field for <see cref="ApplicationId" /> property.</summary>
         private string _applicationId;
 
         /// <summary>key: id of application</summary>
         [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Origin(Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.PropertyOrigin.Owned)]
         public string ApplicationId { get => this._applicationId; set => this._applicationId = value; }
+
+        /// <summary>Backing field for <see cref="DirectoryObjectId" /> property.</summary>
+        private string _directoryObjectId;
+
+        /// <summary>The unique identifier of directoryObject</summary>
+        [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Origin(Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.PropertyOrigin.Owned)]
+        public string DirectoryObjectId { get => this._directoryObjectId; set => this._directoryObjectId = value; }
 
         /// <summary>Backing field for <see cref="FederatedIdentityCredentialId" /> property.</summary>
         private string _federatedIdentityCredentialId;
@@ -70,6 +84,17 @@ namespace Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models
     public partial interface IMSGraphIdentity :
         Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Runtime.IJsonSerializable
     {
+        /// <summary>key: id of appRoleAssignment</summary>
+        [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Runtime.Info(
+        Required = false,
+        ReadOnly = false,
+        Read = true,
+        Create = true,
+        Update = true,
+        Description = @"key: id of appRoleAssignment",
+        SerializedName = @"appRoleAssignment-id",
+        PossibleTypes = new [] { typeof(string) })]
+        string AppRoleAssignmentId { get; set; }
         /// <summary>key: id of application</summary>
         [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Runtime.Info(
         Required = false,
@@ -81,6 +106,17 @@ namespace Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models
         SerializedName = @"application-id",
         PossibleTypes = new [] { typeof(string) })]
         string ApplicationId { get; set; }
+        /// <summary>The unique identifier of directoryObject</summary>
+        [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Runtime.Info(
+        Required = false,
+        ReadOnly = false,
+        Read = true,
+        Create = true,
+        Update = true,
+        Description = @"The unique identifier of directoryObject",
+        SerializedName = @"directoryObject-id",
+        PossibleTypes = new [] { typeof(string) })]
+        string DirectoryObjectId { get; set; }
         /// <summary>key: id of federatedIdentityCredential</summary>
         [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Runtime.Info(
         Required = false,
@@ -152,8 +188,12 @@ namespace Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models
     internal partial interface IMSGraphIdentityInternal
 
     {
+        /// <summary>key: id of appRoleAssignment</summary>
+        string AppRoleAssignmentId { get; set; }
         /// <summary>key: id of application</summary>
         string ApplicationId { get; set; }
+        /// <summary>The unique identifier of directoryObject</summary>
+        string DirectoryObjectId { get; set; }
         /// <summary>key: id of federatedIdentityCredential</summary>
         string FederatedIdentityCredentialId { get; set; }
         /// <summary>key: id of group</summary>

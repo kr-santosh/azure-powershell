@@ -172,5 +172,19 @@ namespace Microsoft.Azure.Commands.Sql.Test.ScenarioTests
         {
             TestRunner.RunTestScript("Test-SwitchFailoverGroupTryPlannedBeforeForcedFailover");
         }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestFailoverGroupMultipleSecondaries()
+        {
+            TestRunner.RunTestScript("Test-FailoverGroupMultipleSecondaries");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestAddRemoveDatabasesToFromFailoverGroupWithStandby()
+        {
+            TestRunner.RunTestScript("Test-AddRemoveDatabasesToFromFailoverGroupWithStandby");
+        }
     }
 }

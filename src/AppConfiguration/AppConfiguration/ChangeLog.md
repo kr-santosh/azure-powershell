@@ -19,6 +19,24 @@
 -->
 ## Upcoming Release
 
+## Version 1.3.2
+* Fixed secrets exposure in example documentation.
+
+## Version 1.3.1
+* Introduced secrets detection feature to safeguard sensitive data.
+
+## Version 1.3.0
+* Added cmdlets to support data plane operation:
+  - `Get-AzAppConfigurationKey`
+  - `Get-AzAppConfigurationKeyValue`
+  - `Get-AzAppConfigurationLabel`
+  - `Get-AzAppConfigurationRevision`
+  - `Remove-AzAppConfigurationKeyValue`
+  - `Remove-AzAppConfigurationLock`
+  - `Set-AzAppConfigurationKeyValue`
+  - `Set-AzAppConfigurationLock`
+  - `Test-AzAppConfigurationKeyValue`
+
 ## Version 1.2.0
 * Added cmdlets `Get-AzAppConfigurationDeletedStore` and `Clear-AzAppConfigurationDeletedStore`
 * Updated ApiVersion to 2022-05-01.

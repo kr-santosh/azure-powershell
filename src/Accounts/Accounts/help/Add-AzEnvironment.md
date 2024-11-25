@@ -59,6 +59,8 @@ The built-in environments AzureCloud and AzureChinaCloud target existing public 
 
 ### Example 1: Creating and modifying a new environment
 <!-- Skip: Output cannot be splitted from code -->
+
+
 ```powershell
 Add-AzEnvironment -Name TestEnvironment `
         -ActiveDirectoryEndpoint TestADEndpoint `
@@ -269,7 +271,7 @@ Accept wildcard characters: False
 ```
 
 ### -AzureAttestationServiceEndpointResourceId
-The The resource identifier of the Azure Attestation service that is the recipient of the requested token.
+The resource identifier of the Azure Attestation service that is the recipient of the requested token.
 
 ```yaml
 Type: System.String
@@ -389,7 +391,7 @@ Accept wildcard characters: False
 ```
 
 ### -AzureSynapseAnalyticsEndpointResourceId
-The The resource identifier of the Azure Synapse Analytics that is the recipient of the requested token.
+The resource identifier of the Azure Synapse Analytics that is the recipient of the requested token.
 
 ```yaml
 Type: System.String
@@ -495,6 +497,7 @@ Accept wildcard characters: False
 
 ### -GalleryEndpoint
 Specifies the endpoint for the Azure Resource Manager gallery of deployment templates.
+The parameter is to set the value to `GalleryUrl` of `PSAzureEnvironment`. As `GalleryUrl` is removed from ArmMetadata, Azure PowerShell will no longer provide for the value and so it is not recommended to set `GalleryEndpoint` anymore.
 
 ```yaml
 Type: System.String

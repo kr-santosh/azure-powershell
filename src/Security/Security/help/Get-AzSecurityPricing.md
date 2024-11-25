@@ -15,17 +15,20 @@ Gets the Azure Defender plans for a subscription in Azure Security Center.
 
 ### SubscriptionScope (Default)
 ```
-Get-AzSecurityPricing [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+Get-AzSecurityPricing [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### SubscriptionLevelResource
 ```
-Get-AzSecurityPricing -Name <String> [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+Get-AzSecurityPricing -Name <String> [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ResourceId
 ```
-Get-AzSecurityPricing -ResourceId <String> [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+Get-AzSecurityPricing -ResourceId <String> [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -75,6 +78,15 @@ Gets pricing details of the specific resource ID. Where ResourceId is one of the
 
 ```powershell
 Get-AzSecurityPricing -Name 'VirtualMachines'
+```
+
+```output
+Id                     : /subscriptions/10329fc1-5a3b-443c-9054-83d13abd64db/providers/Microsoft.Security/pricings/VirtualMachines
+Name                   : VirtualMachines
+PricingTier            : Standard
+FreeTrialRemainingTime : 00:00:00
+SubPlan                : P2
+Extensions             : [{"name":"MdeDesignatedSubscription","isEnabled":"False","additionalExtensionProperties":null,"operationStatus":null},{"name":"AgentlessVmScanning","isEnabled":"True","additionalExtensionProperties":{"ExclusionTags":"[{\"key\":\"Microsoft\",\"value\":\"Defender\"},{\"key\":\"For\",\"value\":\"Cloud\"}]"},"operationStatus":null}]
 ```
 
 Gets pricing details of the named Azure Defender plan. Where `name` is one of the names returned by `Get-AzSecurityPricing`.

@@ -22,7 +22,8 @@ Get-AzDataMigrationSkuRecommendation [-OutputFolder <String>] [-TargetPlatform <
 
 ### ConfigFile
 ```
-Get-AzDataMigrationSkuRecommendation -ConfigFilePath <String> [-PassThru] [<CommonParameters>]
+Get-AzDataMigrationSkuRecommendation -ConfigFilePath <String> [-PassThru]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -336,7 +337,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Boolean
 
 ## NOTES
-
-ALIASES
 
 ## RELATED LINKS

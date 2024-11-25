@@ -16,7 +16,8 @@ Gets a template What-If result for a deployment at management group scope.
 ```
 Get-AzManagementGroupDeploymentWhatIfResult [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-ResultFormat <WhatIfResultFormat>] [-ExcludeChangeType <String[]>] -TemplateFile <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateObjectAndParameterObject
@@ -83,6 +84,14 @@ Get-AzManagementGroupDeploymentWhatIfResult [-Name <String>] -ManagementGroupId 
  [<CommonParameters>]
 ```
 
+### ByParameterFileWithNoTemplate
+```
+Get-AzManagementGroupDeploymentWhatIfResult [-Name <String>] -ManagementGroupId <String> -Location <String>
+ [-ResultFormat <WhatIfResultFormat>] [-ExcludeChangeType <String[]>] -TemplateParameterFile <String>
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
+```
+
 ### ByTemplateObjectAndParameterUri
 ```
 Get-AzManagementGroupDeploymentWhatIfResult [-Name <String>] -ManagementGroupId <String> -Location <String>
@@ -119,21 +128,24 @@ Get-AzManagementGroupDeploymentWhatIfResult [-Name <String>] -ManagementGroupId 
 ```
 Get-AzManagementGroupDeploymentWhatIfResult [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-ResultFormat <WhatIfResultFormat>] [-ExcludeChangeType <String[]>] -TemplateObject <Hashtable>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateUriWithNoParameters
 ```
 Get-AzManagementGroupDeploymentWhatIfResult [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-ResultFormat <WhatIfResultFormat>] [-ExcludeChangeType <String[]>] -TemplateUri <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateSpecResourceId
 ```
 Get-AzManagementGroupDeploymentWhatIfResult [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-ResultFormat <WhatIfResultFormat>] [-ExcludeChangeType <String[]>] -TemplateSpecId <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -176,6 +188,14 @@ The command uses the *ManagementGroupId* parameter to specify the management gro
 The command uses the *TemplateFile* parameter to specify a template file.
 The command uses the *TemplateParameterFile* parameter to specify a template parameter file.
 The command uses the *ResultFormat* parameter to set the What-If result to only contain resource IDs.
+
+### Example 3: Use a .bicepparam file to calculate What-If
+```powershell
+Get-AzManagementGroupDeploymentWhatIfResult -ManagementGroupId "myManagementGroup" -Location "West US" -TemplateParameterFile "./parameters.bicepparam"
+```
+
+This command gets a What-If result at the management group scope by using a .bicepparam file on disk.
+The command uses the *TemplateParameterFile* parameter to specify a .bicepparam file.
 
 ## PARAMETERS
 
@@ -275,7 +295,7 @@ Accept wildcard characters: False
 The What-If result format.
 
 ```yaml
-Type: Microsoft.Azure.Management.ResourceManager.Models.WhatIfResultFormat
+Type: Microsoft.Azure.Management.Resources.Models.WhatIfResultFormat
 Parameter Sets: (All)
 Aliases:
 Accepted values: ResourceIdOnly, FullResourcePayloads
@@ -335,11 +355,11 @@ Accept wildcard characters: False
 ```
 
 ### -TemplateParameterFile
-A file that has the template parameters.
+Parameter file to use for the template.
 
 ```yaml
 Type: System.String
-Parameter Sets: ByTemplateObjectAndParameterFile, ByTemplateFileAndParameterFile, ByTemplateUriAndParameterFile, ByTemplateSpecResourceIdAndParams
+Parameter Sets: ByTemplateObjectAndParameterFile, ByTemplateFileAndParameterFile, ByTemplateUriAndParameterFile, ByTemplateSpecResourceIdAndParams, ByParameterFileWithNoTemplate
 Aliases:
 
 Required: True

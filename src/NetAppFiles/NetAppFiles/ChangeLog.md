@@ -19,6 +19,61 @@
 -->
 ## Upcoming Release
 
+## Version 0.20.0
+* Removed parameters `Location`, `PoolName`, `VolumeName` from `Get-AzNetAppFilesBackup`, `New-AzNetAppFilesBackup`, `Update-AzNetAppFilesBackup`, `Remove-AzNetAppFilesBackup` and `Restore-AzNetAppFilesBackupFile`
+
+## Version 0.19.0
+* Added new cmdLets for on-prem volume migration `Start-AnfPeerExternalCluster`, `Start-AnfFinalizeExternalReplication`, `Start-AnfPerformExternalReplication`, `Start-AnfAuthorizeExternalReplication`
+* Added new cmdLets `Get-AzNetAppFilesQuotaAvailability`, `Get-AzNetAppFilesNameAvailability` and `Get-AzNetAppFilesFileNameAvailability`
+* Added `RemotePath` to `PSNetAppFilesReplicationObject`
+* Added `EffectiveNetworkFeatures` to `PSNetAppFilesVolume`
+
+## Version 0.18.0
+* Fixed some minor issues
+* Added `SnapshotName` to `New-AzNetAppFilesBackup`
+* Fixed `New-AzNetAppFilesBackup`, `Label` is not a requred parameter
+
+## Version 0.17.0
+* Updated to api-version 2024-03-01
+
+## Version 0.16.0
+* Updated to api-version 2023-11-01
+* Fixed some minor issues
+
+## Version 0.15.2
+* Upgraded Azure.Core to 1.37.0.
+
+## Version 0.15.1
+* Fixed some minor issues
+
+## Version 0.15.0
+* Fixed some minor issues
+* Updated to api-version 2023-07-01
+
+## Version 0.14.0
+* Fixed some minor issues
+* Updated to api-version 2023-05-01
+* Added `EncryptionKeySource`, `KeyVaultKeyName`, `KeyVaultResourceId`, `KeyVaultUri`, `IdentityType`, `UserAssignedIdentity` to `New-AzNetAppFilesAccount` and `Update-AzNetAppFilesAccount`
+* Added new cmdlets `Get-AzNetAppFilesNetworkSiblingSet` and `Update-AzNetAppFilesNetworkSiblingSet` to query and update the network features of a network sibling set
+* Added `CoolAccessRetrievalPolicy` to `New-AzNetAppFilesVolume` and `Update-AzNetAppFilesVolume`
+* Added `SmbNonBrowsable` and `SmbAccessBasedEnumeration` to `Update-AzNetAppFilesVolume`
+
+## Version 0.13.2
+* Fixed some minor issues
+* Upgraded Azure.Core to 1.35.0.
+
+## Version 0.13.1
+* Updated Azure.Core to 1.34.0.
+
+## Version 0.13.0
+* Updated to api-version 2022-11-01        
+* Added `Identity` to NetAppAccountPatch
+* Added `ActualThroughputMibps` and `OriginatingResourceId`
+* Added `SnapshotDirectoryVisible` to Update-AzNetAppFilesVolume
+    - If enabled (true) the volume will contain a read-only .snapshot directory which provides access to each of the volume's snapshots (default to true)
+* Updated Azure.Core to 1.33.0.
+
+
 ## Version 0.12.0
 * Updated Azure.Core to 1.31.0.
 * Added cmdLet `Restore-AzNetAppFilesBackupFile`                 

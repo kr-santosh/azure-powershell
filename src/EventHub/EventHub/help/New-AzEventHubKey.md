@@ -15,14 +15,14 @@ Regenerates an EventHub SAS key
 ### NewExpandedNamespace (Default)
 ```
 New-AzEventHubKey -Name <String> -NamespaceName <String> -ResourceGroupName <String> [-SubscriptionId <String>]
- [-KeyType <KeyType>] [-KeyValue <String>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-KeyType <String>] [-KeyValue <String>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### NewExpandedEntity
 ```
 New-AzEventHubKey -Name <String> -NamespaceName <String> -ResourceGroupName <String> [-SubscriptionId <String>]
- -EventHubName <String> [-KeyType <KeyType>] [-KeyValue <String>] [-DefaultProfile <PSObject>] [-AsJob]
+ -EventHubName <String> [-KeyType <String>] [-KeyValue <String>] [-DefaultProfile <PSObject>] [-AsJob]
  [-NoWait] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -112,7 +112,7 @@ Accept wildcard characters: False
 The access key to regenerate.
 
 ```yaml
-Type: Microsoft.Azure.PowerShell.Cmdlets.EventHub.Support.KeyType
+Type: System.String
 Parameter Sets: (All)
 Aliases: RegenerateKey
 
@@ -252,10 +252,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.EventHub.Models.Api20221001Preview.IAccessKeys
+### Microsoft.Azure.PowerShell.Cmdlets.EventHub.Models.IAccessKeys
 
 ## NOTES
-
-ALIASES
 
 ## RELATED LINKS

@@ -17,7 +17,8 @@ Creates an Azure storage container.
 ```
 New-AzStorageContainer [-Name] <String> [[-Permission] <BlobContainerPublicAccessType>]
  [-Context <IStorageContext>] [-ServerTimeoutPerRequest <Int32>] [-ClientTimeoutPerRequest <Int32>]
- [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>]
+ [<CommonParameters>]
 ```
 
 ### EncryptionScope
@@ -25,7 +26,8 @@ New-AzStorageContainer [-Name] <String> [[-Permission] <BlobContainerPublicAcces
 New-AzStorageContainer [-Name] <String> [[-Permission] <BlobContainerPublicAccessType>]
  -DefaultEncryptionScope <String> -PreventEncryptionScopeOverride <Boolean> [-Context <IStorageContext>]
  [-ServerTimeoutPerRequest <Int32>] [-ClientTimeoutPerRequest <Int32>]
- [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -50,13 +52,15 @@ It uses the **Split** method of the .NET **String** class and then passes the na
 
 ### Example 3: Create an Azure storage container with Encryption Scope
 <!-- Skip: Output cannot be splitted from code -->
-```
-PS C:\> $container = New-AzStorageContainer  -Name "mycontainer" -DefaultEncryptionScope "myencryptscope" -PreventEncryptionScopeOverride $true 
 
-PS C:\> $container.BlobContainerProperties.DefaultEncryptionScope
+
+```
+$container = New-AzStorageContainer  -Name "mycontainer" -DefaultEncryptionScope "myencryptscope" -PreventEncryptionScopeOverride $true 
+
+$container.BlobContainerProperties.DefaultEncryptionScope
 myencryptscope
 
-PS C:\> $container.BlobContainerProperties.PreventEncryptionScopeOverride
+$container.BlobContainerProperties.PreventEncryptionScopeOverride
 True
 ```
 
@@ -241,5 +245,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Remove-AzStorageContainer](./Remove-AzStorageContainer.md)
 
 [Set-AzStorageContainerAcl](./Set-AzStorageContainerAcl.md)
-
-

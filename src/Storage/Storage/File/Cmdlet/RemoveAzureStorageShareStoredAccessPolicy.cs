@@ -17,7 +17,6 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
     using Common;
     using global::Azure.Storage.Files.Shares;
     using global::Azure.Storage.Files.Shares.Models;
-    using Microsoft.Azure.Storage.File;
     using Model.Contract;
     using System;
     using System.Collections.Generic;
@@ -47,6 +46,9 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
 
         [Parameter(Mandatory = false, HelpMessage = "Return whether the specified policy is successfully removed")]
         public SwitchParameter PassThru { get; set; }
+
+        // Overwrite the useless parameter
+        public override SwitchParameter DisAllowTrailingDot { get; set; }
 
         internal bool RemoveAzureShareStoredAccessPolicy(IStorageFileManagement localChannel, string shareName, string policyName)
         {

@@ -528,6 +528,15 @@ function Get-JobStepName
 
 <#
 .SYNOPSIS
+Gets valid job private endpoint name
+#>
+function Get-JobPrivateEndpointName
+{
+	return getAssetName
+}
+
+<#
+.SYNOPSIS
 Gets valid schema name
 #>
 function Get-SchemaName
@@ -997,6 +1006,24 @@ function Get-DefaultManagedInstanceParametersV2()
 		vCore = 4;
 		storageSizeInGb = 64;
 		timezone = "Central Europe Standard Time";
+	}
+}
+
+function Get-DefaultManagedInstanceNameAndRgForAADAdmin()
+{
+	return @{
+		rg = "CustomerExperienceTeam_RG";
+		name = "brka0190";
+	}
+}
+
+function Get-DefaultManagedInstanceParametersHermesTesting()
+{
+	return @{
+		rg = "hermes-powershell-testing-resourcegroup-wcus";
+		location = "westcentralus";
+		subnet = "/subscriptions/62e48210-5e43-423e-889b-c277f3e08c39/resourceGroups/hermes-powershell-testing-resourcegroup-wcus/providers/Microsoft.Network/virtualNetworks/hermes-powershell-testing-virtualnetwork-wcus/subnets/hermes-powershell-testing-subnet-wcus";
+		subscriptionId = "62e48210-5e43-423e-889b-c277f3e08c39";
 	}
 }
 

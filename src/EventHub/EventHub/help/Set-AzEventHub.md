@@ -15,20 +15,23 @@ Updates an EventHub Entity
 ### SetExpanded (Default)
 ```
 Set-AzEventHub -Name <String> -NamespaceName <String> -ResourceGroupName <String> [-SubscriptionId <String>]
- [-CaptureEnabled] [-Encoding <EncodingCaptureDescription>] [-IntervalInSeconds <Int32>]
- [-SizeLimitInBytes <Int32>] [-SkipEmptyArchive] [-RetentionTimeInHour <Int64>]
- [-TombstoneRetentionTimeInHour <Int32>] [-Status <EntityStatus>] [-DestinationName <String>]
- [-StorageAccountResourceId <String>] [-ArchiveNameFormat <String>] [-BlobContainer <String>]
- [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-CaptureEnabled] [-Encoding <String>] [-IntervalInSeconds <Int32>] [-SizeLimitInBytes <Int32>]
+ [-SkipEmptyArchive] [-RetentionTimeInHour <Int64>] [-TombstoneRetentionTimeInHour <Int32>] [-Status <String>]
+ [-DestinationName <String>] [-IdentityType <String>] [-UserAssignedIdentityId <String>]
+ [-PartitionCount <Int64>] [-StorageAccountResourceId <String>] [-ArchiveNameFormat <String>]
+ [-BlobContainer <String>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### SetViaIdentityExpanded
 ```
-Set-AzEventHub -InputObject <IEventHubIdentity> [-CaptureEnabled] [-Encoding <EncodingCaptureDescription>]
+Set-AzEventHub -InputObject <IEventHubIdentity> [-CaptureEnabled] [-Encoding <String>]
  [-IntervalInSeconds <Int32>] [-SizeLimitInBytes <Int32>] [-SkipEmptyArchive] [-RetentionTimeInHour <Int64>]
- [-TombstoneRetentionTimeInHour <Int32>] [-Status <EntityStatus>] [-DestinationName <String>]
+ [-TombstoneRetentionTimeInHour <Int32>] [-Status <String>] [-DestinationName <String>]
+ [-IdentityType <String>] [-UserAssignedIdentityId <String>] [-PartitionCount <Int64>]
  [-StorageAccountResourceId <String>] [-ArchiveNameFormat <String>] [-BlobContainer <String>]
- [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -222,7 +225,22 @@ Enumerates the possible values for the encoding format of capture description.
 Note: 'AvroDeflate' will be deprecated in New API Version
 
 ```yaml
-Type: Microsoft.Azure.PowerShell.Cmdlets.EventHub.Support.EncodingCaptureDescription
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IdentityType
+Type of managed service identity.
+
+```yaml
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -309,6 +327,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -PartitionCount
+Number of partitions created for the Event Hub.
+allowed values are from 1 to 32 partitions.
+
+```yaml
+Type: System.Int64
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ResourceGroupName
 The name of the resource group.
 The name is case insensitive.
@@ -376,7 +410,7 @@ Accept wildcard characters: False
 Enumerates the possible values for the status of the Event Hub.
 
 ```yaml
-Type: Microsoft.Azure.PowerShell.Cmdlets.EventHub.Support.EntityStatus
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -434,6 +468,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -UserAssignedIdentityId
+Properties for User Assigned Identities
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Confirm
 Prompts you for confirmation before running the cmdlet.
 
@@ -474,30 +523,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.EventHub.Models.Api20221001Preview.IEventhub
+### Microsoft.Azure.PowerShell.Cmdlets.EventHub.Models.IEventhub
 
 ## NOTES
-
-ALIASES
-
-COMPLEX PARAMETER PROPERTIES
-
-To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
-
-
-`INPUTOBJECT <IEventHubIdentity>`: Identity parameter.
-  - `[Alias <String>]`: The Disaster Recovery configuration name
-  - `[ApplicationGroupName <String>]`: The Application Group name 
-  - `[AuthorizationRuleName <String>]`: The authorization rule name.
-  - `[ClusterName <String>]`: The name of the Event Hubs Cluster.
-  - `[ConsumerGroupName <String>]`: The consumer group name
-  - `[EventHubName <String>]`: The Event Hub name
-  - `[Id <String>]`: Resource identity path
-  - `[NamespaceName <String>]`: The Namespace name
-  - `[PrivateEndpointConnectionName <String>]`: The PrivateEndpointConnection name
-  - `[ResourceAssociationName <String>]`: The ResourceAssociation Name
-  - `[ResourceGroupName <String>]`: Name of the resource group within the azure subscription.
-  - `[SchemaGroupName <String>]`: The Schema Group name 
-  - `[SubscriptionId <String>]`: Subscription credentials that uniquely identify a Microsoft Azure subscription. The subscription ID forms part of the URI for every service call.
 
 ## RELATED LINKS

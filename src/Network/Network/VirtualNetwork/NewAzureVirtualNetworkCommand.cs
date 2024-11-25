@@ -127,6 +127,12 @@ namespace Microsoft.Azure.Commands.Network
 
         [Parameter(
             Mandatory = false,
+            ValueFromPipelineByPropertyName = true,
+            HelpMessage = "The PrivateEndpointVNetPolicies of the virtual network")]
+        public string PrivateEndpointVNetPoliciesValue { get; set; }
+
+        [Parameter(
+            Mandatory = false,
             HelpMessage = "Do not ask for confirmation if you want to override a resource")]
         public SwitchParameter Force { get; set; }
 
@@ -193,6 +199,11 @@ namespace Microsoft.Azure.Commands.Network
                 vnet.ExtendedLocation = new PSExtendedLocation(this.EdgeZone);
             }
 
+            if(!string.IsNullOrEmpty(this.PrivateEndpointVNetPoliciesValue))
+            {
+                vnet.PrivateEndpointVNetPolicies = this.PrivateEndpointVNetPoliciesValue;
+            }
+
             // Map to the sdk object
             var vnetModel = NetworkResourceManagerProfile.Mapper.Map<MNM.VirtualNetwork>(vnet);
             vnetModel.Tags = TagsConversionHelper.CreateTagDictionary(Tag, validate: true);
@@ -202,7 +213,7 @@ namespace Microsoft.Azure.Commands.Network
                 foreach (var ipAllocation in this.IpAllocation)
                 {
                     var ipAllocationReference = new MNM.SubResource(ipAllocation.Id);
-                    vnetModel.IpAllocations.Add(ipAllocationReference);
+                    vnetModel.IPAllocations.Add(ipAllocationReference);
                 }
             }
 

@@ -25,12 +25,18 @@ namespace Commands.HDInsight.Test.ScenarioTests
         {
         }
 
-        //[Fact(Skip = "test case cannot be re-recorded properly, need help from service team")]
-        [Fact]
+        [Fact(Skip = "Sikp this")]
         [Trait(Category.AcceptanceType, Category.CheckIn)]
         public void TestAzureMonitorRelatedCommands()
         {
             TestRunner.RunTestScript("Test-AzureMonitorRelatedCommands");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestAzureMonitorAgentRelatedCommands()
+        {
+            TestRunner.RunTestScript("Test-AzureMonitorAgentRelatedCommands");
         }
     }
 }

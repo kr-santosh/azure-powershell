@@ -14,7 +14,8 @@ Create an in-memory object for LogSettings.
 
 ```
 New-AzDiagnosticSettingLogSettingsObject -Enabled <Boolean> [-Category <String>] [-CategoryGroup <String>]
- [-RetentionPolicyDay <Int32>] [-RetentionPolicyEnabled <Boolean>] [<CommonParameters>]
+ [-RetentionPolicyDay <Int32>] [-RetentionPolicyEnabled <Boolean>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -119,7 +120,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.PowerShell.Cmdlets.Monitor.DiagnosticSetting.Models.Api20210501Preview.LogSettings
 
 ## NOTES
-
-ALIASES
 
 ## RELATED LINKS

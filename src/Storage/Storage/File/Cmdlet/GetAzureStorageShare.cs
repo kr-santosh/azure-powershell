@@ -16,17 +16,15 @@
 namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
 {
     using Azure.Commands.Common.Authentication.Abstractions;
-    using Microsoft.WindowsAzure.Commands.Common.Storage;
-    using Microsoft.Azure.Storage.File;
     using System;
     using System.Globalization;
     using System.Management.Automation;
-    using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
     using Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel;
     using Microsoft.WindowsAzure.Commands.Storage.Common;
     using global::Azure.Storage.Files.Shares.Models;
     using global::Azure.Storage.Files.Shares;
     using global::Azure;
+
     [Cmdlet("Get", Azure.Commands.ResourceManager.Common.AzureRMConstants.AzurePrefix + "StorageShare", DefaultParameterSetName = Constants.MatchingPrefixParameterSetName)]
     [OutputType(typeof(AzureStorageFileShare))]
     public class GetAzureStorageShare : AzureStorageFileCmdletBase
@@ -50,13 +48,18 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
         Mandatory = false,
         ParameterSetName = Constants.SpecificParameterSetName,
         HelpMessage = "SnapshotTime of the file share snapshot to be received.")]
-                [ValidateNotNullOrEmpty]
-                public DateTimeOffset? SnapshotTime { get; set; }
+        [ValidateNotNullOrEmpty]
+        public DateTimeOffset? SnapshotTime { get; set; }
 
-        [Parameter(Mandatory = false, 
-            HelpMessage = "Include deleted shares, by default get share won't include deleted shares", 
+        [Parameter(Mandatory = false,
+            HelpMessage = "Include deleted shares, by default get share won't include deleted shares",
             ParameterSetName = Constants.MatchingPrefixParameterSetName)]
         public SwitchParameter IncludeDeleted { get; set; }
+
+        [Parameter(Mandatory = false,
+            HelpMessage = "Specify this parameter to only generate a local share object, without get share properties from server.",
+            ParameterSetName = Constants.SpecificParameterSetName)]
+        public SwitchParameter SkipGetProperty { get; set; }
 
         [Parameter(
             ValueFromPipeline = true,
@@ -70,6 +73,9 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
             HelpMessage = "Azure Storage Context Object")]
         public override IStorageContext Context { get; set; }
 
+        // Overwrite the useless parameter
+        public override SwitchParameter DisAllowTrailingDot { get; set; }
+
         public override void ExecuteCmdlet()
         {
             switch (this.ParameterSetName)
@@ -81,8 +87,15 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
                         (AzureStorageContext)this.Context, 
                         this.SnapshotTime is null ? null : this.SnapshotTime.Value.ToUniversalTime().ToString("o").Replace("+00:00","Z"),
                         ClientOptions);
-                    ShareProperties shareProperties = share.GetProperties(cancellationToken: this.CmdletCancellationToken).Value;
-                    WriteObject(new AzureStorageFileShare(share, (AzureStorageContext)this.Context, shareProperties, ClientOptions));
+                    if (!this.SkipGetProperty)
+                    {
+                        ShareProperties shareProperties = share.GetProperties(cancellationToken: this.CmdletCancellationToken).Value;
+                        WriteObject(new AzureStorageFileShare(share, (AzureStorageContext)this.Context, shareProperties, ClientOptions));
+                    }
+                    else
+                    {
+                        WriteObject(new AzureStorageFileShare(share, (AzureStorageContext)this.Context, shareProperties: null, ClientOptions));
+                    }
 
                     break;
 

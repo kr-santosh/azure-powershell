@@ -16,6 +16,7 @@ using Hyak.Common;
 using Microsoft.Azure.Commands.ActiveDirectory;
 using Microsoft.Azure.Management.Authorization.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -57,7 +58,9 @@ namespace Microsoft.Azure.Commands.Resources.Models.Authorization
                     Id = role.Id.GuidFromFullyQualifiedId(),
                     AssignableScopes = role.AssignableScopes.ToList(),
                     Description = role.Description,
-                    IsCustom = role.RoleType == CustomRole ? true : false
+                    IsCustom = role.RoleType == CustomRole ? true : false,
+                    Condition = (role.Permissions != null && role.Permissions.Count > 0) ? role.Permissions[0].Condition : null,
+                    ConditionVersion = (role.Permissions != null && role.Permissions.Count > 0) ? role.Permissions[0].ConditionVersion : null
                 };
             }
 

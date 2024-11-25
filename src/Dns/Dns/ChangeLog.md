@@ -18,6 +18,21 @@
         - Additional information about change #1
 -->
 ## Upcoming Release
+
+## Version 1.3.0
+* Added `NAPTR` record type support in cmdlets.
+
+## Version 1.2.1
+* Introduced secrets detection feature to safeguard sensitive data.
+
+## Version 1.2.0
+* Added cmdlets:
+    - `Get-AzDnsDnssecConfig`
+    - `New-AzDnsDnssecConfig`
+    - `Remove-AzDnsDnssecConfig`
+* Added three new record types, `DS`, `TLSA` and `NAPTR`.
+
+## Version 1.1.3
 * Removed length validation for DNS TXT record to make it consistent with Azure CLI and Azure portal.
 
 ## Version 1.1.2

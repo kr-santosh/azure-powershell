@@ -30,12 +30,26 @@ namespace Microsoft.Azure.Commands.Resources.Test.ScenarioTests
         {
             TestRunner.RunTestScript("Test-GetResourceGroupDeploymentStack");
         }
-    
+
+        [Fact()]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestNewResourceGroupDeploymentStackFromBicepparamFileWithOverrides()
+        {
+            TestRunner.RunTestScript("Test-NewResourceGroupDeploymentStackFromBicepparamFileWithOverrides");
+        }
+
         [Fact()]
         [Trait(Category.AcceptanceType, Category.CheckIn)]
         public void TestNewResourceGroupDeploymentStack()
         {
             TestRunner.RunTestScript("Test-NewResourceGroupDeploymentStack");
+        }
+
+        [Fact()]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestTestResourceGroupDeploymentStack()
+        {
+            TestRunner.RunTestScript("Test-TestResourceGroupDeploymentStack");
         }
 
         [Fact()]
@@ -96,6 +110,20 @@ namespace Microsoft.Azure.Commands.Resources.Test.ScenarioTests
 
         [Fact()]
         [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestNewAndSetResourceGroupDeploymentStackWithTags()
+        {
+            TestRunner.RunTestScript("Test-NewAndSetResourceGroupDeploymentStackWithTags");
+        }
+
+        [Fact()]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestSaveAndRemoveResourceGroupDeploymentStackWithPipeOperator()
+        {
+            TestRunner.RunTestScript("Test-SaveAndRemoveResourceGroupDeploymentStackWithPipeOperator");
+        }
+
+        [Fact()]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
         public void TestGetSubscriptionDeploymentStack()
         {
             TestRunner.RunTestScript("Test-GetSubscriptionDeploymentStack");
@@ -106,6 +134,13 @@ namespace Microsoft.Azure.Commands.Resources.Test.ScenarioTests
         public void TestNewSubscriptionDeploymentStack()
         {
             TestRunner.RunTestScript("Test-NewSubscriptionDeploymentStack");
+        }
+
+        [Fact()]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestTestSubscriptionDeploymentStack()
+        {
+            TestRunner.RunTestScript("Test-TestSubscriptionDeploymentStack");
         }
 
         [Fact()]
@@ -166,6 +201,20 @@ namespace Microsoft.Azure.Commands.Resources.Test.ScenarioTests
 
         [Fact()]
         [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestNewAndSetSubscriptionDeploymentStackWithTags()
+        {
+            TestRunner.RunTestScript("Test-NewAndSetSubscriptionDeploymentStackWithTags");
+        }
+
+        [Fact()]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestSaveAndRemoveSubscriptionDeploymentStackWithPipeOperator()
+        {
+            TestRunner.RunTestScript("Test-SaveAndRemoveSubscriptionDeploymentStackWithPipeOperator");
+        }
+
+        [Fact()]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
         public void TestGetManagementGroupDeploymentStack()
         {
             TestRunner.RunTestScript("Test-GetManagementGroupDeploymentStack");
@@ -176,6 +225,13 @@ namespace Microsoft.Azure.Commands.Resources.Test.ScenarioTests
         public void TestNewManagementGroupDeploymentStack()
         {
             TestRunner.RunTestScript("Test-NewManagementGroupDeploymentStack");
+        }
+
+        [Fact()]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestTestManagementGroupDeploymentStack()
+        {
+            TestRunner.RunTestScript("Test-TestManagementGroupDeploymentStack");
         }
 
         [Fact()]
@@ -232,6 +288,20 @@ namespace Microsoft.Azure.Commands.Resources.Test.ScenarioTests
         public void TestRemoveManagementGroupDeploymentStack()
         {
             TestRunner.RunTestScript("Test-RemoveManagementGroupDeploymentStack");
+        }
+
+        [Fact()]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestNewAndSetManagementGroupDeploymentStackWithTags()
+        {
+            TestRunner.RunTestScript("Test-NewAndSetManagementGroupDeploymentStackWithTags");
+        }
+
+        [Fact()]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestSaveAndRemoveManagementGroupDeploymentStackWithPipeOperator()
+        {
+            TestRunner.RunTestScript("Test-SaveAndRemoveManagementGroupDeploymentStackWithPipeOperator");
         }
     }
 }

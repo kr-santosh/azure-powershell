@@ -90,6 +90,8 @@ namespace Microsoft.Azure.Commands.Network
         {
             SecurityAdmin,
             Connectivity,
+            Routing,
+            SecurityUser
         }
 
         public override void Execute()
@@ -132,7 +134,7 @@ namespace Microsoft.Azure.Commands.Network
             networkManagerModel.Tags = TagsConversionHelper.CreateTagDictionary(this.Tag, validate: true);
 
             // Execute the Create Network call
-            this.NetworkManagerClient.CreateOrUpdate(networkManagerModel, this.ResourceGroupName, this.Name);
+            this.NetworkManagerClient.CreateOrUpdate(this.ResourceGroupName, this.Name, networkManagerModel);
             var psNetworkManager = this.GetNetworkManager(this.ResourceGroupName, this.Name);
             return psNetworkManager;
         }

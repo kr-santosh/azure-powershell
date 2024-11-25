@@ -98,7 +98,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         public ItemBase Item { get; set; }
 
         /// <summary>
-        /// Item whose protection needs to be modified.
+        /// Parameter to authorize operations protected by cross tenant resource guard. Use command (Get-AzAccessToken -TenantId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx").Token to fetch authorization token for different tenant.
         /// </summary>
         [Parameter(Mandatory = false, ParameterSetName = ModifyProtectionParameterSet, HelpMessage = ParamHelpMsgs.ResourceGuard.AuxiliaryAccessToken, ValueFromPipeline = false)]
         [ValidateNotNullOrEmpty]
@@ -174,7 +174,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         string backupManagementType = ProtectableItem.BackupManagementType.ToString();
                         string workloadType = ConversionUtils.GetServiceClientWorkloadType(ProtectableItem.WorkloadType.ToString());
                         string containerName = "VMAppContainer;" + ((AzureWorkloadProtectableItem)ProtectableItem).ContainerName;
-                        ODataQuery<BMSPOQueryObject> queryParam = new ODataQuery<BMSPOQueryObject>(
+                        ODataQuery<BmspoQueryObject> queryParam = new ODataQuery<BmspoQueryObject>(
                         q => q.BackupManagementType
                              == backupManagementType &&
                              q.WorkloadType == workloadType &&

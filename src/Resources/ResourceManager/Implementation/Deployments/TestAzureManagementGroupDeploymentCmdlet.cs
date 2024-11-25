@@ -54,11 +54,13 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.Implementation
                 QueryString = QueryString,
                 TemplateFile = this.TemplateUri ?? this.TryResolvePath(this.TemplateFile),
                 TemplateObject = this.TemplateObject,
-                TemplateParameterObject = this.GetTemplateParameterObject(this.TemplateParameterObject),
+                TemplateParameterObject = this.GetTemplateParameterObject(),
                 ParameterUri = this.TemplateParameterUri
             };
 
-            WriteObject(NewResourceManagerSdkClient.ValidateDeployment(parameters));
+            var validationInfo = NewResourceManagerSdkClient.ValidateDeployment(parameters);
+
+            WriteOutput(validationInfo);
         }
     }
 }

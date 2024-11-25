@@ -26,6 +26,53 @@ $oldResourceGroupName = "sambit_rg"
 $oldVaultName = "sambit"
 $oldPolicyName = "iaasvmretentioncheck"
 
+function Test-AzureVMCrashconsistentPolicy
+{
+	$location = "centraluseuap"
+	$resourceGroupName = "hiagarg"
+	$vaultName = "hiagaVault"
+	$newPolicyName = "PScrashConsistentPolicy"
+	
+	try
+	{
+		$vault = Get-AzRecoveryServicesVault -ResourceGroupName $resourceGroupName -Name $vaultName
+				
+		# get weekly default schedule
+		$schedulePolicy = Get-AzRecoveryServicesBackupSchedulePolicyObject -WorkloadType AzureVM -BackupManagementType AzureVM -PolicySubType Enhanced -ScheduleRunFrequency Weekly
+		Assert-NotNull $schedulePolicy
+
+		# get default weekly retention schedule 
+		$retentionPolicy = Get-AzRecoveryServicesBackupRetentionPolicyObject -WorkloadType AzureVM -BackupManagementType AzureVM -ScheduleRunFrequency Weekly
+		Assert-NotNull $retentionPolicy
+
+		# create crash consistent policy
+		$policy = New-AzRecoveryServicesBackupProtectionPolicy -Name $newPolicyName -WorkloadType AzureVM -BackupManagementType AzureVM -RetentionPolicy $retentionPolicy -SchedulePolicy $schedulePolicy -VaultId $vault.ID -SnapshotConsistencyType OnlyCrashConsistent
+
+		# validate crash consistent
+		$policy = Get-AzRecoveryServicesBackupProtectionPolicy -VaultId $vault.ID -Name $newPolicyName
+		Assert-NotNull $policy
+		Assert-AreEqual $policy.Name $newPolicyName
+		Assert-AreEqual $policy.SnapshotConsistencyType "OnlyCrashConsistent"
+
+        # update consistency type to default
+		$policy = Set-AzRecoveryServicesBackupProtectionPolicy -Policy $policy -SnapshotConsistencyType Default -VaultId $vault.ID
+		$policy = Get-AzRecoveryServicesBackupProtectionPolicy -VaultId $vault.ID -Name $newPolicyName
+		Assert-AreEqual $policy.SnapshotConsistencyType $null	
+		
+		# update consistency type to OnlyCrashConsistent
+		$policy = Set-AzRecoveryServicesBackupProtectionPolicy -Policy $policy -SnapshotConsistencyType OnlyCrashConsistent -VaultId $vault.ID
+		$policy = Get-AzRecoveryServicesBackupProtectionPolicy -VaultId $vault.ID -Name $newPolicyName
+		Assert-AreEqual $policy.SnapshotConsistencyType "OnlyCrashConsistent"
+	}
+	finally
+	{
+		# Cleanup		
+		# Delete policy
+		$policy = Get-AzRecoveryServicesBackupProtectionPolicy -VaultId $vault.ID -Name $newPolicyName
+		Remove-AzRecoveryServicesBackupProtectionPolicy -VaultId $vault.ID -Policy $policy -Force
+	}
+}
+
 function Test-AzureVMNonUTCPolicy
 {
 	$resourceGroupName = "hiagarg"
@@ -99,26 +146,38 @@ function Test-AzureVMSmartTieringPolicy
 		$retPol = Get-AzRecoveryServicesBackupRetentionPolicyObject -WorkloadType AzureVM -BackupManagementType AzureVM -ScheduleRunFrequency  Weekly 
 
 		# create tier recommended policy 
-		$pol = New-AzRecoveryServicesBackupProtectionPolicy -Name $tierRecommendedPolicy  -WorkloadType AzureVM  -BackupManagementType AzureVM -RetentionPolicy $retPol -SchedulePolicy $schPol -VaultId $vault.ID  -MoveToArchiveTier $true -TieringMode TierRecommended 
+		$pol = New-AzRecoveryServicesBackupProtectionPolicy -Name $tierRecommendedPolicy  -WorkloadType AzureVM  -BackupManagementType AzureVM -RetentionPolicy $retPol -SchedulePolicy $schPol -VaultId $vault.ID  -MoveToArchiveTier $true -TieringMode TierRecommended -BackupSnapshotResourceGroup "rgpref1" -BackupSnapshotResourceGroupSuffix "suffix1"
 
-		Assert-True { $pol.Name -eq $tierRecommendedPolicy }
-		
+		Assert-True { $pol.Name -eq $tierRecommendedPolicy }		
+		Assert-True { $pol.AzureBackupRGName -match "rgpref1" }
+		Assert-True { $pol.AzureBackupRGNameSuffix -match "suffix1" }		
+
 		# error scenario for tier after policy
-		Assert-ThrowsContains { $pol = New-AzRecoveryServicesBackupProtectionPolicy -Name $tierAfterPolicy  -WorkloadType AzureVM  -BackupManagementType AzureVM -RetentionPolicy $retPol -SchedulePolicy $schPol -VaultId $vault.ID  -MoveToArchiveTier $true -TieringMode TierAllEligible -TierAfterDuration 2 -TierAfterDurationType Months } `
+		Assert-ThrowsContains { $pol = New-AzRecoveryServicesBackupProtectionPolicy -Name $tierAfterPolicy  -WorkloadType AzureVM  -BackupManagementType AzureVM -RetentionPolicy $retPol -SchedulePolicy $schPol -VaultId $vault.ID  -MoveToArchiveTier $true -TieringMode TierAllEligible -TierAfterDuration 2 -TierAfterDurationType Months -BackupSnapshotResourceGroup "rgpref1" -BackupSnapshotResourceGroupSuffix "suffix1"} `
 		"TierAfterDuration needs to be >= 3 months, at least one of monthly or yearly retention should be >= (TierAfterDuration + 6) months";
 
 		# create tier after policy 
-		$pol = New-AzRecoveryServicesBackupProtectionPolicy -Name $tierAfterPolicy -WorkloadType AzureVM  -BackupManagementType AzureVM -RetentionPolicy $retPol -SchedulePolicy $schPol -VaultId $vault.ID  -MoveToArchiveTier $true -TieringMode TierAllEligible -TierAfterDuration 3 -TierAfterDurationType Months
+		$pol = New-AzRecoveryServicesBackupProtectionPolicy -Name $tierAfterPolicy -WorkloadType AzureVM  -BackupManagementType AzureVM -RetentionPolicy $retPol -SchedulePolicy $schPol -VaultId $vault.ID  -MoveToArchiveTier $true -TieringMode TierAllEligible -TierAfterDuration 3 -TierAfterDurationType Months  -BackupSnapshotResourceGroup "rgpref1" -BackupSnapshotResourceGroupSuffix "suffix1"
 
 		Assert-True { $pol.Name -eq $tierAfterPolicy }
+		Assert-True { $pol.AzureBackupRGName -match "rgpref1" }
+		Assert-True { $pol.AzureBackupRGNameSuffix -match "suffix1" }
 
 		# modify policy 
 		$pol = Get-AzRecoveryServicesBackupProtectionPolicy  -VaultId $vault.ID | Where { $_.Name -match $tierRecommendedPolicy }
 		Set-AzRecoveryServicesBackupProtectionPolicy -VaultId $vault.ID -Policy $pol[0] -MoveToArchiveTier $false
-		Set-AzRecoveryServicesBackupProtectionPolicy -VaultId $vault.ID -Policy $pol[0] -MoveToArchiveTier $true -TieringMode TierRecommended
+
+		$pol = Get-AzRecoveryServicesBackupProtectionPolicy  -VaultId $vault.ID | Where { $_.Name -match $tierRecommendedPolicy }
+		Assert-True { $pol.AzureBackupRGName -match "rgpref1" }
+		Assert-True { $pol.AzureBackupRGNameSuffix -match "suffix1" }
+
+		Set-AzRecoveryServicesBackupProtectionPolicy -VaultId $vault.ID -Policy $pol[0] -MoveToArchiveTier $true -TieringMode TierRecommended -BackupSnapshotResourceGroup "rgpref2"
 		
 		# error scenario for retention policy
 		$pol = Get-AzRecoveryServicesBackupProtectionPolicy  -VaultId $vault.ID | Where { $_.Name -match $tierRecommendedPolicy }
+		Assert-True { $pol.AzureBackupRGName -match "rgpref2" }
+		Assert-True { $pol.AzureBackupRGNameSuffix -eq $null }
+
 		$pol.RetentionPolicy.IsYearlyScheduleEnabled = $false
 		$pol.RetentionPolicy.MonthlySchedule.DurationCountInMonths = 8
 
@@ -207,12 +266,12 @@ function Test-AzureVMEnhancedPolicy
 function Test-AzureVMPolicy
 {
 	$location = "centraluseuap" # "eastasia"
-	$resourceGroupName = Create-ResourceGroup $location
+	$resourceGroupName = Create-ResourceGroup $location 26
 
 	try
 	{
 		# Setup
-		$vault = Create-RecoveryServicesVault $resourceGroupName $location
+		$vault = Create-RecoveryServicesVault $resourceGroupName $location 27
 		
 		# Get default policy objects
 		$schedulePolicy = Get-AzRecoveryServicesBackupSchedulePolicyObject -WorkloadType AzureVM

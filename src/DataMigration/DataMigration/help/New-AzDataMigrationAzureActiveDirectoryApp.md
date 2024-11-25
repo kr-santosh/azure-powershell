@@ -8,23 +8,24 @@ schema: 2.0.0
 # New-AzDataMigrationAzureActiveDirectoryApp
 
 ## SYNOPSIS
-Create a new instance DataMigration Azure ActiveDirectory Application details.
+Create a new instance DataMigration Microsoft Entra Application details.
 
 ## SYNTAX
 
 ```
 New-AzDataMigrationAzureActiveDirectoryApp -ApplicationId <String> -AppKey <SecureString>
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Create a new instance DataMigration Azure ActiveDirectory Application details.
+Create a new instance DataMigration Microsoft Entra Application details.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
-$secpasswd = ConvertTo-SecureString "Your Secret Key Here" -AsPlainText -Force
+$secpasswd = ConvertTo-SecureString -String "****" -AsPlainText -Force
 New-AzDataMigrationAzureActiveDirectoryApp -ApplicationId "Your AppId/Service Principal ID here" -AppKey $secpasswd
 ```
 
@@ -37,7 +38,7 @@ TenantId      : "Tenant Id"
 ## PARAMETERS
 
 ### -AppKey
-Azure Active Directory Key
+Microsoft Entra ID Key
 
 ```yaml
 Type: System.Security.SecureString
@@ -52,7 +53,7 @@ Accept wildcard characters: False
 ```
 
 ### -ApplicationId
-Azure Active Directory Application Id
+Microsoft Entra Application Id
 
 ```yaml
 Type: System.String

@@ -17,7 +17,6 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Queue.Cmdlet
     using global::Azure.Storage.Queues;
     using global::Azure.Storage.Queues.Models;
     using global::Azure.Storage.Sas;
-    using Microsoft.Azure.Storage;
     using Microsoft.WindowsAzure.Commands.Storage.Common;
     using Microsoft.WindowsAzure.Commands.Storage.Model.Contract;
     using System;
@@ -25,7 +24,6 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Queue.Cmdlet
     using System.Security.Permissions;
     using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 
-    [GenericBreakingChangeWithVersion("The leading question mark '?' of the created SAS token will be removed in a future release.", "11.0.0", "6.0.0")]
     [Cmdlet("New", Azure.Commands.ResourceManager.Common.AzureRMConstants.AzurePrefix + "StorageQueueSASToken"), OutputType(typeof(String))]
     public class NewAzureStorageQueueSasTokenCommand : StorageQueueBaseCmdlet
     {
@@ -64,8 +62,8 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Queue.Cmdlet
         public string Permission { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Protocol can be used in the request with this SAS token.")]
-        [ValidateNotNull]
-        public SharedAccessProtocol? Protocol { get; set; }
+        [ValidateSet("HttpsOnly", "HttpsOrHttp", IgnoreCase = true),]
+        public string Protocol { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "IP, or IP range ACL (access control list) that the request would be accepted from by Azure Storage.")]
         [ValidateNotNullOrEmpty]
@@ -122,10 +120,8 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Queue.Cmdlet
             QueueSasBuilder sasBuilder = SasTokenHelper.SetQueueSasbuilder(queueClient, identifier, this.Permission, this.StartTime, this.ExpiryTime, this.IPAddressOrRange, this.Protocol);
             string sasToken = SasTokenHelper.GetQueueSharedAccessSignature((AzureStorageContext)this.Context, sasBuilder, CmdletCancellationToken);
 
-            if (sasToken[0] != '?')
-            {
-                sasToken = "?" + sasToken;
-            }
+            // remove prefix "?" of SAS if any
+            sasToken = Util.GetSASStringWithoutQuestionMark(sasToken);
 
             if (FullUri)
             {

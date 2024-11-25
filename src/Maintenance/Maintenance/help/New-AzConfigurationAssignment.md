@@ -13,11 +13,12 @@ Register configuration for resource.
 ## SYNTAX
 
 ```
-New-AzConfigurationAssignment [-ResourceGroupName] <String> [-ProviderName] <String>
- [-ResourceParentType <String>] [-ResourceParentName <String>] [-ResourceType] <String>
- [-ResourceName] <String> -ConfigurationAssignmentName <String> [-ResourceId <String>] -Location <String>
- -MaintenanceConfigurationId <String> [-AsJob] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+New-AzConfigurationAssignment [[-ResourceGroupName] <String>] [[-ProviderName] <String>]
+ [-ResourceParentType <String>] [-ResourceParentName <String>] [[-ResourceType] <String>]
+ [[-ResourceName] <String>] -ConfigurationAssignmentName <String> [-ResourceId <String>] [-Location <String>]
+ -MaintenanceConfigurationId <String> [-FilterResourceType <String[]>] [-FilterLocation <String[]>]
+ [-FilterTag <String>] [-FilterOperator <String>] [-FilterOsType <String[]>] [-FilterResourceGroup <String[]>]
+ [-AsJob] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -41,6 +42,27 @@ Type                       : Microsoft.Maintenance/configurationAssignments
 ```
 
 Register maintenance configuration for dedicated host.
+
+### Example 2
+```powershell
+New-AzConfigurationAssignment -ConfigurationAssignmentName configAssignmentName -MaintenanceConfigurationId /subscriptions/eee2cef4-bc47-4278-b4f8-cfc65f25dfd8/resourceGroups/AUMDemov01/providers/Microsoft.Maintenance/maintenanceConfigurations/kachavan-prepost01  -FilterLocation eastus2euap,centraluseuap  -FilterOsType Windows,Linux -FilterTag '{"tagKey1" : ["tagKey1Value1", "tagKey1Value2"], "tagKey2" : ["tagKey2Value1", "tagKey2Value2", "tagKey2Value3"] }' -FilterOperator "Any" -Location global
+```
+
+```output
+Location                   : global
+MaintenanceConfigurationId : /subscriptions/eee2cef4-bc47-4278-b4f8-cfc65f25dfd8/resourceGroups/AUMDemov01/providers/Microsoft.Maintenance/maintenanceConfigurations/kachavan-prepost01
+ResourceId                 : /subscriptions/eee2cef4-bc47-4278-b4f8-cfc65f25dfd8
+Id                         : /subscriptions/eee2cef4-bc47-4278-b4f8-cfc65f25dfd8/providers/microsoft.maintenance/configurationassignments/configassignmentname
+Name                       : configassignmentname
+Type                       : microsoft.maintenance/configurationassignments
+FilterTag                  : {"tagKey1":["tagKey1Value1","tagKey1Value2"],"tagKey2":["tagKey2Value1","tagKey2Value2","tagKey2Value3"]}
+FilterOperator             : Any
+FilterLocation[0]          : eastus2euap
+FilterLocation[1]          : centraluseuap
+FilterOsType[0]            : Windows
+FilterOsType[1]            : Linux
+```
+Register maintenance configuration for InGuest scope
 
 ## PARAMETERS
 
@@ -89,6 +111,96 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -FilterLocation
+Allowed locations for dynamic scope.
+
+```yaml
+Type: System.String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FilterOperator
+Tag filter operator for dynamic scope.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FilterOsType
+Operating system type for dynamic scope.
+
+```yaml
+Type: System.String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FilterResourceGroup
+Operating system type for dynamic scope.
+
+```yaml
+Type: System.String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FilterResourceType
+Allowed resource types for dynamic scope.
+
+```yaml
+Type: System.String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FilterTag
+Allowed resource types for dynamic scope.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Location
 The location without spaces for the resource.
 
@@ -97,7 +209,7 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -127,7 +239,7 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -142,7 +254,7 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 0
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -172,7 +284,7 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 3
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -217,7 +329,7 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 2
 Default value: None
 Accept pipeline input: True (ByPropertyName)

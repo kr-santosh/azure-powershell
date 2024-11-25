@@ -23,7 +23,8 @@ Get-AzAutoscalePredictiveMetric -InputObject <IAutoscaleIdentity> -Aggregation <
 ```
 Get-AzAutoscalePredictiveMetric -AutoscaleSettingName <String> -ResourceGroupName <String>
  [-SubscriptionId <String[]>] -Aggregation <String> -Interval <TimeSpan> -MetricName <String>
- -MetricNamespace <String> -Timespan <String> [-DefaultProfile <PSObject>] [<CommonParameters>]
+ -MetricNamespace <String> -Timespan <String> [-DefaultProfile <PSObject>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -209,18 +210,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.PowerShell.Cmdlets.Monitor.Autoscale.Models.Api20221001.IPredictiveResponse
 
 ## NOTES
-
-ALIASES
-
-COMPLEX PARAMETER PROPERTIES
-
-To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
-
-
-`INPUTOBJECT <IAutoscaleIdentity>`: Identity Parameter
-  - `[AutoscaleSettingName <String>]`: The autoscale setting name.
-  - `[Id <String>]`: Resource identity path
-  - `[ResourceGroupName <String>]`: The name of the resource group. The name is case insensitive.
-  - `[SubscriptionId <String>]`: The ID of the target subscription.
 
 ## RELATED LINKS

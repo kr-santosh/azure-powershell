@@ -83,7 +83,6 @@ namespace Microsoft.Azure.Commands.Network
         [Parameter(
             Mandatory = false,
             ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "IpConfigurationParameterValues",
             HelpMessage = "One or more Public IP Addresses. The Public IP addresses must use Standard SKU and must belong to the same resource group as the Firewall.")]
         [ValidateNotNullOrEmpty]
         public PSPublicIpAddress[] PublicIpAddress { get; set; }
@@ -175,8 +174,8 @@ namespace Microsoft.Azure.Commands.Network
             ValueFromPipelineByPropertyName = true,
             HelpMessage = "The sku name for firewall")]
         [ValidateSet(
-                MNM.AzureFirewallSkuName.AZFWHub,
-                MNM.AzureFirewallSkuName.AZFWVNet,
+                MNM.AzureFirewallSkuName.AzfwHub,
+                MNM.AzureFirewallSkuName.AzfwVnet,
                 IgnoreCase = false)]
         public string SkuName { get; set; }
 
@@ -268,7 +267,7 @@ namespace Microsoft.Azure.Commands.Network
         {
             var firewall = new PSAzureFirewall();
             var sku = new PSAzureFirewallSku();
-            sku.Name = !string.IsNullOrEmpty(this.SkuName) ? this.SkuName : MNM.AzureFirewallSkuName.AZFWVNet;
+            sku.Name = !string.IsNullOrEmpty(this.SkuName) ? this.SkuName : MNM.AzureFirewallSkuName.AzfwVnet;
             sku.Tier = !string.IsNullOrEmpty(this.SkuTier) ? this.SkuTier : MNM.AzureFirewallSkuTier.Standard;
 
             if (sku.Tier.Equals(MNM.AzureFirewallSkuTier.Basic) && !string.IsNullOrEmpty(this.Location))
@@ -278,7 +277,7 @@ namespace Microsoft.Azure.Commands.Network
                     throw new ArgumentException("Basic Sku Firewall is not supported in this region yet - " + this.Location, nameof(this.Location));
                 }
             }
-            if (this.SkuName == MNM.AzureFirewallSkuName.AZFWHub)
+            if (this.SkuName == MNM.AzureFirewallSkuName.AzfwHub)
             {
 
                 if (VirtualHubId != null && this.Location != null)
@@ -302,6 +301,16 @@ namespace Microsoft.Azure.Commands.Network
                     throw new ArgumentException("The Route Server is not supported on AZFW_Hub SKU Firewalls");
                 }
 
+                if (this.VirtualNetwork != null)
+                {
+                    throw new ArgumentException("Virtual Network is not supported on AZFW_Hub sku Firewalls");
+                }
+
+                if (this.PublicIpAddress != null && this.HubIPAddress != null)
+                {
+                    throw new ArgumentException("Public IP address can only be provided as part of PublicIps or HubIPAddresses. Not both at the same time.");
+                }
+
                 firewall = new PSAzureFirewall()
                 {
                     Name = this.Name,
@@ -315,6 +324,11 @@ namespace Microsoft.Azure.Commands.Network
                     EnableFatFlowLogging = (this.EnableFatFlowLogging.IsPresent ? "True" : null),
                     EnableUDPLogOptimization = (this.EnableUDPLogOptimization.IsPresent ? "True" : null)
                 };
+
+                if (this.PublicIpAddress != null) 
+                {
+                    firewall.AddIpAddressesForByopipHubFirewall(this.PublicIpAddress);
+                }
             }
             else
             {

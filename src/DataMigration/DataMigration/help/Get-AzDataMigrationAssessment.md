@@ -20,7 +20,8 @@ Get-AzDataMigrationAssessment -ConnectionString <String[]> [-OutputFolder <Strin
 
 ### ConfigFile
 ```
-Get-AzDataMigrationAssessment -ConfigFilePath <String> [-PassThru] [<CommonParameters>]
+Get-AzDataMigrationAssessment -ConfigFilePath <String> [-PassThru]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -146,7 +147,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Boolean
 
 ## NOTES
-
-ALIASES
 
 ## RELATED LINKS

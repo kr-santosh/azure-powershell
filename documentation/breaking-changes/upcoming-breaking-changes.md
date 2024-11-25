@@ -1,164 +1,569 @@
 # Upcoming breaking changes in Azure PowerShell
 
-## Az.Aks
+## Az.Accounts
 
-### `New-AzAksCluster`
+### `Get-AzAccessToken`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The Token property of the output type will be changed from String to SecureString. Add the [-AsSecureString] switch to avoid the impact of this upcoming breaking change.
+  - This change is expected to take effect from Az.Accounts version: 4.0.0 and Az version: 13.0.0
+
+### `Resolve-AzError`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The alias 'Resolve-Error' will be removed. Please use 'Resolve-AzError' instead.
+  - This change is expected to take effect from Az.Accounts version: 4.0.0 and Az version: 13.0.0
+
+## Az.App
+
+### `New-AzContainerApp`
 
 - Parameter breaking-change will happen to all parameter sets
-  - `-DockerBridgeCidr`
-    - DockerBridgeCidr parameter will be deprecated in Az 11.0.0 without being replaced.
-    - This change is expected to take effect from Az.Aks version: 6.0.0 and Az version: 11.0.0
+  - `-IdentityType`
+    - The parameter : 'IdentityType' is changing.
+    - Change description : IdentityType will be removed. EnableSystemAssignedIdentity will be used to enable/disable system assigned identity and UserAssignedIdentity will be used to specify user assigned identities. 
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+  - `-IdentityUserAssignedIdentity`
+    - The parameter : 'IdentityUserAssignedIdentity' is changing.
+    The type of the parameter is changing from 'Hashtable' to 'string[]'.
+    - Change description : IdentityUserAssignedIdentity will be renamed to UserAssignedIdentity. And its type will be simplified as string array. 
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+
+### `New-AzContainerAppJob`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-IdentityType`
+    - The parameter : 'IdentityType' is changing.
+    - Change description : IdentityType will be removed. EnableSystemAssignedIdentity will be used to enable/disable system assigned identity and UserAssignedIdentity will be used to specify user assigned identities. 
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+  - `-IdentityUserAssignedIdentity`
+    - The parameter : 'IdentityUserAssignedIdentity' is changing.
+    The type of the parameter is changing from 'Hashtable' to 'string[]'.
+    - Change description : IdentityUserAssignedIdentity will be renamed to UserAssignedIdentity. And its type will be simplified as string array. 
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+
+### `Update-AzContainerApp`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-IdentityType`
+    - The parameter : 'IdentityType' is changing.
+    - Change description : IdentityType will be removed. EnableSystemAssignedIdentity will be used to enable/disable system assigned identity and UserAssignedIdentity will be used to specify user assigned identities. 
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+  - `-IdentityUserAssignedIdentity`
+    - The parameter : 'IdentityUserAssignedIdentity' is changing.
+    The type of the parameter is changing from 'Hashtable' to 'string[]'.
+    - Change description : IdentityUserAssignedIdentity will be renamed to UserAssignedIdentity. And its type will be simplified as string array. 
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+
+### `Update-AzContainerAppJob`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-IdentityType`
+    - The parameter : 'IdentityType' is changing.
+    - Change description : IdentityType will be removed. EnableSystemAssignedIdentity will be used to enable/disable system assigned identity and UserAssignedIdentity will be used to specify user assigned identities. 
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+  - `-IdentityUserAssignedIdentity`
+    - The parameter : 'IdentityUserAssignedIdentity' is changing.
+    The type of the parameter is changing from 'Hashtable' to 'string[]'.
+    - Change description : IdentityUserAssignedIdentity will be renamed to UserAssignedIdentity. And its type will be simplified as string array. 
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
 
 ## Az.Compute
 
-### `New-AzDisk`
-
-- Cmdlet breaking-change will happen to all parameter set
-  - Starting in November 2023 the "New-AzDisk" cmdlet will deploy with the Trusted Launch configuration by default. This includes defaulting the "HyperVGeneration" parameter to "v2". To know more about Trusted Launch, please visit https://learn.microsoft.com/en-us/azure/virtual-machines/trusted-launch
-  - This change is expected to take effect from Az.Compute version: 7.0.0 and Az version: 11.0.0
-
 ### `New-AzVM`
 
-- Cmdlet breaking-change will happen to all parameter set
-  - Consider using the image alias including the version of the distribution you want to use in the "-Image" parameter of the "New-AzVM" cmdlet. On April 30, 2023, the image deployed using `UbuntuLTS` will reach its end of life. In October 2023, the aliases `UbuntuLTS`, `CentOS`, `Debian`, and `RHEL` will be removed.
-  - This change is expected to take effect from Az.Compute version: 7.0.0 and Az version: 11.0.0
-  - Starting in November 2023 the "New-AzVM" cmdlet will deploy with the Trusted Launch configuration by default. To know more about Trusted Launch, please visit https://docs.microsoft.com/en-us/azure/virtual-machines/trusted-launch
-  - This change is expected to take effect from Az.Compute version: 7.0.0 and Az version: 11.0.0
+- Cmdlet breaking-change will happen to all parameter sets
+  - The default publicIpSku will be changed from Basic to Standard. This change is expected to take effect in the next version. If publicIpSku is not specified, default will be switched to Standard. For more information refer to https://aka.ms/ipbasictostandard.
+  - This change is expected to take effect from Az.Compute version: 9.0.0 and Az version: 13.0.0
 
-### `New-AzVmss`
+## Az.DevCenter
 
-- Cmdlet breaking-change will happen to all parameter set
-  - Starting November 2023, the "New-AzVmss" cmdlet will default to Trusted Launch VMSS. For more info, visit https://aka.ms/trustedLaunchVMSS.
-  - This change is expected to take effect from Az.Compute version: 7.0.0 and Az version: 11.0.0
-  - Starting November 2023, the "New-AzVmss" cmdlet will use new defaults: Flexible orchestration mode and enable NATv2 configuration for Load Balancer. To learn more about Flexible Orchestration modes, visit https://aka.ms/orchestrationModeVMSS.
-  - This change is expected to take effect from Az.Compute version: 7.0.0 and Az version: 11.0.0
-  - Consider using the image alias including the version of the distribution you want to use in the "-ImageName" parameter of the "New-AzVmss" cmdlet. On April 30, 2023, the image deployed using `UbuntuLTS` will reach its end of life. In November 2023, the aliases `UbuntuLTS`, `CentOS`, `Debian`, and `RHEL` will be removed.
-  - This change is expected to take effect from Az.Compute version: 7.0.0 and Az version: 11.0.0
+### `Get-AzDevCenterUserDevBox`
 
-## Az.DesktopVirtualization
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'DevBox' to the new type :'DevBox'
+  - The following properties in the output type are being deprecated : 'Detail' 'ProvisioningState' 'HardwareProfileSkuName'
+  - The following properties are being added to the output type : 'Detail' 'ProvisioningState' 'HardwareProfileSkuName'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
 
-### `New-AzWvdScalingPlan`
+### `Get-AzDevCenterUserDevBoxOperation`
 
-- Parameter breaking-change will happen to all parameter sets
-  - `-HostPoolType`
-    - The parameter : 'HostPoolType' is changing.
-    - The change is expected to take effect from the Az.DesktopVirtualization version : '4.0.0'
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'DevBoxOperation' to the new type :'DevBoxOperation'
+  - The following properties in the output type are being deprecated : 'Detail' 'Status'
+  - The following properties are being added to the output type : 'Detail' 'Status'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
 
-## Az.PowerBIEmbedded
+### `Get-AzDevCenterUserEnvironment`
 
-### `Get-AzPowerBIWorkspace`
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'Environment' to the new type :'Environment'
+  - The following properties in the output type are being deprecated : 'Detail' 'ProvisioningState'
+  - The following properties are being added to the output type : 'Detail' 'ProvisioningState'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
 
-- Cmdlet breaking-change will happen to all parameter set
-  - The cmdlet is being deprecated. There will be no replacement for it.
-  - This change is expected to take effect from Az.PowerBIEmbedded version: 2.0.0 and Az version: 11.0.0
+### `Get-AzDevCenterUserEnvironmentAction`
 
-### `Get-AzPowerBIWorkspaceCollection`
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'EnvironmentAction' to the new type :'EnvironmentAction'
+  - The following properties in the output type are being deprecated : 'NextScheduledTime'
+  - The following properties are being added to the output type : 'NextScheduledTime'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
 
-- Cmdlet breaking-change will happen to all parameter set
-  - The cmdlet is being deprecated. There will be no replacement for it.
-  - This change is expected to take effect from Az.PowerBIEmbedded version: 2.0.0 and Az version: 11.0.0
+### `Get-AzDevCenterUserEnvironmentLog`
 
-### `Get-AzPowerBIWorkspaceCollectionAccessKey`
-
-- Cmdlet breaking-change will happen to all parameter set
-  - The cmdlet is being deprecated. There will be no replacement for it.
-  - This change is expected to take effect from Az.PowerBIEmbedded version: 2.0.0 and Az version: 11.0.0
-
-### `New-AzPowerBIWorkspaceCollection`
-
-- Cmdlet breaking-change will happen to all parameter set
-  - The cmdlet is being deprecated. There will be no replacement for it.
-  - This change is expected to take effect from Az.PowerBIEmbedded version: 2.0.0 and Az version: 11.0.0
-
-### `Remove-AzPowerBIWorkspaceCollection`
-
-- Cmdlet breaking-change will happen to all parameter set
-  - The cmdlet is being deprecated. There will be no replacement for it.
-  - This change is expected to take effect from Az.PowerBIEmbedded version: 2.0.0 and Az version: 11.0.0
-
-### `Reset-AzPowerBIWorkspaceCollectionAccessKey`
-
-- Cmdlet breaking-change will happen to all parameter set
-  - The cmdlet is being deprecated. There will be no replacement for it.
-  - This change is expected to take effect from Az.PowerBIEmbedded version: 2.0.0 and Az version: 11.0.0
-
-## Az.RecoveryServices
-
-### `Get-AzRecoveryServicesVaultSettingsFile`
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'boolean' to the new type :'string'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
 
 - Parameter breaking-change will happen to all parameter sets
-  - `-Certificate`
+  - `-OutFile`
+    - The parameter : 'OutFile' is changing.
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+  - `-PassThru`
+    - The parameter : 'PassThru' is changing.
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+
+### `Get-AzDevCenterUserEnvironmentOperation`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'EnvironmentOperation' to the new type :'EnvironmentOperation'
+  - The following properties in the output type are being deprecated : 'Detail' 'EnvironmentParameter' 'Status'
+  - The following properties are being added to the output type : 'Detail' 'EnvironmentParameter' 'Status'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
+
+### `Get-AzDevCenterUserPool`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'Pool' to the new type :'Pool'
+  - The following properties in the output type are being deprecated : 'HardwareProfileSkuName'
+  - The following properties are being added to the output type : 'HardwareProfileSkuName'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
+
+### `Invoke-AzDevCenterUserDelayDevBoxAction`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'DevBoxActionDelayResult' to the new type :'DevBoxActionDelayResult'
+  - The following properties in the output type are being deprecated : 'Detail'
+  - The following properties are being added to the output type : 'Detail'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
+
+### `Invoke-AzDevCenterUserDelayEnvironmentAction`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'EnvironmentAction' to the new type :'EnvironmentAction'
+  - The following properties in the output type are being deprecated : 'NextScheduledTime'
+  - The following properties are being added to the output type : 'NextScheduledTime'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
+
+### `New-AzDevCenterUserDevBox`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'DevBox' to the new type :'DevBox'
+  - The following properties in the output type are being deprecated : 'Detail' 'ProvisioningState' 'HardwareProfileSkuName'
+  - The following properties are being added to the output type : 'Detail' 'ProvisioningState' 'HardwareProfileSkuName'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
+
+### `Update-AzDevCenterUserEnvironment`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type is changing from the existing type :'Environment' to the new type :'Environment'
+  - The following properties in the output type are being deprecated : 'Detail' 'ProvisioningState'
+  - The following properties are being added to the output type : 'Detail' 'ProvisioningState'
+  - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+  - The change is expected to take effect from version : '2.0.0'
+
+## Az.ElasticSan
+
+### `New-AzElasticSanVolumeGroup`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-IdentityType`
+    - The parameter : 'IdentityType' is changing.
+    - Change description : IdentityType will be removed. EnableSystemAssignedIdentity will be used to enable/disable system assigned identity and UserAssignedIdentity will be used to specify user assigned identities. 
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+
+### `Update-AzElasticSanVolumeGroup`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-IdentityType`
+    - The parameter : 'IdentityType' is changing.
+    - Change description : IdentityType will be removed. EnableSystemAssignedIdentity will be used to enable/disable system assigned identity and UserAssignedIdentity will be used to specify user assigned identities. 
+    - This change will take effect on '19/11/2024'- The change is expected to take effect from Az version : '13.0.0'
+    - The change is expected to take effect from version : '2.0.0'
+
+## Az.NetAppFiles
+
+### `Get-AzNetAppFilesBackup`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-AccountBackupName`
     - Parameter is being deprecated without being replaced
-    - This change is expected to take effect from Az.RecoveryServices version: 7.0.0 and Az version: 11.0.0
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-PoolName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-VolumeName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-VolumeObject`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+
+### `New-AzNetAppFilesBackup`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-Location`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-PoolName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-VolumeName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-VolumeObject`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+
+### `Remove-AzNetAppFilesBackup`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-AccountBackupName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-PoolName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-VolumeName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-VolumeObject`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+
+### `Restore-AzNetAppFilesBackupFile`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-PoolName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-VolumeName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-VolumeObject`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+
+### `Update-AzNetAppFilesBackup`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-PoolName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-VolumeName`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+  - `-VolumeObject`
+    - Parameter is being deprecated without being replaced
+    - This change is expected to take effect from Az.NetAppFiles version: 0.16 and Az version: 12
+
+## Az.Sql
+
+### `Get-AzSqlInstanceLink`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type 'Microsoft.Azure.Commands.Sql.ManagedInstanceHybridLink.Model.AzureSqlManagedInstanceLinkModel' is changing
+  - The following properties in the output type are being deprecated : 'TargetDatabase' 'PrimaryAvailabilityGroupName' 'SecondaryAvailabilityGroupName' 'SourceEndpoint' 'SourceReplicaId' 'TargetReplicaId' 'LinkState' 'LastHardenedLsn'
+  - The following properties are being added to the output type : 'Databases' 'DistributedAvailabilityGroupName ' 'InstanceAvailabilityGroupName' 'PartnerAvailabilityGroupName' 'InstanceLinkRole' 'PartnerLinkRole' 'FailoverMode' 'SeedingMode' 'PartnerEndpoint'
+  - This change is expected to take effect from Az.Sql version: 6.0.0 and Az version: 13.0.0
+
+### `New-AzSqlInstanceLink`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type 'Microsoft.Azure.Commands.Sql.ManagedInstanceHybridLink.Model.AzureSqlManagedInstanceLinkModel' is changing
+  - The following properties in the output type are being deprecated : 'TargetDatabase' 'PrimaryAvailabilityGroupName' 'SecondaryAvailabilityGroupName' 'SourceEndpoint' 'SourceReplicaId' 'TargetReplicaId' 'LinkState' 'LastHardenedLsn'
+  - The following properties are being added to the output type : 'Databases' 'DistributedAvailabilityGroupName ' 'InstanceAvailabilityGroupName' 'PartnerAvailabilityGroupName' 'InstanceLinkRole' 'PartnerLinkRole' 'FailoverMode' 'SeedingMode' 'PartnerEndpoint'
+  - This change is expected to take effect from Az.Sql version: 6.0.0 and Az version: 13.0.0
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-PrimaryAvailabilityGroupName`
+    - The parameter : 'PrimaryAvailabilityGroupName' is being replaced by parameter : 'PartnerAvailabilityGroupName'.
+    - This change is expected to take effect from Az.Sql version: 6.0.0 and Az version: 13.0.0
+  - `-SecondaryAvailabilityGroupName`
+    - The parameter : 'SecondaryAvailabilityGroupName' is being replaced by parameter : 'InstanceAvailabilityGroupName'.
+    - This change is expected to take effect from Az.Sql version: 6.0.0 and Az version: 13.0.0
+  - `-SourceEndpoint`
+    - The parameter : 'SourceEndpoint' is being replaced by parameter : 'PartnerEndpoint'.
+    - This change is expected to take effect from Az.Sql version: 6.0.0 and Az version: 13.0.0
+  - `-TargetDatabase`
+    - The parameter 'TargetDatabase' is being replaced by parameter 'Databases'. The type of new parameter is changing from 'String' to 'List<String>'
+    - This change is expected to take effect from Az.Sql version: 6.0.0 and Az version: 13.0.0
+
+### `Remove-AzSqlInstanceLink`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type 'Microsoft.Azure.Commands.Sql.ManagedInstanceHybridLink.Model.AzureSqlManagedInstanceLinkModel' is changing
+  - The following properties in the output type are being deprecated : 'TargetDatabase' 'PrimaryAvailabilityGroupName' 'SecondaryAvailabilityGroupName' 'SourceEndpoint' 'SourceReplicaId' 'TargetReplicaId' 'LinkState' 'LastHardenedLsn'
+  - The following properties are being added to the output type : 'Databases' 'DistributedAvailabilityGroupName ' 'InstanceAvailabilityGroupName' 'PartnerAvailabilityGroupName' 'InstanceLinkRole' 'PartnerLinkRole' 'FailoverMode' 'SeedingMode' 'PartnerEndpoint'
+  - This change is expected to take effect from Az.Sql version: 6.0.0 and Az version: 13.0.0
+
+### `Update-AzSqlInstanceLink`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The output type 'Microsoft.Azure.Commands.Sql.ManagedInstanceHybridLink.Model.AzureSqlManagedInstanceLinkModel' is changing
+  - The following properties in the output type are being deprecated : 'TargetDatabase' 'PrimaryAvailabilityGroupName' 'SecondaryAvailabilityGroupName' 'SourceEndpoint' 'SourceReplicaId' 'TargetReplicaId' 'LinkState' 'LastHardenedLsn'
+  - The following properties are being added to the output type : 'Databases' 'DistributedAvailabilityGroupName ' 'InstanceAvailabilityGroupName' 'PartnerAvailabilityGroupName' 'InstanceLinkRole' 'PartnerLinkRole' 'FailoverMode' 'SeedingMode' 'PartnerEndpoint'
+  - This change is expected to take effect from Az.Sql version: 6.0.0 and Az version: 13.0.0
 
 ## Az.Storage
 
-### `New-AzDataLakeGen2SasToken`
-
-- Cmdlet breaking-change will happen to all parameter set
-  - The leading question mark '?' of the created SAS token will be removed in a future release.
-  - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
-
-### `New-AzStorageAccount`
-
-- Cmdlet breaking-change will happen to all parameter set
-  - Default value of AllowBlobPublicAccess and AllowCrossTenantReplication will be changed from True to False in a future release.
-  When AllowBlobPublicAccess is False on a storage account, it is not permitted to configure container ACLs to allow anonymous access to blobs within the storage account.
-  When AllowCrossTenantReplication is False on a storage account, cross AAD tenant object replication is not allowed.
-  - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
-
-### `New-AzStorageAccountSASToken`
-
-- Cmdlet breaking-change will happen to all parameter set
-  - The leading question mark '?' of the created SAS token will be removed in a future release.
-  - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
-
-### `New-AzStorageBlobSASToken`
-
-- Cmdlet breaking-change will happen to all parameter set
-  - The leading question mark '?' of the created SAS token will be removed in a future release.
-  - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
-
-### `New-AzStorageContainerSASToken`
-
-- Cmdlet breaking-change will happen to all parameter set
-  - The leading question mark '?' of the created SAS token will be removed in a future release.
-  - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
-
-### `New-AzStorageContext`
+### `Close-AzStorageFileHandle`
 
 - Parameter breaking-change will happen to all parameter sets
-  - `-SasToken`
-    - The SAS token in created Storage context properties 'ConnectionString' and 'StorageAccount.Credentials' won't have the leading question mark '?' in a future release.
-    - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
+  - `-Directory`
+    - The parameter Directory (alias CloudFileDirectory) will be deprecated, and ShareDirectoryClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-File`
+    - The parameter File (alias CloudFile) will be deprecated, and ShareFileClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-Share`
+    - The parameter Share (alias CloudFileShare) will be deprecated, and ShareClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Get-AzStorageBlobContent`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-AbsoluteUri`
+    - When download blob with parameter AbsoluteUri (alias Uri, BlobUri), parameter Context will not be allowed to input together.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Get-AzStorageFile`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFile from deprecated v11 SDK will be removed. Use child property ShareFileClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - The child property CloudFileDirectory from deprecated v11 SDK will be removed. Use child property ShareDirectoryClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-Directory`
+    - The parameter Directory (alias CloudFileDirectory) will be deprecated, and ShareDirectoryClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-Share`
+    - The parameter Share (alias CloudFileShare) will be deprecated, and ShareClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Get-AzStorageFileContent`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFile from deprecated v11 SDK will be removed when -PassThru is specified. Use child property ShareFileClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-Directory`
+    - The parameter Directory (alias CloudFileDirectory) will be deprecated, and ShareDirectoryClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-File`
+    - The parameter File (alias CloudFile) will be deprecated, and ShareFileClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-Share`
+    - The parameter Share (alias CloudFileShare) will be deprecated, and ShareClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Get-AzStorageFileCopyState`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-File`
+    - The parameter File (alias CloudFile) will be deprecated, and ShareFileClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Get-AzStorageFileHandle`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-Directory`
+    - The parameter Directory (alias CloudFileDirectory) will be deprecated, and ShareDirectoryClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-File`
+    - The parameter File (alias CloudFile) will be deprecated, and ShareFileClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-Share`
+    - The parameter Share (alias CloudFileShare) will be deprecated, and ShareClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Get-AzStorageShare`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFileShare from deprecated v11 SDK will be removed. Use child property ShareClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `New-AzStorageDirectory`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFileDirectory from deprecated v11 SDK will be removed. Use child property ShareDirectoryClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-Directory`
+    - The parameter Directory (alias CloudFileDirectory) will be deprecated, and ShareDirectoryClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-Share`
+    - The parameter Share (alias CloudFileShare) will be deprecated, and ShareClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
 
 ### `New-AzStorageFileSASToken`
 
-- Cmdlet breaking-change will happen to all parameter set
-  - The leading question mark '?' of the created SAS token will be removed in a future release.
-  - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
+- Parameter breaking-change will happen to all parameter sets
+  - `-File`
+    - The parameter File (alias CloudFile) will be deprecated, and a new mandatory parameter ShareFileClient will be added.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-Protocol`
+    - The type of parameter Protocol will be changed from SharedAccessProtocol to string.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
 
-### `New-AzStorageQueueSASToken`
+### `New-AzStorageShare`
 
-- Cmdlet breaking-change will happen to all parameter set
-  - The leading question mark '?' of the created SAS token will be removed in a future release.
-  - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFileShare from deprecated v11 SDK will be removed. Use child property ShareClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
 
 ### `New-AzStorageShareSASToken`
 
-- Cmdlet breaking-change will happen to all parameter set
-  - The leading question mark '?' of the created SAS token will be removed in a future release.
-  - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
+- Parameter breaking-change will happen to all parameter sets
+  - `-Protocol`
+    - The type of parameter Protocol will be changed from SharedAccessProtocol to string.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
 
-### `New-AzStorageTableSASToken`
+### `Remove-AzStorageDirectory`
 
-- Cmdlet breaking-change will happen to all parameter set
-  - The leading question mark '?' of the created SAS token will be removed in a future release.
-  - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
-
-### `Set-AzStorageAccount`
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFileDirectory from deprecated v11 SDK will be removed when -PassThru is specified. Use child property ShareDirectoryClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
 
 - Parameter breaking-change will happen to all parameter sets
-  - `-EnableLargeFileShare`
-    - EnableLargeFileShare parameter will be deprecated in a future release.
-    - This change is expected to take effect from Az.Storage version: 6.0.0 and Az version: 11.0.0
+  - `-Directory`
+    - The parameter Directory (alias CloudFileDirectory) will be deprecated, and ShareDirectoryClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-Share`
+    - The parameter Share (alias CloudFileShare) will be deprecated, and ShareClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Remove-AzStorageFile`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFile from deprecated v11 SDK will be removed when -PassThru is specified. Use child property ShareFileClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-Directory`
+    - The parameter Directory (alias CloudFileDirectory) will be deprecated, and ShareDirectoryClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-File`
+    - The parameter File (alias CloudFile) will be deprecated, and ShareFileClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-Share`
+    - The parameter Share (alias CloudFileShare) will be deprecated, and ShareClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Remove-AzStorageShare`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFileShare from deprecated v11 SDK will be removed when -PassThru is specified. Use child property ShareClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-Share`
+    - The parameter Share (alias CloudFileShare) will be deprecated, and ShareClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Rename-AzStorageDirectory`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFileDirectory from deprecated v11 SDK will be removed. Use child property ShareDirectoryClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Rename-AzStorageFile`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFile from deprecated v11 SDK will be removed. Use child property ShareFileClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Set-AzStorageFileContent`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFile from deprecated v11 SDK will be removed. Use child property ShareFileClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-Directory`
+    - The parameter Directory (alias CloudFileDirectory) will be deprecated, and ShareDirectoryClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-Share`
+    - The parameter Share (alias CloudFileShare) will be deprecated, and ShareClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Set-AzStorageShareQuota`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFileShare from deprecated v11 SDK will be removed. Use child property ShareClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-Share`
+    - The parameter Share (alias CloudFileShare) will be deprecated, and a new mandatory parameter ShareClient will be added.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Start-AzStorageFileCopy`
+
+- Cmdlet breaking-change will happen to all parameter sets
+  - The child property CloudFile from deprecated v11 SDK will be removed. Use child property ShareFileClient instead.
+  - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-Context`
+    - The parameter Context will be required when the input source blob is based on OAuth credential.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-DestFile`
+    - The parameter DestFile will be deprecated. To input a dest file instance, use DestShareFileClient instead.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-SrcBlob`
+    - The type of parameter SrcBlob will be changed from CloudBlob to BlobBaseClient. The alias ICloudBlob will be deprecated.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-SrcContainer`
+    - The type of parameter SrcContainer will be changed from CloudBlobContainer to BlobContainerClient.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-SrcFile`
+    - The type of parameter SrcFile will be changed from CloudFile to ShareFileClient. The alias CloudFile will be deprecated.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+  - `-SrcShare`
+    - The type of parameter SrcShare will be changed from CloudFileShare to ShareClient. The alias CloudFileShare will be deprecated.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+
+### `Stop-AzStorageFileCopy`
+
+- Parameter breaking-change will happen to all parameter sets
+  - `-File`
+    - The parameter File (alias CloudFile) will be deprecated, and ShareFileClient will be mandatory.
+    - This change is expected to take effect from Az.Storage version: 8.0.0 and Az version: 13.0.0
+

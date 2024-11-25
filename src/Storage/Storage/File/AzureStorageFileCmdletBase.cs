@@ -14,27 +14,24 @@
 
 namespace Microsoft.WindowsAzure.Commands.Storage.File
 {
-    using Azure.Commands.Common.Authentication.Abstractions;
-    using Microsoft.WindowsAzure.Commands.Common.Storage;
+    using global::Azure;
+    using global::Azure.Core;
+    using global::Azure.Storage.Files.Shares;
+    using global::Azure.Storage.Files.Shares.Models;
+    using Microsoft.Azure.Storage.Blob;
+    using Microsoft.Azure.Storage.File;
+    using Microsoft.WindowsAzure.Commands.Common;
+    using Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel;
     using Microsoft.WindowsAzure.Commands.Storage.Common;
     using Microsoft.WindowsAzure.Commands.Storage.Model.Contract;
-    using Microsoft.Azure.Storage.File;
     using System;
     using System.Collections.Generic;
     using System.Management.Automation;
-    using Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel;
-    using global::Azure.Storage.Files.Shares;
-    using Microsoft.WindowsAzure.Commands.Common;
-    using global::Azure.Core;
-    using global::Azure;
-    using global::Azure.Storage.Files.Shares.Models;
-    using System.Linq;
-    using Microsoft.Azure.Cosmos.Table;
-    using Microsoft.Azure.Storage.Blob;
-    using Microsoft.WindowsAzure.Commands.Storage.Adapters;
 
     public abstract class AzureStorageFileCmdletBase : StorageCloudCmdletBase<IStorageFileManagement>
     {
+        [Parameter(Mandatory = false, HelpMessage = "Disallow trailing dot (.) to suffix directory and file names.", ParameterSetName = Constants.ShareNameParameterSetName)]
+        public virtual SwitchParameter DisAllowTrailingDot { get; set; }
         protected FileRequestOptions RequestOptions
         {
             get
@@ -96,88 +93,13 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File
             }
         }
 
-        protected bool ShouldSetContext(IStorageContext context, CloudFileClient cloudFileClient)
-        {
-            if (context == null)
-            {
-                return true;
-            }
-            try
-            {
-                if (context.GetCloudStorageAccount().FileEndpoint.Host.Equals(cloudFileClient.BaseUri.Host, StringComparison.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
-            } catch (Exception)
-            {
-                return true;
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Write CloudFile to output using specified service channel
-        /// </summary>
-        /// <param name="taskId">Task id</param>
-        /// <param name="context">AzureStorageContext object</param>
-        /// <param name="file">The output CloudFile object</param>
-        internal void WriteCloudFileObject(long taskId, AzureStorageContext context, CloudFile file)
-        {
-            AzureStorageFile azureFile = new AzureStorageFile(file, context);
-            OutputStream.WriteObject(taskId, azureFile);
-        }
-
-
-        /// <summary>
-        /// Write CloudFileDirectory to output using specified service channel
-        /// </summary>
-        /// <param name="taskId">Task id</param>
-        /// <param name="context">AzureStorageContext object</param>
-        /// <param name="fileDir">The output CloudFileDirectory object</param>
-        internal void WriteCloudFileDirectoryeObject(long taskId, AzureStorageContext context, CloudFileDirectory fileDir)
-        {
-            AzureStorageFileDirectory azureFileDir = new AzureStorageFileDirectory(fileDir, context);
-            OutputStream.WriteObject(taskId, azureFileDir);
-        }
-
-        /// <summary>
-        /// Write CloudFileShare to output using specified service channel
-        /// </summary>
-        /// <param name="taskId">Task id</param>
-        /// <param name="channel">IStorageFileManagement channel object</param>
-        /// <param name="share">The output CloudFileShare object</param>
-        internal void WriteCloudShareObject(long taskId, IStorageFileManagement channel, CloudFileShare share)
-        {
-            AzureStorageFileShare azureshare = new AzureStorageFileShare(share, channel.StorageContext);
-            OutputStream.WriteObject(taskId, azureshare);
-        }
-
-        /// <summary>
-        /// Write IListFileItem to output using specified service channel
-        /// </summary>
-        /// <param name="taskId">Task id</param>
-        /// <param name="context">AzureStorageContext object</param>
-        /// <param name="item">The output IListFileItem object</param>
-        internal void WriteListFileItemObject(long taskId, AzureStorageContext context, IListFileItem item)
-        {
-            if ((item as CloudFile) != null) // CloudFile
-            {
-                WriteCloudFileObject(taskId, context, item as CloudFile);
-            }
-            else
-            {
-                WriteCloudFileDirectoryeObject(taskId, context, item as CloudFileDirectory);
-            }
-        }
-
         public ShareClientOptions ClientOptions
         {
             get
             {
                 if (clientOptions == null)
                 {
-                    clientOptions = new ShareClientOptions();
-                    clientOptions.AddPolicy(new UserAgentPolicy(ApiConstants.UserAgentHeaderValue), HttpPipelinePosition.PerCall);
+                    clientOptions = createClientOptions();
                     return clientOptions;
                 }
                 else
@@ -188,29 +110,38 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File
         }
         private ShareClientOptions clientOptions = null;
 
-        public static AzureStorageContext GetStorageContextFromTrack1FileServiceClient(CloudFileClient fileServiceClient, IAzureContext DefaultContext = null)
+        public ShareClientOptions createClientOptions()
         {
-            Microsoft.Azure.Storage.CloudStorageAccount account = new Microsoft.Azure.Storage.CloudStorageAccount(
-                fileServiceClient.Credentials,
-                null, //blob Uri
-                null, //queue Uri
-                null, //talbe Uri
-                fileServiceClient.BaseUri); //file Uri
-            return new AzureStorageContext(account, 
-                fileServiceClient.Credentials.AccountName, 
-                DefaultContext);
+            ShareClientOptions clientOptions = new ShareClientOptions();
+            clientOptions.AddPolicy(new UserAgentPolicy(ApiConstants.UserAgentHeaderValue), HttpPipelinePosition.PerCall);
+            if (this.DisAllowTrailingDot.IsPresent)
+            {
+                clientOptions.AllowTrailingDot = false;
+            }
+            else
+            {
+                clientOptions.AllowTrailingDot = true;
+            }
+            clientOptions.AllowSourceTrailingDot = true;
+            return clientOptions;
         }
-        public static AzureStorageContext GetStorageContextFromTrack1BlobServiceClient(CloudBlobClient blobServiceClient, IAzureContext DefaultContext = null)
+
+        protected bool WithOauthCredential()
         {
-            Microsoft.Azure.Storage.CloudStorageAccount account = new Microsoft.Azure.Storage.CloudStorageAccount(
-                blobServiceClient.Credentials,
-                blobServiceClient.BaseUri, //blob Uri
-                null, //queue Uri
-                null, //talbe Uri
-                null); //file Uri
-            return new AzureStorageContext(account,
-                blobServiceClient.Credentials.AccountName,
-                DefaultContext);
+            if(this.Channel != null && this.Channel.StorageContext != null && this.Channel.StorageContext.StorageAccount != null && this.Channel.StorageContext.StorageAccount.Credentials.IsToken)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        protected void CheckContextForObjectInput(AzureStorageContext context)
+        {
+            if (context == null)
+            {
+                throw new InvalidOperationException("Could not get the storage context. Please pass in a storage context with \"-Context\" parameter (can be created with New-AzStorageContext cmdlet), " +
+                            "or set the current storage context with Set-AzCurrentStorageAccount cmdlet.");
+            }
         }
     }
 }

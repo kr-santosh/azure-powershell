@@ -62,21 +62,21 @@ namespace Commands.Aks.Test.ScenarioTests
                     }
                 ).WithMockContextAction(mockContext =>
                 {
-                    if (HttpMockServer.GetCurrentMode() == HttpRecorderMode.Playback)
+                    if (HttpMockServer.Mode == HttpRecorderMode.Playback)
                     {
                         AzureSession.Instance.DataStore = new MemoryDataStore();
                         var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                        var dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath);
+                        var dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath);
                         var subscription = HttpMockServer.Variables["SubscriptionId"];
                         AzureSession.Instance.DataStore.WriteFile(Path.Combine(home, ".ssh", "id_rsa.pub"), File.ReadAllText(dir + "/Fixtures/id_rsa.pub"));
                         var jsonOutput = @"{""" + subscription + @""":{ ""service_principal"":""foo"",""client_secret"":""bar""}}";
                         AzureSession.Instance.DataStore.WriteFile(Path.Combine(home, ".azure", "acsServicePrincipal.json"), jsonOutput);
                     }
-                    else if (HttpMockServer.GetCurrentMode() == HttpRecorderMode.Record)
+                    else if (HttpMockServer.Mode == HttpRecorderMode.Record)
                     {
                         AzureSession.Instance.DataStore = new MemoryDataStore();
                         var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                        var dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath);
+                        var dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath);
                         
                         var currentEnvironment = TestEnvironmentFactory.GetTestEnvironment();
                         var subscription = currentEnvironment.ConnectionString.KeyValuePairs["SubscriptionId"];

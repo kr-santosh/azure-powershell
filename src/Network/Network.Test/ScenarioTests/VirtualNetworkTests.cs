@@ -50,6 +50,14 @@ namespace Commands.Network.Test.ScenarioTests
             TestRunner.RunTestScript("Test-subnetCRUD");
         }
 
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        [Trait(Category.Owner, NrpTeamAlias.wanrpdev_subset1)]
+        public void TestSubnetWithDefaultOutboundAccessCRUD()
+        {
+            TestRunner.RunTestScript("Test-subnetWithDefaultOutboundAccessCRUD");
+        }
+
         [Fact(Skip = "Authentication failed for auxiliary token: The '1' auxiliary tokens contains duplicates which are from the same tenant.")]
         [Trait(Category.AcceptanceType, Category.LiveOnly)]
         [Trait(Category.Owner, NrpTeamAlias.wanrpdev_subset1)]
@@ -141,6 +149,22 @@ namespace Commands.Network.Test.ScenarioTests
         [Fact]
         [Trait(Category.AcceptanceType, Category.CheckIn)]
         [Trait(Category.Owner, NrpTeamAlias.wanrpdev_subset1)]
+        public void TestVirtualNetworkSubnetServiceEndpointWithNetworkIdentifier()
+        {
+            TestRunner.RunTestScript("Test-VirtualNetworkSubnetServiceEndpointWithNetworkIdentifier");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        [Trait(Category.Owner, NrpTeamAlias.wanrpdev_subset1)]
+        public void TestVirtualNetworkSubnetServiceEndpointConfig()
+        {
+            TestRunner.RunTestScript("Test-VirtualNetworkSubnetServiceEndpointConfig");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        [Trait(Category.Owner, NrpTeamAlias.wanrpdev_subset1)]
         public void TestVirtualNetworkSubnetServiceEndpointPolicies()
         {
             TestRunner.RunTestScript("Test-VirtualNetworkSubnetServiceEndpointPolicies");
@@ -184,6 +208,14 @@ namespace Commands.Network.Test.ScenarioTests
         public void TestVirtualNetworkEncryption()
         {
             TestRunner.RunTestScript("Test-VirtualNetworkEncryption");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        [Trait(Category.Owner, NrpTeamAlias.plcpdev)]
+        public void TestVirtualNetworkPrivateEndpointVNetPolicies()
+        {
+            TestRunner.RunTestScript("Test-VirtualNetworkPrivateEndpointVNetPolicies");
         }
     }
 }

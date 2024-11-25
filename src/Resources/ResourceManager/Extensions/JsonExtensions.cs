@@ -45,6 +45,7 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.Extensions
             TypeNameHandling = TypeNameHandling.None,
             DateParseHandling = DateParseHandling.None,
             DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore,
             ContractResolver = new CamelCasePropertyNamesWithOverridesContractResolver(),
@@ -64,6 +65,7 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.Extensions
             TypeNameHandling = TypeNameHandling.None,
             DateParseHandling = DateParseHandling.None,
             DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = new CamelCasePropertyNamesWithOverridesContractResolver(),
             Converters = new List<JsonConverter>
@@ -99,7 +101,7 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.Extensions
         /// <param name="obj">The object.</param>
         public static string ToFormattedJson(this object obj)
         {
-            return JsonConvert.SerializeObject(obj, Formatting.Indented);
+            return JsonConvert.SerializeObject(obj, Formatting.Indented, JsonExtensions.ObjectSerializationSettings);
         }
 
         /// <summary>

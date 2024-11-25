@@ -188,5 +188,45 @@ namespace Commands.Network.Test.ScenarioTests
         {
             TestRunner.RunTestScript("Test-AzureFirewallPolicyApplicationRuleCustomHttpHeader");
         }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        [Trait(Category.Owner, NrpTeamAlias.azurefirewall)]
+        public void TestAzureFirewallPolicySizeProperty()
+        {
+            TestRunner.RunTestScript("Test-AzureFirewallPolicySizeProperty");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        [Trait(Category.Owner, NrpTeamAlias.azurefirewall)]
+        public void TestAzureFirewallPolicyRuleCollectionGroupSizeProperty()
+        {
+            TestRunner.RunTestScript("Test-AzureFirewallPolicyRuleCollectionGroupSizeProperty");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        [Trait(Category.Owner, NrpTeamAlias.azurefirewall)]
+        public void TestAzureFirewallPolicyIDPSProfiles()
+        {
+            TestRunner.RunTestScript("Test-AzureFirewallPolicyIDPSProfiles");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        [Trait(Category.Owner, NrpTeamAlias.azurefirewall)]
+        public void TestAzureFirewallPolicyDraft()
+        {
+            TestRunner.RunTestScript("Test-AzureFirewallPolicyDraft");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        [Trait(Category.Owner, NrpTeamAlias.azurefirewall)]
+        public void TestAzureFirewallPolicyRCGyDraft()
+        {
+            TestRunner.RunTestScript("Test-AzureFirewallPolicyRCGDraft");
+        }
     }
 }

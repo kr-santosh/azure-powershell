@@ -12,6 +12,7 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
+using Microsoft.Azure.Management.StorageSync.Models;
 using Microsoft.WindowsAzure.Commands.Common.Attributes;
 using System.Collections.Generic;
 
@@ -51,7 +52,14 @@ namespace Microsoft.Azure.Commands.StorageSync.Models
         /// <value>The private endpoint connections.</value>
         [Ps1Xml(Label = "PrivateEndpointConnections ", Target = ViewControl.Table, Position = 7)]
         public IList<PSPrivateEndpointConnection> PrivateEndpointConnections { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the name of the use identity.
+        /// </summary>
+        /// <value>The name of the use identity.</value>
+        [Ps1Xml(Label = "UseIdentity ", Target = ViewControl.Table, Position = 7)]
+        public bool? UseIdentity { get; set; }
+
         /// <summary>
         /// Gets or sets the tags.
         /// </summary>
@@ -63,5 +71,17 @@ namespace Microsoft.Azure.Commands.StorageSync.Models
         /// </summary>
         /// <value>The tags.</value>
         public string ProvisioningState { get; set; }
+
+        /// <summary>
+        /// Gets or sets the SystemData.
+        /// </summary>
+        /// <value>The SystemData.</value>
+        public PSSystemData SystemData { get; set; }
+
+        /// <summary>
+        /// Managed Identity for Storage Sync Service
+        /// </summary>
+        public ManagedServiceIdentity Identity { get; set; }
+
     }
 }

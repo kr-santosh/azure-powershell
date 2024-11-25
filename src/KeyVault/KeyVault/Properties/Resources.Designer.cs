@@ -19,7 +19,7 @@ namespace Microsoft.Azure.Commands.KeyVault.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -442,15 +442,6 @@ namespace Microsoft.Azure.Commands.KeyVault.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fetching default CVM policy from remote failed because {0}. Trying to fetch default CVM policy from local backup copy..
-        /// </summary>
-        internal static string FetchDefaultCVMPolicyFromLocal {
-            get {
-                return ResourceManager.GetString("FetchDefaultCVMPolicyFromLocal", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Can not find file &apos;{0}&apos;..
         /// </summary>
         internal static string FileNotFound {
@@ -712,6 +703,24 @@ namespace Microsoft.Azure.Commands.KeyVault.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value must be between 1 and int.MaxValue..
+        /// </summary>
+        internal static string InvalidRangeDaysBeforeExpiry {
+            get {
+                return ResourceManager.GetString("InvalidRangeDaysBeforeExpiry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;Value must be between 0 and 99.&quot;.
+        /// </summary>
+        internal static string InvalidRangePercentageLifetime {
+            get {
+                return ResourceManager.GetString("InvalidRangePercentageLifetime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid Sas permission &apos;{0}&apos;..
         /// </summary>
         internal static string InvalidSasPermission {
@@ -856,6 +865,15 @@ namespace Microsoft.Azure.Commands.KeyVault.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vault &apos;{0}&apos; does not exist in current subscription.  If this vault exists in your tenant, please switch to the correct subscription..
+        /// </summary>
+        internal static string NoVaultWithGivenNameFound {
+            get {
+                return ResourceManager.GetString("NoVaultWithGivenNameFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid permissions to {0}. The list contains &quot;all&quot; along with other permissions. Please remove &quot;all&quot; from the list or include only &quot;all&quot; in the list..
         /// </summary>
         internal static string PermissionSetIncludesAllPlusOthers {
@@ -870,6 +888,15 @@ namespace Microsoft.Azure.Commands.KeyVault.Properties {
         internal static string PermissionsNotSpecified {
             get {
                 return ResourceManager.GetString("PermissionsNotSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error happens when processing certificate &apos;{0}&apos;. See detailed error: {1}.
+        /// </summary>
+        internal static string ProcessingCertError {
+            get {
+                return ResourceManager.GetString("ProcessingCertError", resourceCulture);
             }
         }
         
@@ -1342,6 +1369,15 @@ namespace Microsoft.Azure.Commands.KeyVault.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please provide a valid SasToken or use Managed Identity for authentication..
+        /// </summary>
+        internal static string SasTokenNotNull {
+            get {
+                return ResourceManager.GetString("SasTokenNotNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to selective restore key {0} of managed HSM {1}..
         /// </summary>
         internal static string SelectiveRestoreFailed {
@@ -1477,6 +1513,15 @@ namespace Microsoft.Azure.Commands.KeyVault.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update vault setting.
+        /// </summary>
+        internal static string UpdateKeyVaultSetting {
+            get {
+                return ResourceManager.GetString("UpdateKeyVaultSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update vault network rule.
         /// </summary>
         internal static string UpdateNetworkRule {
@@ -1491,6 +1536,24 @@ namespace Microsoft.Azure.Commands.KeyVault.Properties {
         internal static string UpdateNetworkRuleWarning {
             get {
                 return ResourceManager.GetString("UpdateNetworkRuleWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter SasToken and UseUserManagedIdentity can not exist at the same time. Please choose either one as authentication method..
+        /// </summary>
+        internal static string UseManagedIdentityAndSasTokenBothExist {
+            get {
+                return ResourceManager.GetString("UseManagedIdentityAndSasTokenBothExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please choose either SasToken or UseUserManagedIdentity as authentication method..
+        /// </summary>
+        internal static string UseManagedIdentityAndSasTokenNeitherExist {
+            get {
+                return ResourceManager.GetString("UseManagedIdentityAndSasTokenNeitherExist", resourceCulture);
             }
         }
         

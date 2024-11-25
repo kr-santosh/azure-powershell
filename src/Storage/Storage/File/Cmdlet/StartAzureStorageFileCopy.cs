@@ -13,17 +13,13 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Azure.Commands.Common.Authentication.Abstractions;
-using Microsoft.WindowsAzure.Commands.Common.Storage;
 using Microsoft.WindowsAzure.Commands.Storage.Common;
 using Microsoft.WindowsAzure.Commands.Storage.Model.Contract;
-using Microsoft.Azure.Storage;
-using Microsoft.Azure.Storage.Blob;
-using Microsoft.Azure.Storage.File;
 using System;
 using System.Management.Automation;
 using System.Security.Permissions;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
+using Microsoft.Azure.Storage.Blob;
 using Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel;
 using Azure.Storage.Files.Shares;
 using Azure;
@@ -77,22 +73,22 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
 
         [Parameter(HelpMessage = "Source share instance", Mandatory = true, ParameterSetName = ShareParameterSet)]
         [ValidateNotNull]
-        [Alias("CloudFileShare")]
-        public CloudFileShare SrcShare { get; set; }
+        [Alias("ShareClient")]
+        public ShareClient SrcShare { get; set; }
 
-        [Parameter(HelpMessage = "Source file instance", 
+        [Parameter(HelpMessage = "Source file instance",
             Mandatory = true,
             ValueFromPipeline = true,
-            ValueFromPipelineByPropertyName = true, 
+            ValueFromPipelineByPropertyName = true,
             ParameterSetName = FileFilePathParameterSet)]
-        [Parameter(HelpMessage = "Source file instance", 
+        [Parameter(HelpMessage = "Source file instance",
             Mandatory = true,
             ValueFromPipeline = true,
-            ValueFromPipelineByPropertyName = true, 
+            ValueFromPipelineByPropertyName = true,
             ParameterSetName = FileFileParameterSet)]
         [ValidateNotNull]
-        [Alias("CloudFile")]
-        public CloudFile SrcFile { get; set; }
+        [Alias("ShareFileClient")]
+        public ShareFileClient SrcFile { get; set; }
 
         [Parameter(HelpMessage = "Source Uri", Mandatory = true, ParameterSetName = UriFilePathParameterSet)]
         [Parameter(HelpMessage = "Source Uri", Mandatory = true, ParameterSetName = UriFileParameterSet)]
@@ -119,21 +115,18 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
         [ValidateNotNullOrEmpty]
         public string DestFilePath { get; set; }
 
-        [Parameter(HelpMessage = "Dest file instance", Mandatory = true, ParameterSetName = BlobFileParameterSet)]
-        [Parameter(HelpMessage = "Dest file instance", Mandatory = true, ParameterSetName = FileFileParameterSet)]
-        [Parameter(HelpMessage = "Dest file instance", Mandatory = true, ParameterSetName = UriFileParameterSet)]
+        [Parameter(Mandatory = false, ParameterSetName = BlobFileParameterSet, HelpMessage = "ShareFileClient object indicated the Dest file.")]
+        [Parameter(Mandatory = false, ParameterSetName = FileFileParameterSet, HelpMessage = "ShareFileClient object indicated the Dest file.")]
+        [Parameter(Mandatory = false, ParameterSetName = UriFileParameterSet, HelpMessage = "ShareFileClient object indicated the Dest file.")]
         [ValidateNotNull]
-        public CloudFile DestFile { get; set; }
+        [Alias("DestFile")]
+        public ShareFileClient DestShareFileClient { get; set; }
 
         [Alias("SrcContext")]
         [Parameter(HelpMessage = "Source Azure Storage Context Object",
-            Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = ContainerNameParameterSet)]
+            Mandatory = false, ValueFromPipelineByPropertyName = true, ParameterSetName = ContainerNameParameterSet)]
         [Parameter(HelpMessage = "Source Azure Storage Context Object",
-            Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = ShareNameParameterSet)]
+            Mandatory = false, ValueFromPipelineByPropertyName = true, ParameterSetName = ShareNameParameterSet)]
         public override IStorageContext Context { get; set; }
 
         [Parameter(HelpMessage = "Destination Storage context object", ParameterSetName = ContainerNameParameterSet)]
@@ -143,10 +136,21 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
         [Parameter(HelpMessage = "Destination Storage context object", ParameterSetName = ShareParameterSet)]
         [Parameter(HelpMessage = "Destination Storage context object", ParameterSetName = FileFilePathParameterSet)]
         [Parameter(HelpMessage = "Destination Storage context object", ParameterSetName = UriFilePathParameterSet)]
+        [Parameter(HelpMessage = "Destination Storage context object", ParameterSetName = BlobFileParameterSet)]
+        [Parameter(HelpMessage = "Destination Storage context object", ParameterSetName = FileFileParameterSet)]
+        [Parameter(HelpMessage = "Destination Storage context object", ParameterSetName = UriFileParameterSet)]
         public IStorageContext DestContext { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Disallow trailing dot (.) to suffix source directory and source file names.", ParameterSetName = ShareNameParameterSet)]
+        public virtual SwitchParameter DisAllowSourceTrailingDot { get; set; }
+
+        [Parameter(Mandatory = false, HelpMessage = "Disallow trailing dot (.) to suffix destination directory and destination file names.", ParameterSetName = ContainerNameParameterSet)]
+        [Parameter(Mandatory = false, HelpMessage = "Disallow trailing dot (.) to suffix destination directory and destination file names.", ParameterSetName = ShareNameParameterSet)]
+        public virtual SwitchParameter DisAllowDestTrailingDot { get; set; }
 
         // Overwrite the useless parameter
         public override SwitchParameter AsJob { get; set; }
+        public override SwitchParameter DisAllowTrailingDot { get; set; }
 
         private IStorageBlobManagement blobChannel = null;
 
@@ -181,7 +185,8 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
         private AzureStorageContext GetSourceContext()
         {
             if (this.ParameterSetName == ContainerNameParameterSet ||
-                this.ParameterSetName == ShareNameParameterSet)
+                this.ParameterSetName == ShareNameParameterSet 
+                )
             {
                 return this.GetCmdletStorageContext();
             }
@@ -225,14 +230,14 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
                     }
                     else
                     {
-                        destChannel = new StorageFileManagement(this.GetCmdletStorageContext(DestContext));
+                        destChannel = new StorageFileManagement(this.GetCmdletStorageContext(DestContext, isDestContext:true));
                     }
                 }
                 else if (BlobFileParameterSet == this.ParameterSetName ||
                     FileFileParameterSet == this.ParameterSetName ||
                     UriFileParameterSet == this.ParameterSetName)
                 {
-                    destChannel = new StorageFileManagement(this.GetCmdletStorageContext(DestContext));
+                    destChannel = new StorageFileManagement(this.GetCmdletStorageContext(DestContext, isDestContext:true));
                 }
                 else
                 {
@@ -249,21 +254,20 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public override void ExecuteCmdlet()
         {
-            if(this.DestFile != null)
+            if (this.DisAllowSourceTrailingDot)
             {
-                // Build and set storage context for the output object when
-                // 1. input track1 object and storage context is missing 2. the current context doesn't match the context of the input object 
-                if (ShouldSetContext(this.DestContext, this.DestFile.ServiceClient))
-                {
-                    this.DestContext = GetStorageContextFromTrack1FileServiceClient(this.DestFile.ServiceClient, DefaultContext);
-                }
+                this.ClientOptions.AllowSourceTrailingDot = false;
+            }
+            if (this.DisAllowDestTrailingDot)
+            {
+                this.ClientOptions.AllowTrailingDot = false;
             }
 
             blobChannel = this.GetBlobChannel();
             destChannel = GetDestinationChannel();
             IStorageFileManagement srcChannel = Channel;
             Action copyAction = null;
-            string target = DestFile != null ? DestFile.Name : DestFilePath;
+            string target = this.DestShareFileClient != null ? this.DestShareFileClient.Name : DestFilePath;
             switch (ParameterSetName)
             {
                 case ContainerNameParameterSet:
@@ -331,46 +335,52 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
 
         private void StartCopyFromFile()
         {
-            CloudFile sourceFile = null;
-            string filePath = null;
+            ShareFileClient sourceFile = null;
 
             if (null != this.SrcFile)
             {
                 sourceFile = this.SrcFile;
-                filePath = this.SrcFile.GetFullPath();
-
-                // Build and set storage context for the output object when
-                // 1. input track1 object and storage context is missing 2. the current context doesn't match the context of the input object 
-                if (ShouldSetContext(this.Context, this.SrcFile.ServiceClient))
-                {
-                    this.Context = GetStorageContextFromTrack1FileServiceClient(this.SrcFile.ServiceClient, DefaultContext);
-                }
             }
             else
             {
-                CloudFileDirectory dir = null;
+                ShareDirectoryClient dir = null;
 
                 if (null != this.SrcShare)
                 {
-                    dir = this.SrcShare.GetRootDirectoryReference();
+                    dir = this.SrcShare.GetRootDirectoryClient();
                 }
                 else
                 {
                     NamingUtil.ValidateShareName(this.SrcShareName, false);
-                    dir = this.BuildFileShareObjectFromName(this.SrcShareName).GetRootDirectoryReference();
+
+                    ShareClientOptions srcClientOptions = new ShareClientOptions();
+                    if (this.DisAllowSourceTrailingDot)
+                    {
+                        srcClientOptions.AllowTrailingDot = false;
+                    }
+                    dir = Util.GetTrack2FileServiceClient((AzureStorageContext)this.Context, srcClientOptions).GetShareClient(this.SrcShareName).GetRootDirectoryClient();
                 }
 
-                string[] path = NamingUtil.ValidatePath(this.SrcFilePath, true);
-                sourceFile = dir.GetFileReferenceByPath(path);
-                filePath = this.SrcFilePath;
+                // Remove trailing dots manually if DisAllowSourceTrailing dot is specified 
+                string filepath = this.SrcFilePath;
+                if (this.DisAllowSourceTrailingDot)
+                {
+                    filepath = Util.RemoveFilePathTrailingDot(filepath);
+                }
+                sourceFile = dir.GetFileClient(filepath);
             }
 
             ShareFileClient destFile = this.GetDestFile();
 
+            if (!sourceFile.CanGenerateSasUri && (sourceFile.Uri.Query != null && !sourceFile.Uri.Query.Contains("sig=")) && string.Compare(sourceFile.Uri.Host, destFile.Uri.Host, ignoreCase: true) != 0)
+            {
+                WriteWarning("The source File cannot generate SAS Uri and might cause cross account file copy failures. Please use source File based on SharedKey or SAS creadencial to avoid the failure.");
+            }
+
             Func<long, Task> taskGenerator = (taskId) => StartAsyncCopy(
                 taskId,
                 destFile,
-                () => this.ConfirmOverwrite(sourceFile.SnapshotQualifiedUri.ToString(), Util.GetSnapshotQualifiedUri(destFile.Uri)),
+                () => this.ConfirmOverwrite(Util.GetSnapshotQualifiedUri(sourceFile.Uri), Util.GetSnapshotQualifiedUri(destFile.Uri)),
                 () => destFile.StartCopyAsync(sourceFile.GenerateUriWithCredentials(), cancellationToken: this.CmdletCancellationToken));
 
             this.RunTask(taskGenerator);
@@ -393,9 +403,9 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
         {
             destChannel = this.GetDestinationChannel();
 
-            if (null != this.DestFile)
+            if(this.DestShareFileClient != null)
             {
-                return AzureStorageFile.GetTrack2FileClient(this.DestFile, ClientOptions);
+                return this.DestShareFileClient;
             }
             else
             {

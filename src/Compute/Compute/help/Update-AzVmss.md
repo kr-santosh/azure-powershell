@@ -17,36 +17,9 @@ Updates the state of a VMSS.
 ```
 Update-AzVmss [-ResourceGroupName] <String> [-VMScaleSetName] <String>
  [[-VirtualMachineScaleSet] <PSVirtualMachineScaleSet>] [-AutomaticOSUpgrade <Boolean>]
- [-AutomaticRepairGracePeriod <String>] [-BootDiagnosticsEnabled <Boolean>]
- [-BootDiagnosticsStorageUri <String>] [-CustomData <String>] [-DisableAutoRollback <Boolean>]
- [-DisablePasswordAuthentication <Boolean>] [-EnableAutomaticRepair <Boolean>]
- [-EnableAutomaticUpdate <Boolean>] [-ImageReferenceId <String>] [-ImageReferenceOffer <String>]
- [-ImageReferencePublisher <String>] [-ImageReferenceSku <String>] [-ImageReferenceVersion <String>]
- [-ImageUri <String>] [-LicenseType <String>] [-ManagedDiskStorageAccountType <String>]
- [-MaxBatchInstancePercent <Int32>] [-MaxPrice <Double>] [-MaxUnhealthyInstancePercent <Int32>]
- [-MaxUnhealthyUpgradedInstancePercent <Int32>] [-OsDiskCaching <CachingTypes>]
- [-OsDiskWriteAccelerator <Boolean>] [-Overprovision <Boolean>] [-ScaleInPolicyForceDeletion <Boolean>]
- [-PauseTimeBetweenBatches <String>] [-PlanName <String>] [-PlanProduct <String>] [-PlanPromotionCode <String>]
- [-PlanPublisher <String>] [-ProvisionVMAgent <Boolean>] [-ProximityPlacementGroupId <String>]
- [-ScaleInPolicy <String[]>] [-SinglePlacementGroup <Boolean>] [-SkipExtensionsOnOverprovisionedVMs <Boolean>]
- [-SkuCapacity <Int32>] [-SkuName <String>] [-SkuTier <String>] [-Tag <Hashtable>]
- [-TerminateScheduledEventNotBeforeTimeoutInMinutes <Int32>] [-TerminateScheduledEvents <Boolean>]
- [-TimeZone <String>] [-UltraSSDEnabled <Boolean>] [-UpgradePolicyMode <UpgradeMode>]
- [-CapacityReservationGroupId <String>] [-VhdContainer <String[]>] [-AsJob] [-EncryptionAtHost <Boolean>]
- [-UserData <String>] [-AutomaticRepairAction <String>] [-BaseRegularPriorityCount <Int32>]
- [-RegularPriorityPercentage <Int32>] [-SharedGalleryImageId <String>] [-OSImageScheduledEventEnabled]
- [-OSImageScheduledEventNotBeforeTimeoutInMinutes <String>] [-DefaultProfile <IAzureContextContainer>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### ExplicitIdentityParameterSet
-```
-Update-AzVmss [-ResourceGroupName] <String> [-VMScaleSetName] <String>
- [[-VirtualMachineScaleSet] <PSVirtualMachineScaleSet>] [-AutomaticOSUpgrade <Boolean>]
- [-AutomaticRepairGracePeriod <String>] [-BootDiagnosticsEnabled <Boolean>]
- [-BootDiagnosticsStorageUri <String>] [-CustomData <String>] [-DisableAutoRollback <Boolean>]
- [-DisablePasswordAuthentication <Boolean>] [-EnableAutomaticRepair <Boolean>]
- [-EnableAutomaticUpdate <Boolean>] [-IdentityId <String[]>] -IdentityType <ResourceIdentityType>
+ [-AutomaticRepairGracePeriod <String>] [-EnableAutomaticRepair <Boolean>] [-AutomaticRepairAction <String>]
+ [-BootDiagnosticsEnabled <Boolean>] [-BootDiagnosticsStorageUri <String>] [-CustomData <String>]
+ [-DisableAutoRollback <Boolean>] [-DisablePasswordAuthentication <Boolean>] [-EnableAutomaticUpdate <Boolean>]
  [-ImageReferenceId <String>] [-ImageReferenceOffer <String>] [-ImageReferencePublisher <String>]
  [-ImageReferenceSku <String>] [-ImageReferenceVersion <String>] [-ImageUri <String>] [-LicenseType <String>]
  [-ManagedDiskStorageAccountType <String>] [-MaxBatchInstancePercent <Int32>] [-MaxPrice <Double>]
@@ -59,10 +32,42 @@ Update-AzVmss [-ResourceGroupName] <String> [-VMScaleSetName] <String>
  [-Tag <Hashtable>] [-TerminateScheduledEventNotBeforeTimeoutInMinutes <Int32>]
  [-TerminateScheduledEvents <Boolean>] [-TimeZone <String>] [-UltraSSDEnabled <Boolean>]
  [-UpgradePolicyMode <UpgradeMode>] [-CapacityReservationGroupId <String>] [-VhdContainer <String[]>] [-AsJob]
- [-EncryptionAtHost <Boolean>] [-UserData <String>] [-AutomaticRepairAction <String>]
- [-BaseRegularPriorityCount <Int32>] [-RegularPriorityPercentage <Int32>] [-SharedGalleryImageId <String>]
- [-OSImageScheduledEventEnabled] [-OSImageScheduledEventNotBeforeTimeoutInMinutes <String>]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-EncryptionAtHost <Boolean>] [-UserData <String>] [-BaseRegularPriorityCount <Int32>]
+ [-RegularPriorityPercentage <Int32>] [-SharedGalleryImageId <String>] [-OSImageScheduledEventEnabled]
+ [-OSImageScheduledEventNotBeforeTimeoutInMinutes <String>] [-SecurityType <String>] [-EnableVtpm <Boolean>]
+ [-EnableSecureBoot <Boolean>] [-IfMatch <String>] [-IfNoneMatch <String>] [-SkuProfileVmSize <String[]>]
+ [-SkuProfileAllocationStrategy <String>] [-EnableResilientVMCreate <Boolean>]
+ [-EnableResilientVMDelete <Boolean>] [-DefaultProfile <IAzureContextContainer>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### ExplicitIdentityParameterSet
+```
+Update-AzVmss [-ResourceGroupName] <String> [-VMScaleSetName] <String>
+ [[-VirtualMachineScaleSet] <PSVirtualMachineScaleSet>] [-AutomaticOSUpgrade <Boolean>]
+ [-AutomaticRepairGracePeriod <String>] [-EnableAutomaticRepair <Boolean>] [-AutomaticRepairAction <String>]
+ [-BootDiagnosticsEnabled <Boolean>] [-BootDiagnosticsStorageUri <String>] [-CustomData <String>]
+ [-DisableAutoRollback <Boolean>] [-DisablePasswordAuthentication <Boolean>] [-EnableAutomaticUpdate <Boolean>]
+ [-IdentityId <String[]>] -IdentityType <ResourceIdentityType> [-ImageReferenceId <String>]
+ [-ImageReferenceOffer <String>] [-ImageReferencePublisher <String>] [-ImageReferenceSku <String>]
+ [-ImageReferenceVersion <String>] [-ImageUri <String>] [-LicenseType <String>]
+ [-ManagedDiskStorageAccountType <String>] [-MaxBatchInstancePercent <Int32>] [-MaxPrice <Double>]
+ [-MaxUnhealthyInstancePercent <Int32>] [-MaxUnhealthyUpgradedInstancePercent <Int32>]
+ [-OsDiskCaching <CachingTypes>] [-OsDiskWriteAccelerator <Boolean>] [-Overprovision <Boolean>]
+ [-ScaleInPolicyForceDeletion <Boolean>] [-PauseTimeBetweenBatches <String>] [-PlanName <String>]
+ [-PlanProduct <String>] [-PlanPromotionCode <String>] [-PlanPublisher <String>] [-ProvisionVMAgent <Boolean>]
+ [-ProximityPlacementGroupId <String>] [-ScaleInPolicy <String[]>] [-SinglePlacementGroup <Boolean>]
+ [-SkipExtensionsOnOverprovisionedVMs <Boolean>] [-SkuCapacity <Int32>] [-SkuName <String>] [-SkuTier <String>]
+ [-Tag <Hashtable>] [-TerminateScheduledEventNotBeforeTimeoutInMinutes <Int32>]
+ [-TerminateScheduledEvents <Boolean>] [-TimeZone <String>] [-UltraSSDEnabled <Boolean>]
+ [-UpgradePolicyMode <UpgradeMode>] [-CapacityReservationGroupId <String>] [-VhdContainer <String[]>] [-AsJob]
+ [-EncryptionAtHost <Boolean>] [-UserData <String>] [-BaseRegularPriorityCount <Int32>]
+ [-RegularPriorityPercentage <Int32>] [-SharedGalleryImageId <String>] [-OSImageScheduledEventEnabled]
+ [-OSImageScheduledEventNotBeforeTimeoutInMinutes <String>] [-SecurityType <String>] [-EnableVtpm <Boolean>]
+ [-EnableSecureBoot <Boolean>] [-IfMatch <String>] [-IfNoneMatch <String>] [-SkuProfileVmSize <String[]>]
+ [-SkuProfileAllocationStrategy <String>] [-EnableResilientVMCreate <Boolean>]
+ [-EnableResilientVMDelete <Boolean>] [-DefaultProfile <IAzureContextContainer>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -127,6 +132,7 @@ Type of repair action (replace, restart, reimage) that will be used for repairin
 Type: System.String
 Parameter Sets: (All)
 Aliases:
+Accepted values: Replace, Restart, Reimage
 
 Required: False
 Position: Named
@@ -303,6 +309,66 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -EnableResilientVMCreate
+Specifies whether resilient VM creation should be enabled on the virtual machine scale set. The default value is false.
+
+```yaml
+Type: System.Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableResilientVMDelete
+Specifies whether resilient VM deletion should be enabled on the virtual machine scale set. The default value is false.
+
+```yaml
+Type: System.Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableSecureBoot
+Specifies whether secure boot should be enabled on the virtual machine.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -EnableVtpm
+Specifies whether vTPM should be enabled on the virtual machine.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -EncryptionAtHost
 This parameter can be used by user in the request to enable or disable the Host Encryption for the virtual machine scale set.
 
@@ -354,6 +420,36 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IfMatch
+used to make a request conditional for the PUT and other non-safe methods. The server will only return the requested resources if the resource matches one of the listed ETag values. Omit this value to always overwrite the current resource. Specify the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -IfNoneMatch
+Used to make a request conditional for the GET and HEAD methods. The server will only return the requested resources if none of the listed ETag values match the current entity. Used to make a request conditional for the GET and HEAD methods. The server will only return the requested resources if none of the listed ETag values match the current entity. Set to '*' to allow a new record set to be created, but to prevent updating an existing record set. Other values will result in error from server as they are not supported.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -712,6 +808,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+
 ### -ProvisionVMAgent
 Indicates whether virtual machine agent should be provisioned on the Windows virtual machines in the VMSS.
 
@@ -802,6 +899,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -SecurityType
+Specifies the SecurityType of the virtual machine. It has to be set to any specified value to enable UefiSettings. UefiSettings will not be enabled unless this property is set.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+Accepted values: TrustedLaunch, ConfidentialVM, Standard
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -SharedGalleryImageId
 Specified the shared gallery image unique id for vm deployment. This can be fetched from shared gallery image GET call.
 
@@ -874,6 +987,37 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SkuProfileAllocationStrategy
+Allocation strategy for the SKU profile.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+Accepted values: LowestPrice, CapacityOptimized
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -SkuProfileVmSize
+Array of VM sizes for the scale set.
+
+```yaml
+Type: System.String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -1118,5 +1262,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Start-AzVmss](./Start-AzVmss.md)
 
 [Stop-AzVmss](./Stop-AzVmss.md)
-
-

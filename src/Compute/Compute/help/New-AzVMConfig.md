@@ -21,6 +21,7 @@ New-AzVMConfig [-VMName] <String> [-VMSize] <String> [[-AvailabilitySetId] <Stri
  [-EncryptionAtHost] [-CapacityReservationGroupId <String>] [-ImageReferenceId <String>]
  [-DiskControllerType <String>] [-UserData <String>] [-PlatformFaultDomain <Int32>] [-HibernationEnabled]
  [-vCPUCountAvailable <Int32>] [-vCPUCountPerCore <Int32>] [-SharedGalleryImageId <String>]
+ [-SecurityType <String>] [-EnableVtpm <Boolean>] [-EnableSecureBoot <Boolean>]
  [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
 ```
 
@@ -32,7 +33,8 @@ New-AzVMConfig [-VMName] <String> [-VMSize] <String> [[-AvailabilitySetId] <Stri
  [-EvictionPolicy <String>] [-Priority <String>] [-Tags <Hashtable>] [-EnableUltraSSD] [-EncryptionAtHost]
  [-CapacityReservationGroupId <String>] [-ImageReferenceId <String>] [-DiskControllerType <String>]
  [-UserData <String>] [-PlatformFaultDomain <Int32>] [-HibernationEnabled] [-vCPUCountAvailable <Int32>]
- [-vCPUCountPerCore <Int32>] [-SharedGalleryImageId <String>] [-DefaultProfile <IAzureContextContainer>]
+ [-vCPUCountPerCore <Int32>] [-SharedGalleryImageId <String>] [-SecurityType <String>] [-EnableVtpm <Boolean>]
+ [-EnableSecureBoot <Boolean>] [-DefaultProfile <IAzureContextContainer>]
  [<CommonParameters>]
 ```
 
@@ -62,14 +64,15 @@ $vmname = 'v' + $rgname;
 $domainNameLabel = "d1" + $rgname;
 $vmSize = 'Standard_DS3_v2';
 $computerName = "c" + $rgname;
+$securityTypeStnd = "Standard";
         
 # Credential. Input Username and Password values
 $user = "";
-$securePassword = "" | ConvertTo-SecureString -AsPlainText -Force;  
+$securePassword = ConvertTo-SecureString -String "****" -AsPlainText -Force;  
 $cred = New-Object System.Management.Automation.PSCredential ($user, $securePassword);
         
 # Creating a VMConfig 
-$vmconfig = New-AzVMConfig -VMName $vmname -vmsize $vmsize;
+$vmconfig = New-AzVMConfig -VMName $vmname -vmsize $vmsize -SecurityType $securityTypeStnd;
 
 # Set source image values
 $publisherName = "MicrosoftWindowsServer";
@@ -95,7 +98,6 @@ $vmconfig = Set-AzVMOperatingSystem -VM $vmconfig -Windows -ComputerName $comput
 # Create the VM
 New-AzVM -ResourceGroupName $rgname -Location $loc -Vm $vmconfig;
 $vm = Get-AzVM -ResourceGroupName $rgname -Name $vmname;
-        
 ```
 
 ### Example 2: Create a virtual machine object in a virtual machine scale set with fault domains setup
@@ -115,6 +117,7 @@ $subnetAddress = "10.0.2.0/24";
 $vmssName = "vmss" + $rgname;
 $faultDomainNumber = 2;
 $vmssFaultDomain = 3;
+$securityTypeStnd = "Standard";
 
 $OSDiskName = $vmname + "-osdisk";
 $NICName = $vmname+ "-nic";
@@ -127,13 +130,13 @@ $SKU = "2019-Datacenter";
         
 # Credential. Input Username and Password values.
 $user = "";
-$securePassword = "" | ConvertTo-SecureString -AsPlainText -Force;  
+$securePassword = ConvertTo-SecureString -String "****" -AsPlainText -Force;  
 $cred = New-Object System.Management.Automation.PSCredential ($user, $securePassword);
 
 $frontendSubnet = New-AzVirtualNetworkSubnetConfig -Name $subnetname -AddressPrefix $subnetAddress;
 $vnet = New-AzVirtualNetwork -Name $vnetname -ResourceGroupName $rgname -Location $loc -AddressPrefix $vnetAddress -Subnet $frontendSubnet;
 
-$vmssConfig = New-AzVmssConfig -Location $loc -PlatformFaultDomainCount $vmssFaultDomain;
+$vmssConfig = New-AzVmssConfig -Location $loc -PlatformFaultDomainCount $vmssFaultDomain -SecurityType $securityTypeStnd;
 $vmss = New-AzVmss -ResourceGroupName $RGName -Name $VMSSName -VirtualMachineScaleSet $vmssConfig;
 
 $nsgRuleRDP = New-AzNetworkSecurityRuleConfig -Name RDP  -Protocol Tcp  -Direction Inbound -Priority 1001 -SourceAddressPrefix * -SourcePortRange * -DestinationAddressPrefix * -DestinationPortRange 3389 -Access Allow;
@@ -141,7 +144,7 @@ $nsg = New-AzNetworkSecurityGroup -ResourceGroupName $RGName -Location $loc -Nam
 $nic = New-AzNetworkInterface -Name $NICName -ResourceGroupName $RGName -Location $loc -SubnetId $vnet.Subnets[0].Id -NetworkSecurityGroupId $nsg.Id -EnableAcceleratedNetworking;
 
 # VM
-$vmConfig = New-AzVMConfig -VMName $vmName -VMSize $VMSize  -VmssId $vmss.Id -PlatformFaultDomain $faultDomainNumber ;
+$vmConfig = New-AzVMConfig -VMName $vmName -VMSize $VMSize  -VmssId $vmss.Id -PlatformFaultDomain $faultDomainNumber -SecurityType $securityTypeStnd;
 Set-AzVMOperatingSystem -VM $vmConfig -Windows -ComputerName $vmName -Credential $cred ;
 Set-AzVMOSDisk -VM $vmConfig -StorageAccountType "Premium_LRS" -Caching ReadWrite -Name $OSDiskName -DiskSizeInGB $OSDiskSizeinGB -CreateOption FromImage ;
 Set-AzVMSourceImage -VM $vmConfig -PublisherName $PublisherName -Offer $Offer -Skus $SKU -Version latest ;
@@ -149,10 +152,9 @@ Add-AzVMNetworkInterface -VM $vmConfig -Id $nic.Id;
 
 New-AzVM -ResourceGroupName $RGName -Location $loc -VM $vmConfig;
 $vm = Get-AzVM -ResourceGroupName $rgname -Name $vmName;
-        
 ```
 
-### Example 2: Create a VM using Virtual Machine Config object for TrustedLaunch Secuirty Type, flags Vtpm and Secure Boot are set to True by default.
+### Example 2: Create a VM using Virtual Machine Config object for TrustedLaunch Security Type, flags Vtpm and Secure Boot are set to True by default.
 ```powershell
 $rgname = "rgname";
 $loc = "eastus";
@@ -179,8 +181,7 @@ $enable = $true;
 $extDefaultName = "GuestAttestation";
 $vmGADefaultIDentity = "SystemAssigned";
 # Credential
-$password = <Password>;
-$securePassword = $password | ConvertTo-SecureString -AsPlainText -Force;  
+$securePassword = ConvertTo-SecureString -String "****" -AsPlainText -Force;  
 $user = <Username>;
 $cred = New-Object System.Management.Automation.PSCredential ($user, $securePassword);
 # Network resources
@@ -275,6 +276,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -EnableSecureBoot
+Specifies whether secure boot should be enabled on the virtual machine.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -EnableUltraSSD
 Enables a capability to have one or more managed data disks with UltraSSD_LRS storage account type on the VM.
 Managed disks with storage account type UltraSSD_LRS can be added to a virtual machine only if this property is enabled.
@@ -282,6 +298,21 @@ Managed disks with storage account type UltraSSD_LRS can be added to a virtual m
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -EnableVtpm
+Specifies whether vTPM should be enabled on the virtual machine.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
 Parameter Sets: (All)
 Aliases:
 
@@ -486,6 +517,22 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -SecurityType
+Specifies the SecurityType of the virtual machine. It has to be set to any specified value to enable UefiSettings. By default, UefiSettings will not be enabled unless this property is set.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+Accepted values: TrustedLaunch, ConfidentialVM, Standard
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -SharedGalleryImageId
 Specified the shared gallery image unique id for vm deployment. This can be fetched from shared gallery image GET call.
 
@@ -650,5 +697,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Set-AzVMSourceImage](./Set-AzVMSourceImage.md)
 
 [Get-AzAvailabilitySet](./Get-AzAvailabilitySet.md)
-
-

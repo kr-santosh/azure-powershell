@@ -19,6 +19,21 @@
 -->
 ## Upcoming Release
 
+## Version 0.5.1
+* Removed Microsoft.Azure.Management.Marketplace 1.1.0 dependencies
+* Added Microsoft.Azure.PowerShell.Marketplace.Management.Sdk
+
+## Version 0.5.0
+* Introduced secrets detection feature to safeguard sensitive data.
+
+## Version 0.4.0
+* Added new features and capabilities to user and marketplace-admins:
+    - Approve offer and plans with subscription granularity.
+    - Enable\Disable Approve-All-Products on a collection.
+    - Fetch all subscriptions in a tenant.
+    - Get new plans notifications for the offers in the privatestore.
+    - Get all approved offers and plans for a user.
+
 ## Version 0.3.0
 * Added new cmdlets:
  - `Copy-AzMarketplacePrivateStoreCollectionOffer`

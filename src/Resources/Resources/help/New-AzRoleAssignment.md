@@ -26,14 +26,16 @@ Please notice that this cmdlet will mark `ObjectType` as `Unknown` in output if 
 ```
 New-AzRoleAssignment -ObjectId <String> [-Scope <String>] -RoleDefinitionName <String> [-Description <String>]
  [-Condition <String>] [-ConditionVersion <String>] [-ObjectType <String>] [-AllowDelegation]
- [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipClientSideScopeValidation] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ResourceGroupWithObjectIdParameterSet
 ```
 New-AzRoleAssignment -ObjectId <String> -ResourceGroupName <String> -RoleDefinitionName <String>
  [-Description <String>] [-Condition <String>] [-ConditionVersion <String>] [-ObjectType <String>]
- [-AllowDelegation] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-AllowDelegation] [-SkipClientSideScopeValidation] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ResourceWithObjectIdParameterSet
@@ -41,21 +43,24 @@ New-AzRoleAssignment -ObjectId <String> -ResourceGroupName <String> -RoleDefinit
 New-AzRoleAssignment -ObjectId <String> -ResourceGroupName <String> -ResourceName <String>
  -ResourceType <String> [-ParentResource <String>] -RoleDefinitionName <String> [-Description <String>]
  [-Condition <String>] [-ConditionVersion <String>] [-ObjectType <String>] [-AllowDelegation]
- [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipClientSideScopeValidation] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### RoleIdWithScopeAndObjectIdParameterSet
 ```
 New-AzRoleAssignment -ObjectId <String> -Scope <String> [-Description <String>] [-Condition <String>]
  [-ConditionVersion <String>] [-ObjectType <String>] -RoleDefinitionId <Guid> [-AllowDelegation]
- [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipClientSideScopeValidation] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ResourceGroupWithSignInNameParameterSet
 ```
 New-AzRoleAssignment -SignInName <String> -ResourceGroupName <String> -RoleDefinitionName <String>
  [-Description <String>] [-Condition <String>] [-ConditionVersion <String>] [-ObjectType <String>]
- [-AllowDelegation] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-AllowDelegation] [-SkipClientSideScopeValidation] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ResourceWithSignInNameParameterSet
@@ -63,21 +68,24 @@ New-AzRoleAssignment -SignInName <String> -ResourceGroupName <String> -RoleDefin
 New-AzRoleAssignment -SignInName <String> -ResourceGroupName <String> -ResourceName <String>
  -ResourceType <String> [-ParentResource <String>] -RoleDefinitionName <String> [-Description <String>]
  [-Condition <String>] [-ConditionVersion <String>] [-ObjectType <String>] [-AllowDelegation]
- [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipClientSideScopeValidation] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ScopeWithSignInNameParameterSet
 ```
 New-AzRoleAssignment -SignInName <String> [-Scope <String>] -RoleDefinitionName <String>
  [-Description <String>] [-Condition <String>] [-ConditionVersion <String>] [-ObjectType <String>]
- [-AllowDelegation] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-AllowDelegation] [-SkipClientSideScopeValidation] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ResourceGroupWithSPNParameterSet
 ```
 New-AzRoleAssignment -ApplicationId <String> -ResourceGroupName <String> -RoleDefinitionName <String>
  [-Description <String>] [-Condition <String>] [-ConditionVersion <String>] [-ObjectType <String>]
- [-AllowDelegation] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-AllowDelegation] [-SkipClientSideScopeValidation] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ResourceWithSPNParameterSet
@@ -85,20 +93,22 @@ New-AzRoleAssignment -ApplicationId <String> -ResourceGroupName <String> -RoleDe
 New-AzRoleAssignment -ApplicationId <String> -ResourceGroupName <String> -ResourceName <String>
  -ResourceType <String> [-ParentResource <String>] -RoleDefinitionName <String> [-Description <String>]
  [-Condition <String>] [-ConditionVersion <String>] [-ObjectType <String>] [-AllowDelegation]
- [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipClientSideScopeValidation] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ScopeWithSPNParameterSet
 ```
 New-AzRoleAssignment -ApplicationId <String> [-Scope <String>] -RoleDefinitionName <String>
  [-Description <String>] [-Condition <String>] [-ConditionVersion <String>] [-ObjectType <String>]
- [-AllowDelegation] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-AllowDelegation] [-SkipClientSideScopeValidation] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### InputFileParameterSet
 ```
-New-AzRoleAssignment -InputFile <String> [-AllowDelegation] [-DefaultProfile <IAzureContextContainer>]
- [<CommonParameters>]
+New-AzRoleAssignment -InputFile <String> [-AllowDelegation] [-SkipClientSideScopeValidation]
+ [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -107,9 +117,9 @@ Access is granted by assigning the appropriate RBAC role to them at the right sc
 To grant access to the entire subscription, assign a role at the subscription scope.
 To grant access to a specific resource group within a subscription, assign a role at the resource group scope.
 The subject of the assignment must be specified.
-To specify a user, use SignInName or Azure AD ObjectId parameters.
-To specify a security group, use Azure AD ObjectId parameter.
-And to specify an Azure AD application, use ApplicationId or ObjectId parameters.
+To specify a user, use SignInName or Microsoft Entra ObjectId parameters.
+To specify a security group, use Microsoft Entra ObjectId parameter.
+And to specify a Microsoft Entra application, use ApplicationId or ObjectId parameters.
 The role that is being assigned must be specified using the RoleDefinitionName parameter.
 The scope at which access is being granted may be specified.
 It defaults to the selected subscription. 
@@ -148,14 +158,14 @@ Grant access to a security group
 
 ### Example 3
 ```powershell
-New-AzRoleAssignment -SignInName john.doe@contoso.com -RoleDefinitionName Owner -Scope "/subscriptions/86f81fc3-b00f-48cd-8218-3879f51ff362/resourcegroups/rg1/providers/Microsoft.Web/sites/site1"
+New-AzRoleAssignment -SignInName john.doe@contoso.com -RoleDefinitionName Owner -Scope "/subscriptions/00001111-aaaa-2222-bbbb-3333cccc4444/resourcegroups/rg1/providers/Microsoft.Web/sites/site1"
 ```
 
 Grant access to a user at a resource (website)
 
 ### Example 4
 ```powershell
-New-AzRoleAssignment -ObjectId 5ac84765-1c8c-4994-94b2-629461bd191b -RoleDefinitionName "Virtual Machine Contributor" -ResourceName Devices-Engineering-ProjectRND -ResourceType Microsoft.Network/virtualNetworks/subnets -ParentResource virtualNetworks/VNET-EASTUS-01 -ResourceGroupName Network
+New-AzRoleAssignment -ObjectId 00001111-aaaa-2222-bbbb-3333cccc4444 -RoleDefinitionName "Virtual Machine Contributor" -ResourceName Devices-Engineering-ProjectRND -ResourceType Microsoft.Network/virtualNetworks/subnets -ParentResource virtualNetworks/VNET-EASTUS-01 -ResourceGroupName Network
 ```
 
 Grant access to a group at a nested resource (subnet)
@@ -167,6 +177,82 @@ New-AzRoleAssignment -RoleDefinitionName "Reader" -ApplicationId $servicePrincip
 ```
 
 Grant reader access to a service principal
+
+### Example 6
+```powershell
+$Condition = '(
+ (
+  !(ActionMatches{''Microsoft.Authorization/roleAssignments/write''})
+ )
+ OR 
+ (
+  @Request[Microsoft.Authorization/roleAssignments:PrincipalType] StringEqualsIgnoreCase ''ServicePrincipal''
+ )
+)
+AND
+(
+ (
+  !(ActionMatches{''Microsoft.Authorization/roleAssignments/delete''})
+ )
+ OR 
+ (
+  @Resource[Microsoft.Authorization/roleAssignments:PrincipalType] StringEqualsIgnoreCase ''ServicePrincipal''
+ )
+)'
+
+$DelegationParams = @{
+    AllowDelegation = $true
+    Condition = $Condition 
+    Scope = "/subscriptions/11112222-bbbb-3333-cccc-4444dddd5555" 
+    RoleDefinitionName = 'User Access Administrator' 
+    ObjectId = "00001111-aaaa-2222-bbbb-3333cccc4444"
+}
+
+New-AzRoleAssignment @DelegationParams
+```
+
+Grant User Access Administrator over an azure subscription with constrained delegation.<br>
+The constrained delegation will only allow that the delegated user/service principal/group may only create/delete/update new role assignments for a service principal and any roles.
+
+### Example 7
+```powershell
+$Condition = '(
+ (
+  !(ActionMatches{''Microsoft.Authorization/roleAssignments/write''})
+ )
+ OR 
+ (
+  @Request[Microsoft.Authorization/roleAssignments:PrincipalType] StringEqualsIgnoreCase ''ServicePrincipal''
+  AND
+  NOT @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {8e3af657-a8ff-443c-a75c-2fe8c4bcb635,18d7d88d-d35e-4fb5-a5c3-7773c20a72d9}
+ )
+)
+AND
+(
+ (
+  !(ActionMatches{''Microsoft.Authorization/roleAssignments/delete''})
+ )
+ OR 
+ (
+  @Resource[Microsoft.Authorization/roleAssignments:PrincipalType] StringEqualsIgnoreCase ''ServicePrincipal''
+  AND
+  NOT @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {8e3af657-a8ff-443c-a75c-2fe8c4bcb635,18d7d88d-d35e-4fb5-a5c3-7773c20a72d9}
+ )
+)'
+
+$DelegationParams = @{
+    AllowDelegation = $true
+    Condition = $Condition 
+    Scope = "/subscriptions/11112222-bbbb-3333-cccc-4444dddd5555" 
+    RoleDefinitionName = 'User Access Administrator' 
+    ObjectId = "00001111-aaaa-2222-bbbb-3333cccc4444"
+}
+
+New-AzRoleAssignment @DelegationParams
+```
+
+Grant User Access Administrator over an azure subscription with constrained delegation.<br>
+The constrained delegation will only allow that the delegated user/service principal/group may only create/delete/update new role assignments for a service principal, excluding the [Owner](https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/privileged#owner) and [User Access Administrator](https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/privileged#user-access-administrator) role.
 
 ## PARAMETERS
 
@@ -276,7 +362,7 @@ Accept wildcard characters: False
 ```
 
 ### -ObjectId
-Azure AD Objectid of the user, group or service principal.
+Microsoft Entra Objectid of the user, group or service principal.
 
 ```yaml
 Type: System.String
@@ -452,6 +538,21 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -SkipClientSideScopeValidation
+If specified, skip client side scope validation.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
@@ -466,7 +567,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.Commands.Resources.Models.Authorization.PSRoleAssignment
 
 ## NOTES
-Keywords: azure, azurerm, arm, resource, management, manager, resource, group, template, deployment
+Learn more about role assignment delegation - https://learn.microsoft.com/en-us/azure/role-based-access-control/delegate-role-assignments-portal?tabs=template 
+<br>Keywords: azure, azurerm, arm, resource, management, manager, resource, group, template, deployment
 
 ## RELATED LINKS
 

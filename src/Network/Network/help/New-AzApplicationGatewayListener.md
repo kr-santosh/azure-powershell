@@ -17,15 +17,15 @@ Creates an TCP\TLS listener for an application gateway.
 New-AzApplicationGatewayListener -Name <String>
  [-FrontendIPConfiguration <PSApplicationGatewayFrontendIPConfiguration>]
  [-FrontendPort <PSApplicationGatewayFrontendPort>] [-SslCertificate <PSApplicationGatewaySslCertificate>]
- [-SslProfile <PSApplicationGatewaySslProfile>] -Protocol <String> [-DefaultProfile <IAzureContextContainer>]
- [<CommonParameters>]
+ [-SslProfile <PSApplicationGatewaySslProfile>] -Protocol <String> [-HostNames <String[]>]
+ [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
 ```
 
 ### SetByResourceId
 ```
 New-AzApplicationGatewayListener -Name <String> [-FrontendIPConfigurationId <String>]
  [-FrontendPortId <String>] [-SslCertificateId <String>] [-SslProfileId <String>] -Protocol <String>
- [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-HostNames <String[]>] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -116,6 +116,21 @@ ID of the application gateway FrontendPort
 ```yaml
 Type: System.String
 Parameter Sets: SetByResourceId
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HostNames
+Host names
+
+```yaml
+Type: System.String[]
+Parameter Sets: (All)
 Aliases:
 
 Required: False

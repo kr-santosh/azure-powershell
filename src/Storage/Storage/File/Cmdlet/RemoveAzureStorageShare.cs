@@ -15,14 +15,10 @@
 namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
 {
     using Microsoft.WindowsAzure.Commands.Storage.Common;
-    using Microsoft.Azure.Storage;
-    using Microsoft.Azure.Storage.File;
     using System.Globalization;
     using System.Management.Automation;
-    using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
     using Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel;
     using global::Azure.Storage.Files.Shares;
-    using global::Azure.Storage.Files.Shares.Models;
     using System;
 
     [Cmdlet("Remove", Azure.Commands.ResourceManager.Common.AzureRMConstants.AzurePrefix + "StorageShare",DefaultParameterSetName = Constants.ShareNameParameterSetName,SupportsShouldProcess = true), OutputType(typeof(AzureStorageFileShare))]
@@ -41,17 +37,6 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
         [Parameter(
             Position = 0,
             Mandatory = true,
-            ValueFromPipeline = true,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = Constants.ShareParameterSetName,
-            HelpMessage = "File share object to be removed.")]
-        [ValidateNotNull]
-        [Alias("CloudFileShare")]
-        public CloudFileShare Share { get; set; }
-
-        [Parameter(
-            Position = 0,
-            Mandatory = false,
             ValueFromPipeline = true,
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = Constants.ShareParameterSetName,
@@ -81,6 +66,9 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
 
         private bool force;
 
+        // Overwrite the useless parameter
+        public override SwitchParameter DisAllowTrailingDot { get; set; }
+
         /// <summary>
         /// Cmdlet begin processing
         /// </summary>
@@ -96,21 +84,9 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
             switch (this.ParameterSetName)
             {
                 case Constants.ShareParameterSetName:
-                    if (this.ShareClient != null)
-                    {
-                        share = this.ShareClient;
-                    }
-                    else
-                    {
-                        share = AzureStorageFileShare.GetTrack2FileShareClient(this.Share, (AzureStorageContext)this.Context, this.ClientOptions);
-                    }
-
-                    // Build and set storage context for the output object when
-                    // 1. input track1 object and storage context is missing 2. the current context doesn't match the context of the input object 
-                    if (ShouldSetContext(this.Context, this.Share.ServiceClient))
-                    {
-                        this.Context = GetStorageContextFromTrack1FileServiceClient(this.Share.ServiceClient, DefaultContext);
-                    }
+                    CheckContextForObjectInput((AzureStorageContext)this.Context);
+                    share = this.ShareClient;
+                    this.SnapshotTime = Util.GetSnapshotTimeFromUri(share.Uri);
                     break;
 
                 case Constants.ShareNameParameterSetName:
@@ -135,7 +111,17 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
                         throw new PSArgumentException(string.Format(CultureInfo.InvariantCulture, "'IncludeAllSnapshot' should only be specified to delete a base share, and should not be specified to delete a Share snapshot: {0}", share.Uri));
                     }
 
-                    if (force || ShareIsEmpty(share) || ShouldContinue(string.Format("Remove share and all content in it: {0}", share.Name), ""))
+                    string promptMessage;
+                    if (this.SnapshotTime != null)
+                    {
+                        promptMessage = string.Format("Remove share snapshot and all files in it: {0}, SnapshotTime: {1}", share.Name, this.SnapshotTime.Value.ToUniversalTime().ToString("o"));
+                    }
+                    else
+                    {
+                        promptMessage = string.Format("Remove share and all content in it: {0}", share.Name);
+                    }
+
+                    if (force || ShareIsEmpty(share) || ShouldContinue(promptMessage, ""))
                     {
                         bool includeSnapshots = false;
                         bool retryDeleteSnapshot = false;

@@ -574,4 +574,64 @@
   <data name="KeyStoreLoadingError" xml:space="preserve">
     <value>KeyStore cannot be loaded from storage. Please check the keystore file integrity or system compablity. The functions relate to context autosaving may be affected.</value>
   </data>
+  <data name="InvalidOpenIDConfigUri" xml:space="preserve">
+    <value>The uri is invalid: {0}</value>
+  </data>
+  <data name="OpenIDConfigResponseError" xml:space="preserve">
+    <value>Failed to query tenant information by domain name: unable to find the 'issuer' from the OpenID configuration response: {0}.</value>
+  </data>
+  <data name="TenantIdNotFoundinIssuer" xml:space="preserve">
+    <value>Failed to parse tenant ID from issuer {0}.</value>
+  </data>
+  <data name="OpenIDAbsoluteUriMessage" xml:space="preserve">
+    <value>Uri of OpenID Configuration Doc for {0}: {1}</value>
+  </data>
+  <data name="OpenIDConfigurationDocInJsonMessage" xml:space="preserve">
+    <value>OpenID configuration doc in Json: {0}</value>
+  </data>
+  <data name="TenantDomainToTenantIdMessage" xml:space="preserve">
+    <value>The input domain is {0} and the tenant Id is {1}</value>
+  </data>
+  <data name="ProfileCredentialsWriteWarning" xml:space="preserve">
+    <value>Personally identifiable information and confidential data may be written to the file located at '{0}'. Please ensure that appropriate access controls are assigned to the saved file.</value>
+  </data>
+  <data name="DoNotIgnoreInformationIfUserDeviceAuth" xml:space="preserve">
+    <value>Please do not set InformationAction or $InformationPreference to Ignore if you want to use device code authentication.</value>
+  </data>
+  <data name="PleaseSelectAccount" xml:space="preserve">
+    <value>Please select the account you want to login with.</value>
+  </data>
+  <data name="RetrievingSubscription" xml:space="preserve">
+    <value>Retrieving subscriptions for the selection...</value>
+  </data>
+  <data name="PleaseSelectSubscription" xml:space="preserve">
+    <value>Please type a number to select a subscription.</value>
+  </data>
+  <data name="SelectedSubscriptionOutOfRange" xml:space="preserve">
+    <value>Selected subscription is out of range, please type a correct number.</value>
+  </data>
+  <data name="SelectTenantAndSubscription" xml:space="preserve">
+    <value>Select a tenant and subscription: </value>
+  </data>
+  <data name="SelectTenantAndSubscriptionWithDefaultValue" xml:space="preserve">
+    <value>Select a tenant and subscription (type a number or Enter to accept default): </value>
+  </data>
+  <data name="TenantAndSubscriptionSelection" xml:space="preserve">
+    <value>[Tenant and subscription selection]</value>
+  </data>
+  <data name="TypedSubscriptionNotNumber" xml:space="preserve">
+    <value>Typed subscription is not a number.</value>
+  </data>
+  <data name="AnnouncementsHeader" xml:space="preserve">
+    <value>[Announcements]</value>
+  </data>
+  <data name="AnnouncementsMessage" xml:space="preserve">
+    <value>With the new Azure PowerShell login experience, you can select the subscription you want to use more easily. Learn more about it and its configuration at https://go.microsoft.com/fwlink/?linkid=2271909.</value>
+  </data>
+  <data name="ReportIssue" xml:space="preserve">
+    <value>If you encounter any problem, please open an issue at: https://aka.ms/azpsissue</value>
+  </data>
+  <data name="UsernamePasswordDeprecateWarningMessage" xml:space="preserve">
+    <value>Authentication with a username and password at the command line is strongly discouraged. Use one of the recommended authentication methods based on your requirements. For additional information, visit https://go.microsoft.com/fwlink/?linkid=2276971.</value>
+  </data>
 </root>

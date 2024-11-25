@@ -18,7 +18,7 @@ using Xunit;
 namespace Microsoft.Azure.Commands.ScenarioTest.DnsTests
 {
     public class RecordsTests : DnsTestRunner
-    { 
+    {
         public RecordsTests(Xunit.Abstractions.ITestOutputHelper output) : base(output)
         {
         }
@@ -172,6 +172,34 @@ namespace Microsoft.Azure.Commands.ScenarioTest.DnsTests
 
         [Fact]
         [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestRecordSetDS()
+        {
+            TestRunner.RunTestScript("Test-RecordSetDS");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestRecordSetDSNonEmpty()
+        {
+            TestRunner.RunTestScript("Test-RecordSetDSNonEmpty");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestRecordSetTLSA()
+        {
+            TestRunner.RunTestScript("Test-RecordSetTLSA");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestRecordSetTLSANonEmpty()
+        {
+            TestRunner.RunTestScript("Test-RecordSetTLSANonEmpty");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
         public void TestRecordSetSOA()
         {
             TestRunner.RunTestScript("Test-RecordSetSOA");
@@ -189,6 +217,20 @@ namespace Microsoft.Azure.Commands.ScenarioTest.DnsTests
         public void TestRecordSetPTRNonEmpty()
         {
             TestRunner.RunTestScript("Test-RecordSetPTRNonEmpty");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestRecordSetNAPTR()
+        {
+            TestRunner.RunTestScript("Test-RecordSetNAPTR");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestRecordSetNAPTRNonEmpty()
+        {
+            TestRunner.RunTestScript("Test-RecordSetNAPTRNonEmpty");
         }
 
         [Fact]

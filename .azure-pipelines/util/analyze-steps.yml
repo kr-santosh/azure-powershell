@@ -2,13 +2,13 @@ parameters:
   configuration: ''
   testFramework: ''
   powerShellPlatform: ''
+  IsGenerateBased: ''
 
 steps:
 - template: download-build-steps.yml
   parameters:
     artifactName: build-${{ parameters.testFramework }}
 - task: NodeTool@0
-  condition: eq(variables.IsGenerateBased, true)
   displayName: Install autorest
   inputs:
     versionSpec: '14.17.1'
@@ -16,7 +16,6 @@ steps:
     verbose: false
     customCommand: install autorest@latest
 - task: PowerShell@2
-  condition: eq(variables.IsGenerateBased, true)
   displayName: Setup environment for autorest
   inputs:
     targetType: inline
@@ -50,7 +49,6 @@ steps:
     custom: msbuild
     arguments: 'build.proj /t:GenerateHelp /p:Configuration=${{ parameters.configuration }};PullRequestNumber=$(System.PullRequest.PullRequestNumber)'
   env:
-      OCTOKITPAT: $(OCTOKITPAT)
       PowerShellPlatform: ${{ parameters.powerShellPlatform }}
 
 - task: DotNetCoreCLI@2
@@ -60,8 +58,8 @@ steps:
     custom: msbuild
     arguments: 'build.proj /t:StaticAnalysis /p:Configuration=${{ parameters.configuration }};PullRequestNumber=$(System.PullRequest.PullRequestNumber)'
   env:
-      OCTOKITPAT: $(OCTOKITPAT)
+      IsGenerateBased: ${{ parameters.IsGenerateBased }}
 
 - template: publish-artifacts-steps.yml
   parameters:
-    artifactName: analyze-${{ parameters.testFramework }}
+    artifactName: analyze-${{ parameters.testFramework }}-$(System.JobAttempt)

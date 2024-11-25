@@ -15,7 +15,6 @@
 namespace Microsoft.WindowsAzure.Commands.Storage.Common
 {
     using Microsoft.WindowsAzure.Commands.Storage.Model.Contract;
-    using Microsoft.Azure.Storage.Queue;
     using global::Azure.Storage.Queues;
     using global::Azure.Core;
     using Microsoft.WindowsAzure.Commands.Common;
@@ -45,17 +44,6 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Common
             return Channel;
         }
 
-        /// <summary>
-        /// Queue request options
-        /// </summary>
-        public QueueRequestOptions RequestOptions
-        {
-            get
-            {
-                return (QueueRequestOptions)GetRequestOptions(StorageServiceType.Queue);
-            }
-        }
-
         public QueueClientOptions ClientOptions
         {
             get
@@ -63,7 +51,7 @@ namespace Microsoft.WindowsAzure.Commands.Storage.Common
                 if (clientOptions == null)
                 {
                     clientOptions = new QueueClientOptions();
-                    clientOptions.AddPolicy(new UserAgentPolicy(ApiConstants.UserAgentHeaderValue), HttpPipelinePosition.PerCall);
+                    clientOptions.AddPolicy(new UserAgentPolicy(ApiConstants.UserAgentHeaderValue), HttpPipelinePosition.PerCall); 
                 }
                 return clientOptions;
             }

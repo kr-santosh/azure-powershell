@@ -18,11 +18,92 @@
         - Additional information about change #1
 -->
 ## Upcoming Release
+* Upgraded Azure.Core to 1.44.1.
+
+## Version 6.3.0
+* Added Secret URI Parameter to Key Vault Secret Cmdlets [#23053]
+
+## Version 6.2.0
+* Fixed a parameter validation issue in Set-AzureKeyVaultCertificatePolicy. [#25649]
+
+## Version 6.1.0
+* Fixed secrets exposure in example documentation.
+* Upgraded Get-AzKeyVaultKey for key vault key to track 2 SDK.
+
+## Version 6.0.1
+* Fixed an issue during merging certificate process. [#24323]
+
+## Version 6.0.0
+* [Breaking change] Removed the offline fallback policy if specify parameter `UseDefaultCVMPolicy` in `Add-AzKeyVaultKey`. Key creation will fail if unable to get regional default CVM SKR policy from MAA Service Discovery API.
+* [Breaking change] Removed parameter `Value` from `Invoke-AzKeyVaultKeyOperation`.
+* [Breaking change] Removed property `Result` from the output type `PSKeyOperationResult` of `Invoke-AzKeyVaultKeyOperation`.
+* [Breaking Change] Replaced parameter `EnableRbacAuthorization` by `DisableRbacAuthorization` in `New-AzKeyVault` and `Update-AzKeyVault`.
+    - RBAC will be enabled by default during the process of key vault creation. 
+    
+## Version 5.3.0
+* Introduced secrets detection feature to safeguard sensitive data.
+* [Upcoming Breaking Change] Added breaking change warning message for parameter `UseDefaultCVMPolicy` of `Add-AzKeyVaultKey`.
+    - The offline fallback policy will be removed. Key creation will fail if unable to get regional default CVM SKR policy from MAA Service Discovery API.
+* Added parameter `PolicyPath` in `Add-AzKeyVaultCertificate` to support custom policy in the process of certificate enrollment. 
+* Upgraded the API version of merging certificate to 7.5. [#24323]
+
+## Version 5.2.2
+* Introduced secrets detection feature to safeguard sensitive data.
+* Formatted the output of Azure Key Vault certificate in removed state. [#24333]
+* [Upcoming Breaking Change] Added breaking change warning message for parameter `EnableRbacAuthorization` of `New-AzKeyVault` and `Update-AzKeyVault`.
+    - RBAC will be enabled by default during the process of key vault creation. To disable RBAC authorization, please use parameter 'DisableRbacAuthorization'.
+    - Parameter `EnableRbacAuthorization` is expected to be removed in Az.KeyVault 6.0.0 and Az 12.0.0.
+    - Parameter `EnableRbacAuthorization` is expected to be replaced by `DisableRbacAuthorization`.
+* Upgraded Azure.Core to 1.37.0.
+
+## Version 5.2.1
+* Supported `HsmPlatform` in `KeyAttributes`.
+
+## Version 5.2.0
+* Supported authentication via User Managed Identity by adding parameter `UseUserManagedIdentity` and making `SasToken` optional.
+
+## Version 5.1.0
+* Added parameter `ByteArrayValue` in `Invoke-AzKeyVaultKeyOperation` to support operating byte array without conversion to secure string.
+* Added Property `RawResult` in the output type `PSKeyOperationResult` of `Invoke-AzKeyVaultKeyOperation`. 
+* [Upcoming Breaking Change] Added breaking change warning message for parameter `Value` in `Invoke-AzKeyVaultKeyOperation`. 
+    - Parameter `Value` is expected to be removed in Az.KeyVault 6.0.0
+    - `ByteArrayValue` is the alternative of parameter `Value` in byte array format
+* [Upcoming Breaking Change] Added breaking change warning message for the output type `PSKeyOperationResult` of `Invoke-AzKeyVaultKeyOperation`. 
+    - Property `Result` is expected to be removed in Az.KeyVault 6.0.0
+    - Property `RawResult` is the alternative of parameter `Result` in byte array format
+
+## Version 5.0.1
+* Removed redundant Microsoft Graph API calls for access policy in `Get-AzKeyVault`.
+
+## Version 5.0.0
+* Removed non-core types creation in PowerShell scripts to be compatible in constrained language mode.
+* Supported user assigned identity for Managed HSM in `New/Update-AzKeyVaultManagedHsm` 
+* [Breaking Change] Changed parameter `SoftDeleteRetentionInDays` in `New-AzKeyVaultManagedHsm` to mandatory.
+* Upgraded Azure.Core to 1.35.0.
+
+## Version 4.12.0
+* Supported splitting `Import-AzKeyVaultSecurityDomain` process into three steps to allow keys to be hidden offline.
+    - Added `DownloadExchangeKey`, `RestoreBlob` and `ImportRestoredBlob` in `Import-AzKeyVaultSecurityDomain`.
+
+## Version 4.11.0
+* Fixed certificate policy bugs if DnsName is null. [#22642]
+* Supported multi-regions for Managed Hsm: Added `Add/Get/Remove-AzAzKeyVaultManagedHsmRegion`.
+* Added `Test-AzKeyVaultNameAvailability` and `Test-AzKeyVaultManagedHsmNameAvailability`.
+* Formatted the table view of `*-AzKeyVault`, `*-AzKeyVaultKey` and `*-AzKeyVaultSecret`
+* Added `SecurityDomain` and `Regions` properties into the output of `New/Update/Get-AzKeyVaultManagedHsm` (`PSManagedHsm`).
+* Supported Setting for Managed HSM: Added `Get-AzKeyVaultSetting` and `Update-AzKeyVaultSetting`.
+* Updated Azure.Core to 1.34.0.
+
+## Version 4.10.2
+* Bug Fix: Removed duplicated IpRules from `NetworkRuleSet` and `MhsmNetworkRuleSet`. [#22472]
+
+## Version 4.10.1
 * Removed maximum number for `IpAddressRange` and `VirtualNetworkResourceId` in `*-AzKeyVaultNetworkRuleSet*` from client side. [#22137]
+* Updated Azure.Core to 1.33.0.
 
 ## Version 4.10.0
 * Added breaking change announcement for parameter `SoftDeleteRetentionInDays` in `New-AzKeyVaultManagedHsm`. The parameter `SoftDeleteRetentionInDays` is becoming mandatory
-    - This change will take effect on version 6.0.0
+    - This change will take effect on version 5.0.0
 * Changed the encoding way from a string into byte array in `Invoke-AzKeyVaultKeyOperation` from ASCII to UTF8. UTF8 is backward-compatible with ASCII. [#21269]
 * Bug fix: Changed the decoding way from byte array into a string from system default encoding to UTF8 to match encoding way. [#21269]
 * Added parameter `PolicyPath` and `PolicyObject` in `Import-AzKeyVaultCertificate` to support custom policy [#20780]

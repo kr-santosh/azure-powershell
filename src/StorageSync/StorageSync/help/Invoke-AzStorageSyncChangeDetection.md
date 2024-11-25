@@ -8,7 +8,7 @@ schema: 2.0.0
 # Invoke-AzStorageSyncChangeDetection
 
 ## SYNOPSIS
-This command can be used to manually initiate the detection of namespace changes. It can be targeted to the entire share, subfolder or set of files. When running the command with the -DirectoryPath or -Path parameters, a maximum of 10,000 items can be detected. If the scope of changes is known to you, limit the execution of this command to parts of the namespace, so change detection can finish quickly and within the 10,000 item limit. Alternatively, you can avoid the item limit by running the cmdlet without these parameters, invoking share-level change detection. 
+This command can be used to manually initiate the detection of namespace changes. It can be targeted to the entire share, subfolder or set of files. When running the command with the -DirectoryPath or -Path parameters, a maximum of 10,000 items can be detected. If the scope of changes is known to you, limit the execution of this command to parts of the namespace, so change detection can finish quickly and within the 10,000 item limit. Alternatively, you can avoid the item limit by running the cmdlet without these parameters, invoking share-level change detection.
 
 > [!Note]  
 > If run with -DirectoryPath or -Path parameters, the command will not detect the following changes in the Azure file share:
@@ -31,54 +31,62 @@ Invoke-AzStorageSyncChangeDetection [-ResourceGroupName] <String> [-StorageSyncS
 ```
 Invoke-AzStorageSyncChangeDetection [-ResourceGroupName] <String> [-StorageSyncServiceName] <String>
  [-SyncGroupName] <String> -Name <String> -DirectoryPath <String> [-Recursive] [-PassThru] [-AsJob]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### StringAndPathParameterSet
 ```
 Invoke-AzStorageSyncChangeDetection [-ResourceGroupName] <String> [-StorageSyncServiceName] <String>
  [-SyncGroupName] <String> -Name <String> -Path <String[]> [-PassThru] [-AsJob]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ResourceIdAndDirectoryParameterSet
 ```
 Invoke-AzStorageSyncChangeDetection [-ResourceId] <String> -DirectoryPath <String> [-Recursive] [-PassThru]
- [-AsJob] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-AsJob] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ResourceIdAndPathParameterSet
 ```
 Invoke-AzStorageSyncChangeDetection [-ResourceId] <String> -Path <String[]> [-PassThru] [-AsJob]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### FullShareResourceIdParameterSet
 ```
 Invoke-AzStorageSyncChangeDetection [-ResourceId] <String> [-PassThru] [-AsJob]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ObjectAndDirectoryParameterSet
 ```
 Invoke-AzStorageSyncChangeDetection [-InputObject] <PSCloudEndpoint> -DirectoryPath <String> [-Recursive]
- [-PassThru] [-AsJob] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-PassThru] [-AsJob] [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### ObjectAndPathParameterSet
 ```
 Invoke-AzStorageSyncChangeDetection [-InputObject] <PSCloudEndpoint> -Path <String[]> [-PassThru] [-AsJob]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### FullShareObjectParameterSet
 ```
 Invoke-AzStorageSyncChangeDetection [-InputObject] <PSCloudEndpoint> [-PassThru] [-AsJob]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Periodically, Azure File Sync checks the namespace inside a syncing Azure file share for changes that came into the file share by other means than sync. The goal is to identify these changes and ultimately sync them to connected servers. This command can be used to manually initiate the detection of namespaces changes. It can be targeted to the entire share, subfolder or set of files. If the scope of changes is known to you, limit the execution of this command to parts of the namespace, so individual item change detection can finish quickly and within the 10,000 items limit. Otherwise, run the command without the -DirectoryPath or -Path parameters to invoke full share-level change detection.
+Periodically, Azure File Sync checks the namespace inside a syncing Azure file share for changes that came into the file share by other means than sync. The goal is to identify these changes and ultimately sync them to connected servers. This command can be used to manually initiate the detection of namespaces changes. It can be targeted to the entire share, subfolder or set of files. If the scope of changes is known to you, limit the execution of this command to parts of the namespace, so individual item change detection can finish quickly and within the 10,000 items limit. Otherwise, run the command without the -DirectoryPath or -Path parameters to invoke full share-level change detection. The Invoke-AzStorageSyncChangeDetection cmdlet will cancel a cloud change enumeration job that is in progress. To avoid cancelling a currently running job, go to the Cloud Endpoint properties in the portal to check if a job is currently running.
 
 ## EXAMPLES
 

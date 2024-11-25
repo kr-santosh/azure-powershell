@@ -15,7 +15,8 @@ Validates a deployment at tenant scope.
 ### ByTemplateFileWithNoParameters (Default)
 ```
 Test-AzTenantDeployment [-Name <String>] -Location <String> [-QueryString <String>] -TemplateFile <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateObjectAndParameterObject
@@ -74,6 +75,13 @@ Test-AzTenantDeployment [-Name <String>] -Location <String> [-QueryString <Strin
  [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
 ```
 
+### ByParameterFileWithNoTemplate
+```
+Test-AzTenantDeployment [-Name <String>] -Location <String> [-QueryString <String>]
+ -TemplateParameterFile <String> [-SkipTemplateParameterPrompt] [-Pre]
+ [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+```
+
 ### ByTemplateObjectAndParameterUri
 ```
 Test-AzTenantDeployment [-Name <String>] -Location <String> [-QueryString <String>]
@@ -105,19 +113,22 @@ Test-AzTenantDeployment [-Name <String>] -Location <String> [-QueryString <Strin
 ### ByTemplateObjectWithNoParameters
 ```
 Test-AzTenantDeployment [-Name <String>] -Location <String> [-QueryString <String>] -TemplateObject <Hashtable>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateUriWithNoParameters
 ```
 Test-AzTenantDeployment [-Name <String>] -Location <String> [-QueryString <String>] -TemplateUri <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateSpecResourceId
 ```
 Test-AzTenantDeployment [-Name <String>] -Location <String> [-QueryString <String>] -TemplateSpecId <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -140,6 +151,14 @@ Test-AzTenantDeployment -Location "West US" -TemplateObject $TemplateObject -Tem
 ```
 
 This command tests a deployment at the current tenant scope using the an in-memory hashtable created from the given template file and a parameter file.
+
+### Example 3: Use a .bicepparam file to validate a deployment
+```powershell
+Test-AzTenantDeployment -Location "West US" -TemplateParameterFile "./parameters.bicepparam"
+```
+
+This command validates the deployment at the current tenant scope by using a .bicepparam file on disk.
+The command uses the *TemplateParameterFile* parameter to specify a .bicepparam file.
 
 ## PARAMETERS
 
@@ -266,11 +285,11 @@ Accept wildcard characters: False
 ```
 
 ### -TemplateParameterFile
-A file that has the template parameters.
+Parameter file to use for the template.
 
 ```yaml
 Type: System.String
-Parameter Sets: ByTemplateObjectAndParameterFile, ByTemplateFileAndParameterFile, ByTemplateUriAndParameterFile, ByTemplateSpecResourceIdAndParams
+Parameter Sets: ByTemplateObjectAndParameterFile, ByTemplateFileAndParameterFile, ByTemplateUriAndParameterFile, ByTemplateSpecResourceIdAndParams, ByParameterFileWithNoTemplate
 Aliases:
 
 Required: True

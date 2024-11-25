@@ -318,6 +318,29 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             HelpMessage = ParamHelpMsgs.RestoreVM.TargetSubscriptionId)]
         public string TargetSubscriptionId { get; set; }
 
+        [Parameter(Mandatory = false, ParameterSetName = AzureManagedVMCreateNewParameterSet,
+            HelpMessage = ParamHelpMsgs.RestoreVM.EdgeZone)]
+        public SwitchParameter RestoreToEdgeZone { get; set; }
+
+        /// <summary>
+        /// Parameter to authorize operations protected by cross tenant resource guard. Use command (Get-AzAccessToken -TenantId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx").Token to fetch authorization token for different tenant.
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.ResourceGuard.AuxiliaryAccessToken, ValueFromPipeline = false)]        
+        public string Token;
+
+        [Parameter(Mandatory = false, ParameterSetName = AzureManagedVMCreateNewParameterSet,
+            HelpMessage = ParamHelpMsgs.RestoreVM.DiskAccessOption)]        
+        [Parameter(Mandatory = false, ParameterSetName = AzureManagedVMReplaceExistingParameterSet,
+            HelpMessage = ParamHelpMsgs.RestoreVM.DiskAccessOption)]
+        public ServiceClientModel.TargetDiskNetworkAccessOption?  DiskAccessOption { get; set; }
+
+        [Parameter(Mandatory = false, ParameterSetName = AzureManagedVMCreateNewParameterSet,
+            HelpMessage = ParamHelpMsgs.RestoreVM.TargetDiskAccessId)]
+        [Parameter(Mandatory = false, ParameterSetName = AzureManagedVMReplaceExistingParameterSet,
+            HelpMessage = ParamHelpMsgs.RestoreVM.TargetDiskAccessId)]
+        [ValidatePattern(@"^/subscriptions/[^/]+/resourceGroups/[^/]+/providers/Microsoft.Compute/diskAccesses/[^/]+$")]
+        public string TargetDiskAccessId { get; set; }
+
         public override void ExecuteCmdlet()
         {
             ExecutionBlock(() =>
@@ -404,6 +427,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 providerParameters.Add(RestoreVMBackupItemParams.TargetVNetResourceGroup, TargetVNetResourceGroup);
                 providerParameters.Add(RestoreVMBackupItemParams.TargetSubnetName, TargetSubnetName);
                 providerParameters.Add(RestoreVMBackupItemParams.TargetSubscriptionId, TargetSubscriptionId);
+                providerParameters.Add(RestoreVMBackupItemParams.RestoreToEdgeZone, RestoreToEdgeZone.IsPresent);
+                providerParameters.Add(ResourceGuardParams.Token, Token);
+                providerParameters.Add(ResourceGuardParams.IsMUAOperation, true);
 
                 if (DiskEncryptionSetId != null)
                 {
@@ -414,6 +440,43 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     if ((vaultEncryptionSettings.Properties.EncryptionAtRestType == "CustomerManaged") && rp.IsManagedVirtualMachine && !(rp.EncryptionEnabled))
                     {
                         providerParameters.Add(RestoreVMBackupItemParams.DiskEncryptionSetId, DiskEncryptionSetId);
+                    }
+                }
+
+                if (DiskAccessOption != null)
+                {
+                    AzureVmRecoveryPoint rp = (AzureVmRecoveryPoint)RecoveryPoint;
+                    if (!(bool)rp.IsPrivateAccessEnabledOnAnyDisk)
+                    {
+                        throw new ArgumentException("DiskAccessOption parameter can't be provided since private access is not enabled in given recovery point");
+                    }
+
+                    if (DiskAccessOption == ServiceClientModel.TargetDiskNetworkAccessOption.EnablePrivateAccessForAllDisks)
+                    {
+                        if (string.IsNullOrEmpty(TargetDiskAccessId))
+                        {
+                            throw new ArgumentException("TargetDiskAccessId must be provided when DiskAccessOption is set to EnablePrivateAccessForAllDisks.");
+                        }                        
+                    }
+                    else if (RestoreToSecondaryRegion.IsPresent && DiskAccessOption == ServiceClientModel.TargetDiskNetworkAccessOption.SameAsOnSourceDisks)
+                    {
+                        throw new ArgumentException("Given DiskAccessOption isn't applicable to cross region restore");
+                    }
+                    else if (!string.IsNullOrEmpty(TargetDiskAccessId))
+                    {
+                        throw new ArgumentException("TargetDiskAccessId can't be provided for the given DiskAccessOption.");
+                    }
+
+                    providerParameters.Add(RestoreVMBackupItemParams.DiskAccessOption, DiskAccessOption);
+                    providerParameters.Add(RestoreVMBackupItemParams.TargetDiskAccessId, TargetDiskAccessId);
+                }
+                else if (string.Equals(this.ParameterSetName, AzureManagedVMCreateNewParameterSet, StringComparison.Ordinal) ||
+                        string.Equals(this.ParameterSetName, AzureManagedVMReplaceExistingParameterSet, StringComparison.Ordinal))
+                {
+                    AzureVmRecoveryPoint rp = (AzureVmRecoveryPoint)RecoveryPoint;
+                    if ((bool)rp.IsPrivateAccessEnabledOnAnyDisk)
+                    {
+                        throw new ArgumentException("DiskAccessOption parameter must be provided since private access is enabled in given recovery point");
                     }
                 }
 
@@ -430,9 +493,18 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     if (storageType == AzureRmRecoveryServicesBackupStorageRedundancyType.ZoneRedundant.ToString() ||                     
                         (storageType == AzureRmRecoveryServicesBackupStorageRedundancyType.GeoRedundant.ToString() && crrEnabled))
                     {
-                        // eliminate non-vault tier RPs 
-                        if (rp.RecoveryPointTier == RecoveryPointTier.VaultStandard)
-                        {                               
+                        // eliminate Archive tier RPs. Snapshot RPs are supported for RPCv2/Enhanced policy
+                        // service would throw the appropriate error for Standard policy
+                        if (rp.RecoveryPointTier != 0 && rp.RecoveryPointTier != RecoveryPointTier.VaultArchive) 
+                        {
+                            WriteDebug("Recovery point time = " + rp.RecoveryPointTime.ToString());
+                            WriteDebug("UTC NOW - 4 Hrs = " + DateTime.UtcNow.AddHours(-4).ToString());
+                                                        
+                            if ((rp.RecoveryPointTier == RecoveryPointTier.Snapshot || rp.RecoveryPointTier == RecoveryPointTier.SnapshotAndVaultStandard || rp.RecoveryPointTier == RecoveryPointTier.SnapshotAndVaultArchive) && rp.RecoveryPointTime > DateTime.UtcNow.AddHours(-4))
+                            {
+                                throw new ArgumentException(String.Format(Resources.UnbakedSnapshotRecoveryPoint));
+                            }
+
                             // check CZR eligibility for RA-GRS
                             if (storageType == AzureRmRecoveryServicesBackupStorageRedundancyType.GeoRedundant.ToString() && crrEnabled)
                             {                                
@@ -458,7 +530,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         throw new ArgumentException(string.Format(Resources.ZonalRestoreVaultStorageRedundancyException));
                     }
                 }
-
+                
                 if (StorageAccountName != null)
                 {
                     providerParameters.Add(RestoreBackupItemParams.StorageAccountName, StorageAccountName);

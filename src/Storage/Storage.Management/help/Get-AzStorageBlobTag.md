@@ -16,24 +16,24 @@ Get blob tags of a specific blob.
 ```
 Get-AzStorageBlobTag [-Blob] <String> [-Container] <String> [-TagCondition <String>]
  [-Context <IStorageContext>] [-ServerTimeoutPerRequest <Int32>] [-ClientTimeoutPerRequest <Int32>]
- [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### BlobPipeline
 ```
 Get-AzStorageBlobTag -BlobBaseClient <BlobBaseClient> [-TagCondition <String>] [-Context <IStorageContext>]
  [-ServerTimeoutPerRequest <Int32>] [-ClientTimeoutPerRequest <Int32>]
- [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### ContainerPipeline
 ```
 Get-AzStorageBlobTag -CloudBlobContainer <CloudBlobContainer> [-Blob] <String> [-TagCondition <String>]
  [-Context <IStorageContext>] [-ServerTimeoutPerRequest <Int32>] [-ClientTimeoutPerRequest <Int32>]
- [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -45,6 +45,7 @@ The **Get-AzStorageBlobTag** gets blob tags of a specific blob.
 ```powershell
 Get-AzStorageBlobTag -Container "containername" -Blob testblob
 ```
+
 ```output
 Name                           Value                                                                                                                                                                                 
 ----                           -----                                                                                                                                                                                 
@@ -58,6 +59,7 @@ This command gets blob tags on a specific blob.
 ```powershell
 Get-AzStorageBlobTag -Container "containername" -Blob testblob -TagCondition """tag1""='value1'"
 ```
+
 ```output
 Name                           Value                                                                                                                                                                                 
 ----                           -----                                                                                                                                                                                 

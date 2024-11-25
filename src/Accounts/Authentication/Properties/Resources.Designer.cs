@@ -223,6 +223,15 @@ namespace Microsoft.Azure.Commands.Common.Authentication.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set it to true to disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached, such as in private clouds or Azure Stack. It is crucial to ensure that the configured authority host is valid and trustworthy..
+        /// </summary>
+        public static string DisableInstanceDiscoveryWarning {
+            get {
+                return ResourceManager.GetString("DisableInstanceDiscoveryWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Environment name needs to be specified.
         /// </summary>
         public static string EnvironmentNameNeedsToBeSpecified {
@@ -250,6 +259,24 @@ namespace Microsoft.Azure.Commands.Common.Authentication.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication failed against tenant {0}. User interaction is required. This may be due to the conditional access policy settings such as multi-factor authentication (MFA). If you need to access subscriptions in that tenant, please rerun &apos;Connect-AzAccount&apos; with additional parameter &apos;-TenantId {0}&apos;..
+        /// </summary>
+        public static string ErrorMessageMsalInteractionRequiredWithTid {
+            get {
+                return ResourceManager.GetString("ErrorMessageMsalInteractionRequiredWithTid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Authentication failed against resource {0}. User interaction is required. This may be due to the conditional access policy settings such as multi-factor authentication (MFA). Please rerun &apos;Connect-AzAccount&apos; with additional parameter &apos;-AuthScope {0}&apos;..
+        /// </summary>
+        public static string ErrorMsgMsalInteractionRequiredWithResourceID {
+            get {
+                return ResourceManager.GetString("ErrorMsgMsalInteractionRequiredWithResourceID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your Microsoft Azure credential in the Windows PowerShell session has expired. Please log in again. In PowerShell, execute Connect-AzAccount..
         /// </summary>
         public static string ExpiredRefreshToken {
@@ -268,6 +295,15 @@ namespace Microsoft.Azure.Commands.Common.Authentication.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to INITIALIZATION: Failed to migrate MSAL token cache of the legacy name with error : {0}.
+        /// </summary>
+        public static string FailedToMigrateMsalCacheWithLegayName {
+            get {
+                return ResourceManager.GetString("FailedToMigrateMsalCacheWithLegayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File path is not valid.
         /// </summary>
         public static string FilePathIsNotValid {
@@ -277,11 +313,29 @@ namespace Microsoft.Azure.Commands.Common.Authentication.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When enabled, Azure PowerShell will check for updates automatically and display a hint message when an update is available. The default value is true..
+        /// </summary>
+        public static string HelpMessageOfCheckForUpgrade {
+            get {
+                return ResourceManager.GetString("HelpMessageOfCheckForUpgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Subscription name or GUID. Sets the default context for Azure PowerShell when logging in without specifying a subscription..
         /// </summary>
         public static string HelpMessageOfDefaultSubscriptionForLogin {
             get {
                 return ResourceManager.GetString("HelpMessageOfDefaultSubscriptionForLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set it to true to disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached, such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to true, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustwo [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string HelpMessageOfDisableInstanceDiscovery {
+            get {
+                return ResourceManager.GetString("HelpMessageOfDisableInstanceDiscovery", resourceCulture);
             }
         }
         
@@ -304,11 +358,29 @@ namespace Microsoft.Azure.Commands.Common.Authentication.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When enabled, a warning message will be displayed when the cmdlet output contains secrets. Learn more at https://go.microsoft.com/fwlink/?linkid=2258844.
+        /// </summary>
+        public static string HelpMessageOfDisplaySecretsWarning {
+            get {
+                return ResourceManager.GetString("HelpMessageOfDisplaySecretsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When enabled, Azure PowerShell cmdlets send telemetry data to Microsoft to improve the customer experience. For more information, see our privacy statement: https://aka.ms/privacy.
         /// </summary>
         public static string HelpMessageOfEnableDataCollection {
             get {
                 return ResourceManager.GetString("HelpMessageOfEnableDataCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled, error records will be written to ~/.Azure/ErrorRecords..
+        /// </summary>
+        public static string HelpMessageOfEnableErrorRecordsPersistence {
+            get {
+                return ResourceManager.GetString("HelpMessageOfEnableErrorRecordsPersistence", resourceCulture);
             }
         }
         
@@ -322,11 +394,20 @@ namespace Microsoft.Azure.Commands.Common.Authentication.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Preview] When enabled, Web Account Manager (WAM) will be the default interactive login experience. It will fall back to using the browser if the platform does not support WAM. Note that this feature is under preview. Microsoft Account (MSA) is currently not supported. Feel free to reach out to Azure PowerShell team if you have any feedbacks: https://aka.ms/azpsissue.
+        ///   Looks up a localized string similar to When enabled, Web Account Manager (WAM) will be the default interactive login experience. It will fall back to using the browser if the platform does not support WAM. For more details please refer to https://go.microsoft.com/fwlink/?linkid=2272007.
         /// </summary>
         public static string HelpMessageOfEnableWamLogin {
             get {
                 return ResourceManager.GetString("HelpMessageOfEnableWamLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only active when authenticating interactively, allows the user to choose the subscription and tenant used in subsequent commands. Possible values ad &apos;On&apos; (Default) and &apos;Off&apos;. &apos;On&apos; requires user&apos;s input. &apos;Off&apos; will use the first tenant and subscription returned by Azure, can change without notice and lead to command execution in an unwanted context (not recommended)..
+        /// </summary>
+        public static string HelpMessageOfLoginExperienceV2 {
+            get {
+                return ResourceManager.GetString("HelpMessageOfLoginExperienceV2", resourceCulture);
             }
         }
         

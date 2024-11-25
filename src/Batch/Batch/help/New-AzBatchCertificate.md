@@ -40,7 +40,7 @@ This command adds a certificate to the specified Batch account by using the file
 ### Example 2: Add a certificate from raw data
 ```powershell
 $RawData = [System.IO.File]::ReadAllBytes("E:\Certificates\MyCert.pfx")
-New-AzBatchCertificate -RawData $RawData -Password "Password1234" -BatchContext $Context
+New-AzBatchCertificate -RawData $RawData -Password <Password> -BatchContext $Context
 ```
 
 The first command reads the data from the file named MyCert.pfx into the $RawData variable.
@@ -50,7 +50,7 @@ The second command adds a certificate to the specified Batch account using the r
 
 ### -BatchContext
 Specifies the **BatchAccountContext** instance that this cmdlet uses to interact with the Batch service.
-If you use the Get-AzBatchAccount cmdlet to get your BatchAccountContext, then Azure Active Directory authentication will be used when interacting with the Batch service. To use shared key authentication instead, use the Get-AzBatchAccountKey cmdlet to get a BatchAccountContext object with its access keys populated. When using shared key authentication, the primary access key is used by default. To change the key to use, set the BatchAccountContext.KeyInUse property.
+If you use the Get-AzBatchAccount cmdlet to get your BatchAccountContext, then Microsoft Entra authentication will be used when interacting with the Batch service. To use shared key authentication instead, use the Get-AzBatchAccountKey cmdlet to get a BatchAccountContext object with its access keys populated. When using shared key authentication, the primary access key is used by default. To change the key to use, set the BatchAccountContext.KeyInUse property.
 
 ```yaml
 Type: Microsoft.Azure.Commands.Batch.BatchAccountContext

@@ -21,7 +21,6 @@ using Microsoft.Azure.Management.RecoveryServices.Models;
 using Microsoft.Rest.Azure.OData;
 using RestAzureNS = Microsoft.Rest.Azure;
 using System;
-using Newtonsoft.Json;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Properties;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClientAdapterNS
@@ -77,7 +76,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             }           
 
             return BmsAdapter.Client.BackupResourceVaultConfigs.UpdateWithHttpMessagesAsync(
-                vaultName ?? BmsAdapter.GetResourceName(), resourceGroupName ?? BmsAdapter.GetResourceGroupName(), param, customHeaders).Result.Body;
+                vaultName ?? BmsAdapter.GetResourceName(), resourceGroupName ?? BmsAdapter.GetResourceGroupName(), param, null, customHeaders).Result.Body;
         }
 
         public BackupResourceVaultConfigResource GetVaultProperty(string vaultName, string resourceGroupName)
@@ -94,7 +93,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         /// <returns>Azure Resource Storage response object.</returns>  
         public BackupResourceConfigResource GetVaultStorageType(string resouceGroupName, string vaultName)
         {
-            return BmsAdapter.Client.BackupResourceStorageConfigsNonCRR.GetWithHttpMessagesAsync(
+            return BmsAdapter.Client.BackupResourceStorageConfigsNonCrr.GetWithHttpMessagesAsync(
                 vaultName, resouceGroupName).Result.Body;
         }
 
@@ -106,8 +105,23 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         /// <returns>Azure Resource Encryption response object.</returns>  
         public BackupResourceEncryptionConfigExtendedResource GetVaultEncryptionConfig(string resouceGroupName, string vaultName)
         {
-            return BmsAdapter.Client.BackupResourceEncryptionConfigs.GetWithHttpMessagesAsync(
-                vaultName, resouceGroupName).Result.Body;
+            ARSVault vault = GetVault(resouceGroupName, vaultName);
+
+            var vaultEncryptionProperty = vault.Properties.EncryptionProperty;
+            BackupResourceEncryptionConfigExtendedResource encryptionConfig = new BackupResourceEncryptionConfigExtendedResource();
+
+            if (vaultEncryptionProperty != null)
+            {
+                encryptionConfig.Properties = new BackupResourceEncryptionConfigExtended
+                {
+                    KeyUri = vaultEncryptionProperty.KeyVaultProperties?.KeyUri,
+                    InfrastructureEncryptionState = vaultEncryptionProperty.InfrastructureEncryption,
+                    UseSystemAssignedIdentity = vaultEncryptionProperty.KekIdentity?.UseSystemAssignedIdentity,
+                    UserAssignedIdentity = vaultEncryptionProperty.KekIdentity?.UserAssignedIdentity
+                };
+            }
+
+            return encryptionConfig;
         }
 
         /// <summary>  
@@ -156,13 +170,55 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         /// <summary>  
         /// Method to create or update Recovery Services Vault.
         /// </summary>  
-        /// <param name="resouceGroupName">Name of the resouce group</param>  
+        /// <param name="resourceGroupName">Name of the resouce group</param>  
         /// <param name="vaultName">Name of the vault</param>  
         /// <param name="patchVault">patch vault object to patch the recovery services Vault</param>
+        /// <param name="auxiliaryAccessToken">Auxiliary access token for authorization</param>  
+        /// <param name="isMUAProtected">Flag indicating if the operation is MUA protected</param>  
         /// <returns>Azure Recovery Services Vault.</returns> 
-        public Vault UpdateRSVault(string resouceGroupName, string vaultName, PatchVault patchVault)
+        public Vault UpdateRSVault(string resourceGroupName, string vaultName, PatchVault patchVault, string auxiliaryAccessToken = null, bool isMUAProtected = false)
         {
-            var response = RSAdapter.Client.Vaults.UpdateWithHttpMessagesAsync(resouceGroupName, vaultName, patchVault).Result;
+            Dictionary<string, List<string>> customHeaders = new Dictionary<string, List<string>>();
+            if (isMUAProtected)
+            {
+                List<ResourceGuardProxyBaseResource> resourceGuardMapping = ListResourceGuardMapping(vaultName, resourceGroupName);
+                string operationRequest = null;
+
+                if (resourceGuardMapping != null && resourceGuardMapping.Count != 0)
+                {
+                    // todo: CMK_MUA - check the op value correctly
+                    string criticalOp = "Microsoft.RecoveryServices/vaults/write#modifyEncryptionSettings";
+
+                    foreach (ResourceGuardOperationDetail operationDetail in resourceGuardMapping[0].Properties.ResourceGuardOperationDetails)
+                    {
+                        if (operationDetail.VaultCriticalOperation == criticalOp)
+                        {
+                            operationRequest = operationDetail.DefaultResourceRequest;
+                        }
+                    }
+
+                    if (operationRequest != null)
+                    {
+                        patchVault.Properties.ResourceGuardOperationRequests = new List<string>();
+                        patchVault.Properties.ResourceGuardOperationRequests.Add(operationRequest);
+                    }
+                }
+
+                if (auxiliaryAccessToken != null && auxiliaryAccessToken != "")
+                {
+                    if (operationRequest != null)
+                    {
+                        customHeaders.Add("x-ms-authorization-auxiliary", new List<string> { "Bearer " + auxiliaryAccessToken });
+                    }
+                    else
+                    {
+                        // resx
+                        throw new ArgumentException(String.Format(Resources.UnexpectedParameterToken, "modify encryption settings for recovery services vault"));
+                    }
+                }
+            }
+
+            var response = RSAdapter.Client.Vaults.UpdateWithHttpMessagesAsync(resourceGroupName, vaultName, patchVault, default(string), customHeaders).Result;
             return response.Body;
         }
 
@@ -174,11 +230,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         /// <returns>vault response object.</returns>
         public CrrModel.AADPropertiesResource GetAADProperties(string azureRegion, string backupManagementType = null)
         {
-            ODataQuery<CrrModel.BMSAADPropertiesQueryObject> queryParams = null;
+            ODataQuery<CrrModel.BmsaadPropertiesQueryObject> queryParams = null;
 
             if (backupManagementType == BackupManagementType.AzureWorkload)
             {
-                queryParams = new ODataQuery<CrrModel.BMSAADPropertiesQueryObject>(q => q.BackupManagementType == BackupManagementType.AzureWorkload);
+                queryParams = new ODataQuery<CrrModel.BmsaadPropertiesQueryObject>(q => q.BackupManagementType == BackupManagementType.AzureWorkload);
             }
 
             CrrModel.AADPropertiesResource aadProperties = CrrAdapter.Client.AadProperties.GetWithHttpMessagesAsync(azureRegion, queryParams).Result.Body;

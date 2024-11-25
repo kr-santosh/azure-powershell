@@ -18,7 +18,8 @@ Update-AzStorageFileServiceProperty [-ResourceGroupName] <String> [-StorageAccou
  [-EnableShareDeleteRetentionPolicy <Boolean>] [-ShareRetentionDays <Int32>] [-EnableSmbMultichannel <Boolean>]
  [-SmbProtocolVersion <String[]>] [-SmbAuthenticationMethod <String[]>] [-SmbChannelEncryption <String[]>]
  [-SmbKerberosTicketEncryption <String[]>] [-CorsRule <PSCorsRule[]>]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### AccountObject
@@ -27,7 +28,8 @@ Update-AzStorageFileServiceProperty -StorageAccount <PSStorageAccount>
  [-EnableShareDeleteRetentionPolicy <Boolean>] [-ShareRetentionDays <Int32>] [-EnableSmbMultichannel <Boolean>]
  [-SmbProtocolVersion <String[]>] [-SmbAuthenticationMethod <String[]>] [-SmbChannelEncryption <String[]>]
  [-SmbKerberosTicketEncryption <String[]>] [-CorsRule <PSCorsRule[]>]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### FileServicePropertiesResourceId
@@ -36,7 +38,8 @@ Update-AzStorageFileServiceProperty [-ResourceId] <String> [-EnableShareDeleteRe
  [-ShareRetentionDays <Int32>] [-EnableSmbMultichannel <Boolean>] [-SmbProtocolVersion <String[]>]
  [-SmbAuthenticationMethod <String[]>] [-SmbChannelEncryption <String[]>]
  [-SmbKerberosTicketEncryption <String[]>] [-CorsRule <PSCorsRule[]>]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -163,10 +166,11 @@ AllowedHeaders  : {x-ms-meta-customheader, x-ms-meta-target*}
 The first command assigns an array of rules to the $CorsRules variable. This command uses standard extends over several lines in this code block.
 The second command sets the rules in $CorsRules to the File service of a Storage account.
 
-### Example 6: Clean up CORS rules 
+### Example 6: Clean up CORS rules
 ```powershell
 Update-AzStorageFileServiceProperty -ResourceGroupName myresourcegroup -StorageAccountName mystorageaccount -CorsRule @()
 ```
+
 This command cleans up the CORS rules of a Storage account by inputting @() to parameter CorsRule. 
 
 ## PARAMETERS

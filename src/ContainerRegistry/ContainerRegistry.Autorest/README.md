@@ -3,9 +3,6 @@
 This directory contains the PowerShell module for the ContainerRegistry service.
 
 ---
-## Status
-[![Az.ContainerRegistry](https://img.shields.io/powershellgallery/v/Az.ContainerRegistry.svg?style=flat-square&label=Az.ContainerRegistry "Az.ContainerRegistry")](https://www.powershellgallery.com/packages/Az.ContainerRegistry/)
-
 ## Info
 - Modifiable: yes
 - Generated: all
@@ -47,13 +44,12 @@ In this directory, run AutoRest:
 > see https://aka.ms/autorest
 
 ``` yaml
-branch: 891dd18a70057c2fee388573117683e6d0081bda
+commit: 66174681c09b101de03fd35399080cfbccc93e8f
 require:
   - $(this-folder)/../../readme.azure.noprofile.md
-# lock the commit
-input-file:
-  - https://github.com/Azure/azure-rest-api-specs/blob/66174681c09b101de03fd35399080cfbccc93e8f/specification/containerregistry/resource-manager/Microsoft.ContainerRegistry/preview/2023-01-01-preview/containerregistry.json
-  - https://github.com/Azure/azure-rest-api-specs/blob/66174681c09b101de03fd35399080cfbccc93e8f/specification/containerregistry/resource-manager/Microsoft.ContainerRegistry/preview/2019-06-01-preview/containerregistry_build.json
+  - $(repo)/specification/containerregistry/resource-manager/readme.md
+try-require:
+  - $(repo)/specification/containerregistry/resource-manager/readme.powershell.md
 module-version: 0.1.0
 title: ContainerRegistry
 subject-prefix: $(service-name)
@@ -62,6 +58,10 @@ inlining-threshold: 100
 resourcegroup-append: true
 nested-object-to-string: true
 
+# For new modules, please avoid setting 3.x using the use-extension method and instead, use 4.x as the default option
+use-extension:
+  "@autorest/powershell": "3.x"
+
 directive:
 # Remove cmdlet, Private link related resource should be ignored. 
 - where:
@@ -69,7 +69,7 @@ directive:
   hide: true
 # Remove the unexpanded parameter set
 - where:
-    variant: ^Create$|^CreateViaIdentityExpanded$|^Update$|^UpdateViaIdentity$|^CreateViaIdentity$|^ImportViaIdentity$|^ImportViaIdentityExpanded$|^CheckViaIdentity$|^CheckViaIdentityExpanded$|^PingViaIdentity$|^Check$|^RegenerateViaIdentity$
+    variant: ^Create$|^CreateViaIdentityExpanded$|^Update$|^UpdateViaIdentity$|^CreateViaIdentity$|^ImportViaIdentity$|^ImportViaIdentityExpanded$|^CheckViaIdentity$|^CheckViaIdentityExpanded$|^PingViaIdentity$|^Check$|^RegenerateViaIdentity$|^Generate$|^GenerateViaIdentity$
   remove: true
 - where:
     subject: PrivateEndpointConnection
@@ -322,4 +322,5 @@ directive:
 - where:
     subject: (.*)AgentPool(.*)|(.*)Pipeline|(.*)ScopeMap|(.*)Token|(.*)WebhookCallbackConfig
   set:
-    preview-message: This is a preview version of ContainerRegistry. Let us know if you run into any issues.
+    preview-announcement:
+      preview-message: This is a preview version of ContainerRegistry. Let us know if you run into any issues.

@@ -208,7 +208,7 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
 
             Action writeProgressAction = () => this.WriteDeploymentProgress(parameters, deployment, deploymentOperationError);
 
-            var deploymentExtended =  this.WaitDeploymentStatus(
+            var deploymentExtended = this.WaitDeploymentStatus(
                 getDeploymentFunc,
                 writeProgressAction,
                 ProvisioningState.Canceled,
@@ -217,8 +217,8 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
 
             if (deploymentOperationError.ErrorMessages.Count > 0)
             {
-                WriteError(GetDeploymentErrorMessagesWithOperationId(deploymentOperationError, 
-                    parameters.DeploymentName, 
+                WriteError(GetDeploymentErrorMessagesWithOperationId(deploymentOperationError,
+                    parameters.DeploymentName,
                     deploymentExtended?.Properties?.CorrelationId));
             }
 
@@ -260,11 +260,11 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
                 }
                 else
                 {
-                    deploymentOperationError.ProcessError(operation);                   
+                    deploymentOperationError.ProcessError(operation);
                 }
             }
         }
-        
+
         private DeploymentExtended WaitDeploymentStatus(
             Func<Task<AzureOperationResponse<DeploymentExtended>>> getDeployment,
             Action listDeploymentOperations,
@@ -452,8 +452,7 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
                 }
                 else
                 {
-                    deployment.Properties.Template = 
-                        PSJsonSerializer.Serialize(parameters.TemplateObject).FromJson<JObject>();
+                    deployment.Properties.Template = parameters.TemplateObject.ToJToken();
                 }
             }
 
@@ -473,7 +472,7 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
                     : null;
                 // NOTE(jcotillo): Adding FromJson<> to parameters as well 
                 deployment.Properties.Parameters = !string.IsNullOrEmpty(parametersContent)
-                    ? parametersContent.FromJson<JObject>()
+                    ? parametersContent.FromJson<Dictionary<string, DeploymentParameter>>()
                     : null;
             }
 
@@ -489,17 +488,24 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
             try
             {
                 var validationResult = this.ValidateDeployment(parameters, deployment);
-
-                return new TemplateValidationInfo(validationResult);
+                switch (validationResult)
+                {
+                    case DeploymentExtended deploymentExtended:
+                        return new TemplateValidationInfo(deploymentExtended.Properties?.Providers?.ToList() ?? new List<Provider>(), new List<ErrorDetail>(), deploymentExtended.Properties?.Diagnostics?.ToList() ?? new List<DeploymentDiagnosticsDefinition>());
+                    case DeploymentValidationError deploymentValidationError:
+                        return new TemplateValidationInfo(new List<Provider>(), new List<ErrorDetail>(deploymentValidationError.Error.AsArray()), new List<DeploymentDiagnosticsDefinition>());
+                    default:
+                        throw new InvalidOperationException($"Received unexpected type {validationResult.GetType()}");
+                }
             }
             catch (Exception ex)
             {
                 var error = HandleError(ex).FirstOrDefault();
-                return new TemplateValidationInfo(new DeploymentValidateResult(error));
+                return new TemplateValidationInfo(new List<Provider>(), error.AsArray().ToList(), new List<DeploymentDiagnosticsDefinition>());
             }
         }
 
-        private DeploymentValidateResult ValidateDeployment(PSDeploymentCmdletParameters parameters, Deployment deployment)
+        private object ValidateDeployment(PSDeploymentCmdletParameters parameters, Deployment deployment)
         {
             var scopedDeployment = new ScopedDeployment { Properties = deployment.Properties, Location = deployment.Location };
 
@@ -512,7 +518,15 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
                     return ResourceManagementClient.Deployments.ValidateAtManagementGroupScope(parameters.ManagementGroupId, parameters.DeploymentName, scopedDeployment);
 
                 case DeploymentScopeType.ResourceGroup:
-                    return ResourceManagementClient.Deployments.Validate(parameters.ResourceGroupName, parameters.DeploymentName, deployment);
+                    if (parameters.AuxTenantHeaders != null)
+                    {
+                        return ResourceManagementClient.Deployments.ValidateWithHttpMessagesAsync(parameters.ResourceGroupName, parameters.DeploymentName, deployment,
+                            customHeaders: ConvertAuxTenantDictionary(parameters.AuxTenantHeaders)).GetAwaiter().GetResult().Body;
+                    }
+                    else
+                    {
+                        return ResourceManagementClient.Deployments.Validate(parameters.ResourceGroupName, parameters.DeploymentName, deployment);
+                    }
 
                 case DeploymentScopeType.Subscription:
                 default:
@@ -520,26 +534,26 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
             }
         }
 
-        private List<ErrorResponse> HandleError(Exception ex)
+        private List<ErrorDetail> HandleError(Exception ex)
         {
             if (ex == null)
             {
                 return null;
             }
 
-            ErrorResponse error = null;
+            ErrorDetail error = null;
             var innerException = HandleError(ex.InnerException);
             if (ex is CloudException)
             {
                 var cloudEx = ex as CloudException;
-                error = new ErrorResponse(cloudEx.Body?.Code, cloudEx.Body?.Message, cloudEx.Body?.Target, innerException);
+                error = new ErrorDetail(cloudEx.Body?.Code, cloudEx.Body?.Message, cloudEx.Body?.Target, innerException);
             }
             else
             {
-                error = new ErrorResponse(null, ex.Message, null, innerException);
+                error = new ErrorDetail(null, ex.Message, null, innerException);
             }
 
-            return new List<ErrorResponse> { error };
+            return new List<ErrorDetail> { error };
 
         }
 
@@ -648,7 +662,15 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
                     break;
 
                 case DeploymentScopeType.ResourceGroup:
-                    ResourceManagementClient.Deployments.BeginCreateOrUpdate(parameters.ResourceGroupName, parameters.DeploymentName, deployment);
+                    if (parameters.AuxTenantHeaders != null)
+                    {
+                        ResourceManagementClient.Deployments.BeginCreateOrUpdateWithHttpMessagesAsync(parameters.ResourceGroupName, parameters.DeploymentName, deployment,
+                            customHeaders: ConvertAuxTenantDictionary(parameters.AuxTenantHeaders)).GetAwaiter().GetResult();
+                    }
+                    else
+                    {
+                        ResourceManagementClient.Deployments.BeginCreateOrUpdate(parameters.ResourceGroupName, parameters.DeploymentName, deployment);
+                    }
                     break;
 
                 case DeploymentScopeType.Subscription:
@@ -656,6 +678,22 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
                     ResourceManagementClient.Deployments.BeginCreateOrUpdateAtSubscriptionScope(parameters.DeploymentName, deployment);
                     break;
             }
+        }
+        /// <summary>
+        /// Conversion method for aux tenant dictionary to put it in correct format for passing as custom header object in sdk.
+        /// </summary>
+        /// <param name="auxTenants">Dictionary of tenant to tokens.</param>
+        private Dictionary<string, List<string>> ConvertAuxTenantDictionary(IDictionary<string, IList<string>> auxTenants)
+        {
+            if (auxTenants == null) return null;
+
+            var headers = new Dictionary<string, List<string>>();
+            foreach (KeyValuePair<string, IList<string>> entry in auxTenants)
+            {
+                headers[entry.Key] = entry.Value.ToList();
+            }
+
+            return headers;
         }
 
         private void RunDeploymentValidation(PSDeploymentCmdletParameters parameters, Deployment deployment)
@@ -916,6 +954,27 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
             else
             {
                 ResourceManagementClient.ResourceGroups.Delete(name);
+            }
+        }
+
+        /// <summary>
+        /// Deletes a given resource group
+        /// </summary>
+        /// <param name="name">The resource group name</param>
+        /// <param name="forceDeletionTypes">
+        /// The resource types you want to force delete. Currently, only the following
+        /// is supported:
+        /// forceDeletionTypes=Microsoft.Compute/virtualMachines,Microsoft.Compute/virtualMachineScaleSets
+        /// </param>
+        public virtual void DeleteResourceGroup(string name, string forceDeletionTypes)
+        {
+            if (!ResourceManagementClient.ResourceGroups.CheckExistence(name))
+            {
+                WriteError(ProjectResources.ResourceGroupDoesntExists);
+            }
+            else
+            {
+                ResourceManagementClient.ResourceGroups.Delete(name, forceDeletionTypes);
             }
         }
 
@@ -1457,7 +1516,7 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
             return ProvisionDeploymentStatus(parameters, deployment);
         }
 
-        private void DisplayInnerDetailErrorMessage(ErrorResponse error)
+        private void DisplayInnerDetailErrorMessage(ErrorDetail error)
         {
             WriteError(string.Format(ErrorFormat, error.Code, error.Message));
             if (error.Details != null)
@@ -1657,10 +1716,11 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
         /// Validates a given deployment.
         /// </summary>
         /// <param name="parameters">The deployment create options</param>
-        /// <returns>The validation errors if there's any, or empty list otherwise.</returns>
-        public virtual List<PSResourceManagerError> ValidateDeployment(PSDeploymentCmdletParameters parameters)
+        /// <returns>The validation info</returns>
+        public virtual TemplateValidationInfo ValidateDeployment(PSDeploymentCmdletParameters parameters)
         {
-            if (parameters.DeploymentName == null){
+            if (parameters.DeploymentName == null)
+            {
                 parameters.DeploymentName = GenerateDeploymentName(parameters);
             }
             Deployment deployment = CreateBasicDeployment(parameters, parameters.DeploymentMode, null);
@@ -1671,7 +1731,7 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
             {
                 WriteVerbose(ProjectResources.TemplateValid);
             }
-            return validationInfo.Errors.Select(e => e.ToPSResourceManagerError()).ToList();
+            return validationInfo;
         }
 
         public string GetDeploymentErrorMessagesWithOperationId(DeploymentOperationErrorInfo errorInfo, string deploymentName = null, string correlationId = null)
@@ -1698,7 +1758,7 @@ namespace Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkClient
                     .AppendLine());
 
             // Add correlationId
-             sb.AppendLine().AppendFormat(ProjectResources.DeploymentCorrelationId, correlationId);
+            sb.AppendLine().AppendFormat(ProjectResources.DeploymentCorrelationId, correlationId);
 
             return sb.ToString();
         }

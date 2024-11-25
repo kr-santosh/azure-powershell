@@ -19,6 +19,143 @@
 -->
 
 ## Upcoming Release
+* Added Diagnostics/Warnings to WhatIf/Validate results for deployments.
+
+## Version 7.7.0
+* Updated Resources SDK to 2024-07-01.
+* Fixed overriding of Bicep parameters in Deployment Stack cmdlets to support SecureString parameters.
+* Updated verbose status log during stack deployments to show deployment status.
+
+## Version 7.6.0
+* Fixed customer-reported `Remove-AzPolicyAssignment` behavior.
+* Added new cmdlets of DataBoundary
+
+## Version 7.5.0
+* Added `ResourceSelector` and `Override` parameters to `New/Update-AzPolicyAssignment`.
+* Added `ResourceSelector` parameter to `New/Update-AzPolicyExemption`.
+* Removed `Experimental` notice from `-WithSource` parameter to `Publish-AzBicepModule`.
+
+## Version 7.4.0
+* Fixed secrets exposure in example documentation.
+* `Remove-AzResourceGroup` - support parameter "[-ForceDeletionType]".
+* Removed specific characters from the codebase to unblock digital signature verification.
+
+## Version 7.3.0
+* Added null check and empty list check to the permissions object in the ToPSRoleDefinition method.
+* Added argument completer for `EnforcementMode`, `IdentityType`
+    * `New-AzPolicyAssignment`
+    * `New-AzPolicyExemption`
+    * `Update-AzPolicyAssignment`
+    * `Update-AzPolicyExemption`
+* Fixed bug deserializing property: `policyDefinitionReferenceId` [#25112] 
+* Fixed overriding of Bicep parameters in Deployment cmdlets to support `SecureString` parameters.
+* Added Test cmdlets for Deployment Stacks.
+
+## Version 7.2.0
+* Fixed `Set-AzPolicyAssignment` loses description and Display Name [#25362]
+* Fixed `New-AzPolicyAssignment` string ID value handling for parameter '-PolicyDefinition'
+* Fixed policy import issue with OP (requires serialization of null values)
+* Fixed '-Scope' parameter handling at resource instance level
+* Fixed error `Get-AzPolicySetDefinition`cannot find matched parameter '-Name' [#25334]
+* Fixed serialization issue with empty arrays in PolicyParameterObject
+* Addressed a rare case where a service principal does not have AppId
+* Introduced validation of MG scoped deployment stack during New/Set cmdlet execution.
+* Updated Remove/New stack cmdlets with warnings for management groups ActionOnUnmanage and removed DeleteResourcesAndResourceGroups as valid ActionOnUnmanage value.
+* Supported get and assign versioned policy definitions and sets
+* Fixed syntax incompatible with windows powershell [#24971]
+* Fixed bug with `Get-AzPolicyExemption` requesting 'ParentResourcePath'
+* Supported `ServiceManagementReference` of Entra App
+    * `Get-AzADApplication`
+    * `New-AzADApplication`
+    * `Update-AzADApplication`
+* Fixed deployment stack validation error surfacing.
+* Fixed default formatting for output objects
+* Removed '-InputObject' for
+    * `Get-AzPolicyAssignment`
+    * `Get-AzPolicyDefinition`
+    * `Get-AzPolicyExemption`
+    * `Get-AzPolicySetDefinition`
+    * `New-AzPolicyAssignment`
+    * `New-AzPolicyDefinition`
+    * `New-AzPolicySetDefinition`
+* Implemented '-Version' and '-ListVersion' parameters on `Get-AzPolicyDefinition` and `Get-AzPolicySetDefinition`
+
+## Version 7.1.0
+* Fixed deployment and deployment stack New/Set cmdlets to fail if template/parameter uri fails to downloads.
+* Deployment Stack cmdlets GA release/updates.
+* [Breaking Change] Redesigned CRUD cmdlets for `PolicyAssignment`, `PolicyDefinition`, `PolicyExemption`, `PolicySetDefinition`. Please see Az 12 migration guide https://learn.microsoft.com/en-us/powershell/azure/migrate-az-12.0.0 for more detail.
+* Added null check to the permissions object in the ToPSRoleDefinition method to return if the whole permissions object array is null.
+
+## Version 6.16.2
+* Introduced secrets detection feature to safeguard sensitive data.
+* Migrated SDK generation from autorest csharp to autorest powershell.
+
+## Version 6.16.1
+* Added null check to the permissions object in the ToPSRoleDefinition method.
+* Added dynamic parameters to stack New/Set cmdlets.
+* Used correct JSON serializer settings for all templates-related deserialization.
+
+## Version 6.16.0
+* Added breaking change warnings for Azure Policy cmdlets.
+* Added `AuxTenant` parameter in `New-AzResourceGroupDeployment`to support cross-tenant deployment.
+* Fixed bug with custom types and deployments whatif. [#13245]
+* Fixed bug with nullable array parameters & outputs.
+* Fixed bug with TemplateParameterUri not downloading parameters correctly.
+
+## Version 6.15.1
+* Fixed deadlock in Bicep CLI execution. [#24133]
+
+## Version 6.15.0
+* Supported `-SkipClientSideScopeValidation` in RoleAssignment and RoleDefinition related commands. [#22473]
+* Updated Bicep build logic to use --stdout flag instead of creating a temporary file on disk.
+* Fixed exception when `-ApiVersion` is specified for `Get-AzResource`, affected by some resource types.
+* Refactored deployment base cmdlet.
+
+## Version 6.14.0
+* Fixed ABAC condition not included in role definition payload. Get-AzRoleDefinition will now contain ABAC Condition and ConditionVersion info when applicable.
+
+## Version 6.13.0
+* Added AppRoleAssigment related commands for service principal. [#18412]
+* Added `-WithSource` parameter to `Publish-AzBicepModule` for publishing source with a module (currently experimental)
+* Supported nullable Bicep parameters in Deployment cmdlets
+* Updated Get-AzRoleDefinition to api-version "2022-05-01-preview" and returns ABAC condition information
+* Added a couple missing validators and completers to Deployment Stack cmdlets.
+
+## Version 6.12.1
+* Used utf8 encoding for reading stdout & stderr when invoking Bicep. [#23246]
+* Fixed regression in `Publish-AzBicepModule` [Azure/bicep/12461](https://github.com/Azure/bicep/issues/12461)
+
+## Version 6.12.0
+* Supported $ref statements for user-defined types in Bicep files.
+* Fixed reporting duplicate warnings when compiling Bicep files.
+* Updated New and Set Management Group cmdlets to allow DeploymentSubscription to be optional.
+* Fixed inexplicable error message when subscription and scope are neither provided in RoleAssignment/RoleDefinition related commands. [#22716]
+
+## Version 6.11.2
+* Fixed bug where `.bicepparam` values were not being correctly serialized in the correct format.
+* Allowed supplemental parameters for Deployments cmdlets when used with `.bicepparam` file.
+
+## Version 6.11.1
+* Reverted commits that caused regression in `Get-AzRoleAssignment`. [#22863]
+
+## Version 6.11.0
+* Supported `TemplateParameterFile` to accept a `.bicepparam` file.
+* Fixed inexplicable error message when subscription and scope are neither provided in `Get-AzRoleDefinition`. [#22716]
+
+## Version 6.10.0
+* Added breaking change warnings for Azure Policy cmdlets.
+* Implemented logic that allows Deployment Stack objects to be piped into Save and Remove Deployment Stack cmdlets.
+
+## Version 6.9.1
+* Fixed the warning prompt condition check in New-Az*DeploymentStack cmdlets.
+
+## Version 6.9.0
+* Fixed the issue that `New-AzRoleAssignment` didn't work without subscription.
+* Added cmdlets for group owner
+    - `Get-AzADGroupOwner`
+    - `New-AzADGroupOwner`
+    - `Remove-AzADGroupOwner`
+* Updated Tags functionality in deployment stacks New and Set cmdlets
 
 ## Version 6.8.0
 * Fixed the incorrect behavior of pagination for `Get-AzTag`

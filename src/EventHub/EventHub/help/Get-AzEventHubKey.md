@@ -15,7 +15,8 @@ Gets an EventHub SAS key
 ### GetExpandedNamespace (Default)
 ```
 Get-AzEventHubKey -Name <String> -NamespaceName <String> -ResourceGroupName <String>
- [-SubscriptionId <String[]>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [<CommonParameters>]
+ [-SubscriptionId <String[]>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait]
+ [<CommonParameters>]
 ```
 
 ### GetExpandedAlias
@@ -216,10 +217,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.EventHub.Models.Api20221001Preview.IAccessKeys
+### Microsoft.Azure.PowerShell.Cmdlets.EventHub.Models.IAccessKeys
 
 ## NOTES
-
-ALIASES
 
 ## RELATED LINKS

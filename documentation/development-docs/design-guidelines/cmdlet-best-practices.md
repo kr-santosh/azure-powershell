@@ -18,6 +18,11 @@ From the [_Strongly Encouraged Development Guidelines_](https://learn.microsoft.
 
 > _Use Pascal case for cmdlet names. In other words, capitalize the first letter of the verb and all terms used in the noun. For example, "Clear-ItemProperty"._
 
+#### Acronyms
+Do capitalize both characters of two-character acronyms. For example, New-Az*VM*, Remove-AzCosmos*DB*Table.
+
+Do capitalize only the first character of acronyms with three or more characters, which aligned with Pascal case. for example, Restart-Az*Vmss*, New-Az*Sql*Database. 
+
 #### Specific Noun and Noun Singularity
 
 From the [_Strongly Encouraged Development Guidelines_](https://learn.microsoft.com/en-us/powershell/scripting/developer/cmdlet/strongly-encouraged-development-guidelines#use-a-specific-noun-for-a-cmdlet-name-sd01):
@@ -81,6 +86,27 @@ public class MySampleCmdlet : MyBaseCmdlet
         }
     }
 }
+```
+
+#### Enumerate Collection When WriteObject()
+
+When returning a collection of objects, the cmdlet should enumerate the collection. This ensures that the objects are written to the pipeline one at a time, which is the expected behavior for PowerShell cmdlets.
+
+There are two ways to accomplish this: (a) call `WriteObject()` for each object in the collection, or (b) use `WriteObject()` with the `enumerateCollection` parameter set to `true`. The `enumerateCollection` parameter is a boolean that, when true, will enumerate the collection and write each object to the pipeline.
+
+The code below shows how this should look in a cmdlet:
+
+```cs
+var resources = Client.ListResources();
+
+// option a: call WriteObject() for each object in the collection
+foreach (var resource in resources)
+{
+    WriteObject(resource);
+}
+
+// option b: use WriteObject() with the enumerateCollection parameter set to true
+WriteObject(resources, true);
 ```
 
 ### `ShouldProcess`

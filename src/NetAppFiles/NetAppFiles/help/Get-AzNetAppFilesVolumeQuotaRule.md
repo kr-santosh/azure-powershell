@@ -15,19 +15,20 @@ Gets details of an Azure NetApp Files (ANF) Volume Quouta Rule.
 ### ByFieldsParameterSet (Default)
 ```
 Get-AzNetAppFilesVolumeQuotaRule -ResourceGroupName <String> -AccountName <String> -PoolName <String>
- [-VolumeName <String>] [-Name <String>] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
-```
-
-### ByResourceIdParameterSet
-```
-Get-AzNetAppFilesVolumeQuotaRule [-Name <String>] -ResourceId <String>
- [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-VolumeName <String>] [-Name <String>] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByParentObjectParameterSet
 ```
 Get-AzNetAppFilesVolumeQuotaRule [-Name <String>] -VolumeObject <PSNetAppFilesVolume>
  [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+```
+
+### ByResourceIdParameterSet
+```
+Get-AzNetAppFilesVolumeQuotaRule -ResourceId <String> [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -79,7 +80,7 @@ The name of the ANF Subvolume
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: ByFieldsParameterSet, ByParentObjectParameterSet
 Aliases: SubvolumeName
 
 Required: False

@@ -19,6 +19,26 @@
 -->
 ## Upcoming Release
 
+## Version 5.0.1
+* Migrated EventHub SDK to generated SDK
+  - Removed "Microsoft.Azure.Management.EventHub" Version "5.0.0" PackageReference
+  - Added EventHub.Management.Sdk ProjectReference
+
+## Version 5.0.0
+* Moved cmdlets to V4
+
+## Version 4.2.2
+* Introduced secrets detection feature to safeguard sensitive data.
+
+## Version 4.2.1
+* Added Breaking Change Warning for parameter datatype change.
+
+## Version 4.2.0
+*  Added parameter `PartitionCount` to `Set-AzEventHub`
+
+## Version 4.1.0
+* Supported EventHub MSI capture feature in cmdlets `New-AzEventHub` and `Set-AzEventHub`
+
 ## Version 4.0.0
 * Aliased `New-AzEventHubNamespace`, `Remove-AzEventHubNamespace`, `Set-AzEventHubNamespace`, `Get-AzEventHubNamespace` with `New-AzEventHubNamespaceV2`, `Remove-AzEventHubNamespaceV2`, `Set-AzEventHubNamespaceV2`, `Get-AzEventHubNamespaceV2` respectively
 * Replaced `New-AzEventHubEncryptionConfig` by `New-AzEventHubKeyVaultPropertiesObject`

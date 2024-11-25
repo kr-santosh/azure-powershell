@@ -1,7 +1,7 @@
 ---
 external help file: Microsoft.Azure.PowerShell.Cmdlets.Compute.dll-Help.xml
 Module Name: Az.Compute
-online version: https://learn.microsoft.com/powershell/module/az.compute/set-azdisksecurityprofile.md
+online version: https://learn.microsoft.com/powershell/module/az.compute/set-azdisksecurityprofile
 schema: 2.0.0
 ---
 
@@ -14,22 +14,23 @@ Set SecurityProfile on managed disk
 
 ```
 Set-AzDiskSecurityProfile [-Disk] <PSDisk> -SecurityType <String> [-SecureVMDiskEncryptionSet <String>]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Set SecurityProfile on managed disk
+Set the SecurityProfile on managed disks.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
 $diskconfig = New-AzDiskConfig -DiskSizeGB 10 -AccountType PremiumLRS -OsType Windows -CreateOption FromImage;
-$image = '/subscriptions/0000000-0000-0000-0000-000000000000/resourceGroups/ResourceGroup01/providers/Microsoft.Compute/images/TestImage123';        
+$image = '/subscriptions/0000000-0000-0000-0000-000000000000/resourceGroups/ResourceGroup01/providers/Microsoft.Compute/images/TestImage123';
 $diskconfig = Set-AzDiskImageReference -Disk $diskconfig -Id $image -Lun 0;
 $diskconfig = Set-AzDiskSecurityProfile -Disk $diskconfig -SecurityType "TrustedLaunch";
-New-AzDisk -ResourceGroupName 'ResourceGroup01' -DiskName 'Disk01' -Disk $diskconfig;
-#$disk.Properties.SecurityProfile.SecurityType == "TrustedLaunch";
+$disk = New-AzDisk -ResourceGroupName 'ResourceGroup01' -DiskName 'Disk01' -Disk $diskconfig;
+# $disk.Properties.SecurityProfile.SecurityType == "TrustedLaunch";
 ```
 
 Customers can set the SecurityType of managed Disks.
@@ -40,9 +41,9 @@ $Location = "northeurope";
 $KeyVaultName = "val" + $rgname;
 $KeyName = "key" + $rgname;
 $DesName= "des" + $rgname;
-$KeySize = 3072; 
+$KeySize = 3072;
 
-$SecurePassword = "Password" | ConvertTo-SecureString -AsPlainText -Force;  
+$SecurePassword = ConvertTo-SecureString -String "****" -AsPlainText -Force;
 $User = "Username";
 $Cred = New-Object System.Management.Automation.PSCredential ($User, $SecurePassword);
 
@@ -50,7 +51,7 @@ New-AzKeyVault -Name $KeyVaultName -Location $Location -ResourceGroupName $Resou
 
 # Add Key vault Key
 Add-AzKeyVaultKey -VaultName $KeyVaultName -Name $KeyName -Size $KeySize -KeyOps wrapKey,unwrapKey -KeyType RSA -Destination HSM -Exportable -UseDefaultCVMPolicy;
-        
+
 # Capture Keyvault and key details
 $KeyVaultId = (Get-AzKeyVault -VaultName $KeyVaultName -ResourceGroupName $ResourceGroupName).ResourceId;
 $KeyUrl = (Get-AzKeyVaultKey -VaultName $KeyVaultName -KeyName $KeyName).Key.Kid;
@@ -64,7 +65,7 @@ $diskencset = Get-AzDiskEncryptionSet -ResourceGroupName $ResourceGroupName -Nam
 # Assign DES Access Policy to key vault
 $desIdentity = (Get-AzDiskEncryptionSet -Name $DesName -ResourceGroupName $ResourceGroupName).Identity.PrincipalId;
 Set-AzKeyVaultAccessPolicy -VaultName $KeyVaultName -ResourceGroupName $ResourceGroupName -ObjectId $desIdentity -PermissionsToKeys wrapKey,unwrapKey,get -BypassObjectIdValidation;
-        
+
 $diskSecurityType = "ConfidentialVM_DiskEncryptedWithCustomerKey";
 $diskName = "diskname";
 $diskconfig = New-AzDiskConfig -AccountType Premium_LRS -OsType Windows -CreateOption FromImage -Location $Location;
@@ -74,6 +75,22 @@ New-AzDisk -ResourceGroupName $ResourceGroupName -DiskName $diskName -Disk $disk
 $disk = Get-AzDisk -ResourceGroupName $ResourceGroupName -DiskName $diskName;
 # Verify the SecurityType value.
 # $disk.Properties.SecurityProfile.SecurityType returns "ConfidentialVM";
+```
+
+### Example 3: Set the SecurityType to Standard to avoid TrustedLaunch defaulting.
+```powershell
+$rgname = <Resource Group Name>;
+$loc = <Azure Region>;
+New-AzResourceGroup -Name $rgname -Location $loc -Force;
+$securityTypeStnd = "Standard";
+
+# Standard SecurityType
+$diskconfig = New-AzDiskConfig -Location $loc -DiskSizeGB 1 -AccountType "Premium_LRS" -OsType "Windows" -CreateOption "Empty" -HyperVGeneration "V1";
+$diskname = "diskstnd" + $rgname;
+$diskconfig = Set-AzDiskSecurityProfile -Disk $diskconfig -SecurityType $securityTypeStnd;
+$diskPr = New-AzDisk -ResourceGroupName $rgname -DiskName $diskname -Disk $diskconfig;
+$disk = Get-AzDisk -ResourceGroupName $rgname -DiskName $diskname;
+# Verify $disk.SecurityProfile is null;
 ```
 
 ## PARAMETERS

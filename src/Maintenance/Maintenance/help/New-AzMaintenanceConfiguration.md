@@ -13,14 +13,19 @@ Create or Update configuration record
 ## SYNTAX
 
 ```
-New-AzMaintenanceConfiguration [-ResourceGroupName] <string> [-Name] <string> [-Location] <string> [-Tag <hashtable>]
-    [-ExtensionProperty <hashtable>] [-MaintenanceScope <string>] [-StartDateTime <string>] [-ExpirationDateTime <string>]
-    [-Timezone <string>] [-Duration <timespan>] [-Visibility <string>] [-RecurEvery <string>]
-    [-LinuxParameterPackageNameMaskToInclude <HashSet[string]>] [-LinuxParameterPackageNameMaskToExclude <HashSet[string]>]
-    [-LinuxParameterClassificationToInclude <HashSet[string]>] [-WindowParameterKbNumberToInclude <HashSet[string]>]
-    [-WindowParameterKbNumberToExclude <HashSet[string]>] [-WindowParameterClassificationToInclude <HashSet[string]>]
-    [-WindowParameterExcludeKbRequiringReboot <bool>] [-PreTask <string>] [-PostTask <string>] [-InstallPatchRebootSetting
-    <string>] [-AsJob] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AzMaintenanceConfiguration [-ResourceGroupName] <String> [-Name] <String> [-Location] <String>
+ [-Tag <Hashtable>] [-ExtensionProperty <Hashtable>] [-MaintenanceScope <String>] [-StartDateTime <String>]
+ [-ExpirationDateTime <String>] [-Timezone <String>] [-Duration <TimeSpan>] [-Visibility <String>]
+ [-RecurEvery <String>]
+ [-LinuxParameterPackageNameMaskToInclude <System.Collections.Generic.HashSet`1[System.String]>]
+ [-LinuxParameterPackageNameMaskToExclude <System.Collections.Generic.HashSet`1[System.String]>]
+ [-LinuxParameterClassificationToInclude <System.Collections.Generic.HashSet`1[System.String]>]
+ [-WindowParameterKbNumberToInclude <System.Collections.Generic.HashSet`1[System.String]>]
+ [-WindowParameterKbNumberToExclude <System.Collections.Generic.HashSet`1[System.String]>]
+ [-WindowParameterClassificationToInclude <System.Collections.Generic.HashSet`1[System.String]>]
+ [-WindowParameterExcludeKbRequiringReboot <Boolean>] [-InstallPatchRebootSetting <String>] [-PreTask <String>]
+ [-PostTask <String>] [-AsJob] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -51,6 +56,37 @@ Type                : Microsoft.Maintenance/maintenanceConfigurations
 ```
 
 Create a maintenance configuration with scope Host
+
+### Example 2
+```powershell
+New-AzMaintenanceConfiguration -ResourceGroupName sample-rg  -Name PatchSchedule -MaintenanceScope "InGuestPatch" -Location westeurope -Timezone "UTC" -StartDateTime "2025-10-09 12:30" -Duration "3:00" -RecurEvery "Day" -LinuxParameterClassificationToInclude @('Other') -LinuxParameterPackageNameMaskToInclude @('lib', 'kernel') -LinuxParameterPackageNameMaskToExclude @('curl', 'vim') -WindowParameterClassificationToInclude @('Critical', 'Security') -WindowParameterKbNumberToInclude @('5035849', '5035857') -WindowParameterKbNumberToExclude @('5034439')  -ExtensionProperty @{inGuestPatchMode="User"} -InstallPatchRebootSetting "IfRequired"  -Debug
+```
+
+```output
+Location                               : westeurope
+Tags                                   : {"resource":"test"}
+ExtensionProperties                    : {"inGuestPatchMode":"User"}
+MaintenanceScope                       : InGuestPatch
+Id                                     : 
+/subscriptions/783fd652-64f3-4680-81e9-0b978c542005/resourcegroups/sample-rg/providers/Microsoft.Maintenance/maintenanceConfigurations/PatchSchedule
+Name                                   : PatchSchedule
+Type                                   : Microsoft.Maintenance/maintenanceConfigurations
+StartDateTime                          : 2025-10-09 12:30
+Duration                               : 03:00
+Timezone                               : UTC
+Visibility                             : Custom
+RecurEvery                             : Day
+LinuxParameterClassificationToInclude  : 
+LinuxParameterPackageNameMaskToExclude : 
+LinuxParameterPackageNameMaskToInclude : apt
+                                         httpd
+WindowParameterKbNumberToInclude       : 
+WindowParameterKbNumberToExclude       : 
+WindowParameterClassificationToInclude : 
+InstallPatchRebootSetting              : IfRequired
+```
+
+Create a maintenance configuration with scope InGuest
 
 ## PARAMETERS
 
@@ -134,7 +170,7 @@ Accept wildcard characters: False
 Install Patch Reboot Option. Allowed values Never, IfRequired, Always
 
 ```yaml
-Type: string
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -149,7 +185,7 @@ Accept wildcard characters: False
 List of linux patch classifications
 
 ```yaml
-Type: HashSet[string]
+Type: System.Collections.Generic.HashSet`1[System.String]
 Parameter Sets: (All)
 Aliases:
 
@@ -164,7 +200,7 @@ Accept wildcard characters: False
 List of packages to exclude during vm patch operation
 
 ```yaml
-Type: HashSet[string]
+Type: System.Collections.Generic.HashSet`1[System.String]
 Parameter Sets: (All)
 Aliases:
 
@@ -179,7 +215,7 @@ Accept wildcard characters: False
 List of packages to include during vm patch operation
 
 ```yaml
-Type: HashSet[string]
+Type: System.Collections.Generic.HashSet`1[System.String]
 Parameter Sets: (All)
 Aliases:
 
@@ -235,11 +271,11 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -PreTask
-List of tasks executed before schedule. e.g. [{'source' :'runbook', 'taskScope': 'Resource', 'parameters': { 'arg1': 'value1'}}]. This parameter is used to specify a command or script that should be run before the maintenance tasks are performed. This can be used to perform any necessary preparations or cleanup actions before the maintenance tasks are run. This parameter accepts a string value that specifies the command or script to be run. The command or script can be specified as a simple string or as an array of strings. If an array of strings is specified, each element in the array will be treated as a separate command or script.
+### -PostTask
+List of tasks executed after schedule. [{'source' :'runbook', 'taskScope': 'Resource', 'parameters': { 'arg1': 'value1'}}]. This parameter is used to specify a command or script that should be run after the maintenance tasks are performed. This can be used to perform any necessary follow-up actions after the maintenance tasks are completed. This parameter accepts a string value that specifies the command or script to be run. The command or script can be specified as a simple string or as an array of strings. If an array of strings is specified, each element in the array will be treated as a separate command or script.
 
 ```yaml
-Type: string
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -250,11 +286,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PostTask
-List of tasks executed after schedule. e.g. [{'source' :'runbook', 'taskScope': 'Resource', 'parameters': { 'arg1': 'value1'}}]. This parameter is used to specify a command or script that should be run after the maintenance tasks are performed. This can be used to perform any necessary follow-up actions after the maintenance tasks are completed. This parameter accepts a string value that specifies the command or script to be run. The command or script can be specified as a simple string or as an array of strings. If an array of strings is specified, each element in the array will be treated as a separate command or script.
+### -PreTask
+List of tasks executed before schedule. e.g. [{'source' :'runbook', 'taskScope': 'Global', 'parameters': { 'arg1': 'value1'}}]. This parameter is used to specify a command or script that should be run before the maintenance tasks are performed. This can be used to perform any necessary preparations or cleanup actions before the maintenance tasks are run. This parameter accepts a string value that specifies the command or script to be run. The command or script can be specified as a simple string or as an array of strings. If an array of strings is specified, each element in the array will be treated as a separate command or script.
 
 ```yaml
-Type: string
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -359,7 +395,7 @@ Accept wildcard characters: False
 List of windows patch classification
 
 ```yaml
-Type: HashSet[string]
+Type: System.Collections.Generic.HashSet`1[System.String]
 Parameter Sets: (All)
 Aliases:
 
@@ -374,7 +410,7 @@ Accept wildcard characters: False
 Exclude KBs which require reboot
 
 ```yaml
-Type: bool
+Type: System.Nullable`1[System.Boolean]
 Parameter Sets: (All)
 Aliases:
 
@@ -389,7 +425,7 @@ Accept wildcard characters: False
 List of KBs to exclude during vm patch operation
 
 ```yaml
-Type: HashSet[string]
+Type: System.Collections.Generic.HashSet`1[System.String]
 Parameter Sets: (All)
 Aliases:
 
@@ -404,7 +440,7 @@ Accept wildcard characters: False
 List of KBs to include during vm patch operation
 
 ```yaml
-Type: HashSet[string]
+Type: System.Collections.Generic.HashSet`1[System.String]
 Parameter Sets: (All)
 Aliases:
 

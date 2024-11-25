@@ -254,6 +254,22 @@ namespace Microsoft.Azure.Commands.NetAppFiles.Models
         public int? CoolnessPeriod { get; set; }
 
         /// <summary>
+        /// Gets or sets CoolAccessRetrievalPolicy
+        /// </summary>
+        /// <value>
+        /// CoolAccessRetrievalPolicy determines the data retrieval behavior from the
+        /// cool tier to standard storage based on the read pattern for cool access
+        /// enabled volumes. The possible values for this field are:
+        /// Default - Data will be pulled from cool tier to standard storage on random
+        /// reads. This policy is the default.
+        /// OnRead - All client-driven data read is pulled from cool tier to standard
+        /// storage on both sequential and random reads.
+        /// Never - No client-driven data is pulled from cool tier to standard storage.
+        /// Possible values include: 'Default', 'OnRead', 'Never'
+        /// </value>
+        public string CoolAccessRetrievalPolicy { get; set; }
+
+        /// <summary>
         /// Gets or sets UnixPermission
         /// </summary>
         /// <value>
@@ -311,6 +327,15 @@ namespace Microsoft.Azure.Commands.NetAppFiles.Models
         /// Basic network, or Standard features available to the volume (Basic, Standard).
         /// </value>
         public string NetworkFeatures { get; set; }
+
+        /// <summary>
+        /// Gets or sets effectiveNetworkFeatures
+        /// </summary>
+        /// <value>
+        /// The effective value of the network features type available to the volume,
+        /// or current effective state of update. Possible values include: &#39;Basic&#39;, &#39;Standard&#39;, &#39;Basic_Standard&#39;,
+        /// </value>
+        public string EffectiveNetworkFeatures { get; set; }
 
         /// <summary>
         /// Gets or sets NetworkSiblingSetId
@@ -472,10 +497,27 @@ namespace Microsoft.Azure.Commands.NetAppFiles.Models
 
         /// <summary>
         /// Gets or sets IsLargeVolume 
-        /// </summary>        
+        /// </summary>
         /// <remarks>
         /// If enabled (true) Specifies whether volume is a Large Volume or Regular Volume. Defaults to false
         /// </remarks>
-        public bool? IsLargeVolume { get; set; }        
+        public bool? IsLargeVolume { get; set; }
+
+        /// <summary>
+        /// Gets or sets ActualThroughputMibps
+        /// </summary>        
+        /// <remarks>
+        /// Actual throughput in MiB/s for auto qosType volumes calculated
+        /// based on size and serviceLevel
+        /// </remarks>
+        public double? ActualThroughputMibps { get; set; }
+
+        /// <summary>
+        /// Gets originating Resource Id
+        /// </summary>
+        /// <remarks>
+        /// Id of the snapshot or backup that the volume is restored from.
+        /// </remarks>
+        public string OriginatingResourceId { get; set; }
     }
 }

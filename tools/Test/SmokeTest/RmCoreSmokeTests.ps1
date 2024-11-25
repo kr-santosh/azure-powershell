@@ -108,14 +108,14 @@ $resourceTestCommands = @(
     @{Name = "Az.ContainerRegistry [DataPlane]"; Command = {Get-Command Get-AzContainerRegistryManifest}},
     @{Name = "Az.DataBoxEdge";                Command = {Get-AzDataBoxEdgeDevice -ResourceGroupName $resourceGroupName}},
     @{Name = "Az.Databricks";                 Command = {Get-AzDatabricksWorkspace -ResourceGroupName $resourceGroupName}},
-    @{Name = "Az.DataFactory [V1]";           Command = {Get-AzDataFactory -ResourceGroupName $resourceGroupName}},
+    # The resource type could not be found in the namespace 'Microsoft.DataFactory' for api version '2015-10-01'.
+    # @{Name = "Az.DataFactory [V1]";           Command = {Get-AzDataFactory -ResourceGroupName $resourceGroupName}},
     @{Name = "Az.DataFactoryV2 [V2]";         Command = {Get-AzDataFactoryV2}},
     @{Name = "Az.DataLakeAnalytics";          Command = {Get-AzDataLakeAnalyticsAccount}},
-    @{Name = "Az.DataLakeStore [MngmPlane]";  Command = {Get-AzDataLakeStoreAccount}},
+    # The resource type could not be found in the namespace 'Microsoft.DataLakeStore' for api version '2016-11-01'.
+    # @{Name = "Az.DataLakeStore [MngmPlane]";  Command = {Get-AzDataLakeStoreAccount}},
     @{Name = "Az.DataLakeStore [DataPlane]";  Command = {Get-Command New-AzDataLakeStoreItem}},
     @{Name = "Az.DataShare";                  Command = {Get-AzDataShareAccount -ResourceGroupName $resourceGroupName}},
-    # Waiting for an issue fix: https://github.com/Azure/azure-powershell/issues/13522#issuecomment-728659457
-    # @{Name = "Az.DeploymentManager";          Command = {try {Get-AzDeploymentManagerArtifactSource -ResourceGroupName $resourceGroupName }catch {if ($_.ToString() -notlike "*not found*") {throw $_}}}},
     @{Name = "Az.DesktopVirtualization";      Command = {Get-AzWvdApplicationGroup -ResourceGroupName $resourceGroupName}},
     @{Name = "Az.Dns";                        Command = {Get-AzDnsZone}},
     @{Name = "Az.EventGrid";                  Command = {Get-AzEventGridTopic}},
@@ -130,7 +130,8 @@ $resourceTestCommands = @(
     @{Name = "Az.KeyVault [DataPlane]";       Command = {Get-Command Get-AzKeyVaultKey}},
     @{Name = "Az.Kusto";                      Command = {Get-AzKustoCluster}},
     @{Name = "Az.LogicApp";                   Command = {Get-AzIntegrationAccount}},
-    @{Name = "Az.MachineLearning";            Command = {Get-AzMlWebService}},
+    # The request uri is invalid. The requested path '/subscriptions/$subId/providers/Microsoft.MachineLearning/webServices' is not found
+    # @{Name = "Az.MachineLearning";            Command = {Get-AzMlWebService}},
     @{Name = "Az.Maintenance";                Command = {Get-AzMaintenanceConfiguration}},
     @{Name = "Az.ManagedServices";            Command = {Get-AzManagedServicesAssignment}},
     @{Name = "Az.Media";                      Command = {Get-AzMediaService -ResourceGroupName $resourceGroupName}},
@@ -141,7 +142,6 @@ $resourceTestCommands = @(
     @{Name = "Az.OperationalInsights [DataPlane]"; Command = {Get-Command Invoke-AzOperationalInsightsQuery}},
     @{Name = "Az.PolicyInsights";             Command = {Get-AzPolicyEvent -Top 10}}, # without -Top service may return 400: ResponseTooLarge
     @{Name = "Az.PowerBIEmbedded";            Command = {Get-AzPowerBIEmbeddedCapacity}},
-    @{Name = "Az.PowerBIUEmbedded";           Command = {Get-AzPowerBIWorkspaceCollection}},
     @{Name = "Az.PrivateDns";                 Command = {Get-AzPrivateDnsZone}},
     @{Name = "Az.RecoveryServices";           Command = {Get-AzRecoveryServicesVault}},
     @{Name = "Az.RedisCache";                 Command = {Get-AzRedisCache}},

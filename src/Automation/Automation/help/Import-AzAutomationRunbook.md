@@ -221,11 +221,13 @@ Accept wildcard characters: False
 Specifies the type of runbook that this cmdlet creates.
 Valid values are:
 - PowerShell
+- PowerShell72
 - GraphicalPowerShell
 - PowerShellWorkflow
 - GraphicalPowerShellWorkflow
 - Graph
 - Python2
+- Python3
 The value Graph is obsolete.
 It is equivalent to GraphicalPowerShellWorkflow.
 
@@ -233,7 +235,7 @@ It is equivalent to GraphicalPowerShellWorkflow.
 Type: System.String
 Parameter Sets: (All)
 Aliases:
-Accepted values: PowerShell, GraphicalPowerShell, PowerShellWorkflow, GraphicalPowerShellWorkflow, Graph, Python2
+Accepted values: PowerShell, GraphicalPowerShell, PowerShellWorkflow, GraphicalPowerShellWorkflow, Graph, Python2, Python3, Powershell72
 
 Required: True
 Position: Named

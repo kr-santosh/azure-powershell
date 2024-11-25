@@ -1,4 +1,4 @@
-﻿// ----------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------
 //
 // Copyright Microsoft Corporation
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@ using Microsoft.Azure.Commands.Common.Exceptions;
 using Microsoft.Azure.Commands.Profile.Models;
 using Microsoft.Azure.Commands.ResourceManager.Common;
 using Microsoft.Azure.PowerShell.Common.Config;
+using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,6 +26,7 @@ using System.Management.Automation;
 namespace Microsoft.Azure.Commands.Common.Authentication.Config
 {
     [Cmdlet("Update", AzureRMConstants.AzureRMPrefix + "Config", SupportsShouldProcess = true)]
+    [Alias("Set-AzConfig")]
     [OutputType(typeof(PSConfig))]
     public class UpdateConfigCommand : ConfigCommandBase, IDynamicParameters
     {

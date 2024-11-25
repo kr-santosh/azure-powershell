@@ -17,7 +17,35 @@
     * Overview of change #1
         - Additional information about change #1
 -->
+
 ## Upcoming Release
+
+## Version 6.3.0
+* Changed the type of parameter `-IdentityId` in command `Update-AzHDInsightCluster` from `string`  to `string[]`.
+
+## Version 6.2.1
+* Fixed a bug: Error occurs when setting the same assigned identity for storage and esp configurations.
+
+## Version 6.2.0
+* Added new feature: Enable adding public IP tags to clusters. 
+* Added commands for manage Azure Monitor Agent
+    - Command `Get-AzHDInsightAzureMonitorAgent` to get the Azure Monitor Agent status of HDInsight cluster.
+    - Command `Enable-AzHDInsightAzureMonitorAgent` to enable the Azure Monitor Agent in HDInsight cluster.
+    - Command `Disable-AzHDInsightAzureMonitorAgent` to disable the Azure Monitor Agent in HDInsight cluster.
+    - Command `Update-AzHDInsightCluster` to update tags or identity for HDInsight cluster.
+
+## Version 6.1.0
+* Added new feature: Enable secure channels while creating a new cluster.
+* Fixed a bug: When creating a cluster without passing the version, the default version cannot be set to 'default'.
+
+## Version 6.0.2
+* Fixed a bug where the get cluster command does not display abfss storage information.
+
+## Version 6.0.1
+* This change adds some warning messages to the incoming break changes for the next version, with detailed information as follows:
+  * Added warning message for planning to replace the type of property `DiskEncryption` of type `Microsoft.Azure.Commands.HDInsight.Models.AzureHDInsightCluster` from `Microsoft.Azure.Management.HDInsight.Models.DiskEncryptionProperties` to `Azure.ResourceManager.HDInsight.Models.HDInsightDiskEncryptionProperties`.
+  * Added warning message for planning to replace the type of property `WorkerNodeDataDisksGroups` of type `Microsoft.Azure.Commands.HDInsight.Models.AzureHDInsightCluster`  from `List<Microsoft.Azure.Management.HDInsight.Models.DataDisksGroups>` to `List<Azure.ResourceManager.HDInsight.Models.HDInsightClusterDataDiskGroup>`.
+  * Added warning message for planning to replace the parameter `NodeType` type from `Microsoft.Azure.Management.HDInsight.Models.ClusterNodeType` to `Microsoft.Azure.Commands.HDInsight.Models.Management.RuntimeScriptActionClusterNodeType`.
 
 ## Version 6.0.0
 * Breaking Change:

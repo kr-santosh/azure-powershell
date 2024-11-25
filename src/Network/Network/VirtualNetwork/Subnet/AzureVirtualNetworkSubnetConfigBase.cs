@@ -98,6 +98,18 @@ namespace Microsoft.Azure.Commands.Network
         [Parameter(
             Mandatory = false,
             ValueFromPipelineByPropertyName = true,
+            HelpMessage = "NetworkIdentifier Value for ServiceEndpoint")]
+        public PSResourceId NetworkIdentifier { get; set; }
+
+        [Parameter(
+            Mandatory = false,
+            ValueFromPipelineByPropertyName = true,
+            HelpMessage = "Service Endpoint with NetworkIdentifier Value")]
+        public PSServiceEndpoint[] ServiceEndpointConfig { get; set; }
+
+        [Parameter(
+            Mandatory = false,
+            ValueFromPipelineByPropertyName = true,
             HelpMessage = "Service Endpoint Policies")]
         public PSServiceEndpointPolicy[] ServiceEndpointPolicy { get; set; }
 
@@ -126,5 +138,11 @@ namespace Microsoft.Azure.Commands.Network
             ValueFromPipelineByPropertyName = true,
             HelpMessage = "IpAllocation")]
         public PSIpAllocation[] IpAllocation { get; set; }
+
+        [Parameter(
+            Mandatory = false,
+            ValueFromPipelineByPropertyName = true,
+            HelpMessage = "Default outbound connectivity for all VMs in the subnet")]
+        public bool? DefaultOutboundAccess { get; set; }
     }
 }

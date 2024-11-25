@@ -84,10 +84,11 @@ namespace Microsoft.Azure.Commands.Sql.Server.Adapter
         /// <param name="resourceGroupName">The name of the resource group</param>
         /// <param name="serverName">The name of the server</param>
         /// <param name="expand">The child resources to include in the response.</param>
+        /// <param name="subscriptionId">The subscription id of the server.</param>
         /// <returns>The server</returns>
-        public AzureSqlServerModel GetServer(string resourceGroupName, string serverName, string expand = null)
+        public AzureSqlServerModel GetServer(string resourceGroupName, string serverName, string expand = null, string subscriptionId = null)
         {
-            var resp = Communicator.Get(resourceGroupName, serverName, expand);
+            var resp = Communicator.Get(resourceGroupName, serverName, expand, subscriptionId);
             return CreateServerModelFromResponse(resp);
         }
 
@@ -232,7 +233,7 @@ namespace Microsoft.Azure.Commands.Sql.Server.Adapter
 
             Guid? objectId = input.Sid;
             string displayName = input.Login;
-            bool? adOnlyAuth = input.AzureADOnlyAuthentication;
+            bool? adOnlyAuth = input.AzureAdOnlyAuthentication;
 
             // Gets the default Tenant id for the subscriptions
             Guid tenantId = GetTenantId();
@@ -309,7 +310,7 @@ namespace Microsoft.Azure.Commands.Sql.Server.Adapter
                     Sid = new Guid(app.AppId),
                     TenantId = tenantId,
                     PrincipalType = "Application",
-                    AzureADOnlyAuthentication = adOnlyAuth
+                    AzureAdOnlyAuthentication = adOnlyAuth
                 };
             }
 
@@ -321,7 +322,7 @@ namespace Microsoft.Azure.Commands.Sql.Server.Adapter
                     Sid = new Guid(group.Id),
                     TenantId = tenantId,
                     PrincipalType = "Group",
-                    AzureADOnlyAuthentication = adOnlyAuth
+                    AzureAdOnlyAuthentication = adOnlyAuth
                 };
             }
 
@@ -385,7 +386,7 @@ namespace Microsoft.Azure.Commands.Sql.Server.Adapter
                     Sid = new Guid(obj.Id),
                     TenantId = tenantId,
                     PrincipalType = "User",
-                    AzureADOnlyAuthentication = adOnlyAuth
+                    AzureAdOnlyAuthentication = adOnlyAuth
                 };
             }
         }

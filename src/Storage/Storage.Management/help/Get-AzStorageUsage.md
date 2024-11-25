@@ -14,7 +14,8 @@ Gets the Storage resource usage of the current subscription.
 ## SYNTAX
 
 ```
-Get-AzStorageUsage -Location <String> [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+Get-AzStorageUsage -Location <String> [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,6 +27,7 @@ The **Get-AzStorageUsage** cmdlet gets the resource usage for Azure Storage for 
 ```powershell
 Get-AzStorageUsage -Location 'West US'
 ```
+
 ```output
 LocalizedName : Storage Accounts
 Name          : StorageAccounts
@@ -70,7 +72,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
@@ -85,5 +87,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## RELATED LINKS
 
 [Azure Storage Manager Cmdlets](./Az.Storage.md)
-
-

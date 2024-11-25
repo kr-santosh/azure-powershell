@@ -23,35 +23,40 @@ Test-AzManagementGroupDeployment [-Name <String>] -ManagementGroupId <String> -L
 ```
 Test-AzManagementGroupDeployment [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-QueryString <String>] -TemplateParameterObject <Hashtable> -TemplateObject <Hashtable>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateFileAndParameterObject
 ```
 Test-AzManagementGroupDeployment [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-QueryString <String>] -TemplateParameterObject <Hashtable> -TemplateFile <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateUriAndParameterObject
 ```
 Test-AzManagementGroupDeployment [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-QueryString <String>] -TemplateParameterObject <Hashtable> -TemplateUri <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateSpecResourceIdAndParamsObject
 ```
 Test-AzManagementGroupDeployment [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-QueryString <String>] -TemplateParameterObject <Hashtable> -TemplateSpecId <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateObjectAndParameterFile
 ```
 Test-AzManagementGroupDeployment [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-QueryString <String>] -TemplateParameterFile <String> -TemplateObject <Hashtable>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateFileAndParameterFile
@@ -72,14 +77,23 @@ Test-AzManagementGroupDeployment [-Name <String>] -ManagementGroupId <String> -L
 ```
 Test-AzManagementGroupDeployment [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-QueryString <String>] -TemplateParameterFile <String> -TemplateSpecId <String>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
+```
+
+### ByParameterFileWithNoTemplate
+```
+Test-AzManagementGroupDeployment [-Name <String>] -ManagementGroupId <String> -Location <String>
+ [-QueryString <String>] -TemplateParameterFile <String> [-SkipTemplateParameterPrompt] [-Pre]
+ [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
 ```
 
 ### ByTemplateObjectAndParameterUri
 ```
 Test-AzManagementGroupDeployment [-Name <String>] -ManagementGroupId <String> -Location <String>
  [-QueryString <String>] -TemplateParameterUri <String> -TemplateObject <Hashtable>
- [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-SkipTemplateParameterPrompt] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateFileAndParameterUri
@@ -144,6 +158,14 @@ Test-AzManagementGroupDeployment -ManagementGroupId "myMG" -Location "West US" -
 ```
 
 This command tests a deployment at the management group "myMG" using the an in-memory hashtable created from the given template file and a parameter file.
+
+### Example 3: Use a .bicepparam file to validate a deployment
+```powershell
+Test-AzManagementGroupDeployment -ManagementGroupId "myManagementGroup" -Location "West US" -TemplateParameterFile "./parameters.bicepparam"
+```
+
+This command validates the deployment at the management group scope by using a .bicepparam file on disk.
+The command uses the *TemplateParameterFile* parameter to specify a .bicepparam file.
 
 ## PARAMETERS
 
@@ -285,11 +307,11 @@ Accept wildcard characters: False
 ```
 
 ### -TemplateParameterFile
-A file that has the template parameters.
+Parameter file to use for the template.
 
 ```yaml
 Type: System.String
-Parameter Sets: ByTemplateObjectAndParameterFile, ByTemplateFileAndParameterFile, ByTemplateUriAndParameterFile, ByTemplateSpecResourceIdAndParams
+Parameter Sets: ByTemplateObjectAndParameterFile, ByTemplateFileAndParameterFile, ByTemplateUriAndParameterFile, ByTemplateSpecResourceIdAndParams, ByParameterFileWithNoTemplate
 Aliases:
 
 Required: True

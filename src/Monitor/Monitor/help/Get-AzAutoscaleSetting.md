@@ -14,7 +14,8 @@ Gets an autoscale setting
 
 ### List1 (Default)
 ```
-Get-AzAutoscaleSetting [-SubscriptionId <String[]>] [-DefaultProfile <PSObject>] [<CommonParameters>]
+Get-AzAutoscaleSetting [-SubscriptionId <String[]>] [-DefaultProfile <PSObject>]
+ [<CommonParameters>]
 ```
 
 ### Get
@@ -31,7 +32,8 @@ Get-AzAutoscaleSetting -ResourceGroupName <String> [-SubscriptionId <String[]>] 
 
 ### GetViaIdentity
 ```
-Get-AzAutoscaleSetting -InputObject <IAutoscaleIdentity> [-DefaultProfile <PSObject>] [<CommonParameters>]
+Get-AzAutoscaleSetting -InputObject <IAutoscaleIdentity> [-DefaultProfile <PSObject>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -152,18 +154,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.PowerShell.Cmdlets.Monitor.Autoscale.Models.Api20221001.IAutoscaleSettingResource
 
 ## NOTES
-
-ALIASES
-
-COMPLEX PARAMETER PROPERTIES
-
-To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
-
-
-`INPUTOBJECT <IAutoscaleIdentity>`: Identity Parameter
-  - `[AutoscaleSettingName <String>]`: The autoscale setting name.
-  - `[Id <String>]`: Resource identity path
-  - `[ResourceGroupName <String>]`: The name of the resource group. The name is case insensitive.
-  - `[SubscriptionId <String>]`: The ID of the target subscription.
 
 ## RELATED LINKS

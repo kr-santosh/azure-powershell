@@ -32,15 +32,15 @@ namespace Microsoft.WindowsAzure.Build.Tasks
     public class CIFilterTask : Task
     {
         /// <summary>
-        /// Gets or sets the files changed in a given pull request.
+        /// Gets or set the OutputFile, store FilesChanged.txt in 'artifacts' folder
         /// </summary>
         [Required]
-        public string[] FilesChanged { get; set; }
+        public string FilesChangedFile { get; set; }
 
         /// <summary>
-        /// Gets or set the TargetModule, e.g. Storage
+        /// Changed File List
         /// </summary>
-        public string TargetModule { get; set; }
+        private string[] FilesChanged { get; set; }
 
         /// <summary>
         /// Gets or set the Mode, e.g. Release
@@ -54,11 +54,14 @@ namespace Microsoft.WindowsAzure.Build.Tasks
         [Required]
         public string CsprojMapFilePath { get; set; }
 
-        /// <summary>
-        /// Gets or sets the test assemblies output produced by the task.
-        /// </summary>
         [Output]
-        public CIFilterTaskResult FilterTaskResult { get; set; }
+        public string[] BuildCsprojList { get; set; }
+
+        [Output]
+        public string[] TestCsprojList { get; set; }
+
+        [Output]
+        public string SubTasks { get; set; }
 
         private const string TaskMappingConfigName = ".ci-config.json";
 
@@ -70,6 +73,7 @@ namespace Microsoft.WindowsAzure.Build.Tasks
 
         private const string BUILD_PHASE = "build";
         private const string TEST_PHASE = "test";
+        private const string SUB_TASK_PHASE = "sub-task";
         private readonly List<string> ANALYSIS_PHASE_LIST = new List<string>() { "breaking-change", "help-example", "help", "dependency", "signature", "file-change", "ux", "generated-sdk" };
         private readonly List<string> ONLY_AFFECT_MODULE_PHASE_LIST = new List<string>() { "cmdlet-diff" }; // These phases will be triggered only when the module is modified, not when its dependent module is updated.
         private const string ACCOUNT_MODULE_NAME = "Accounts";
@@ -175,35 +179,8 @@ namespace Microsoft.WindowsAzure.Build.Tasks
         {
             List<string> csprojList = GetRelatedCsprojList(moduleName, csprojMap)
                 .Where(x => x.Contains("Test")).ToList();
-            if (csprojList.Count == 0)
-            {
-                csprojList.Add(moduleName);
-            }
+
             return csprojList;
-        }
-
-        private bool ProcessTargetModule(Dictionary<string, string[]> csprojMap)
-        {
-            Dictionary<string, HashSet<string>> influencedModuleInfo = new Dictionary<string, HashSet<string>>
-            {
-                [BUILD_PHASE] = new HashSet<string>(GetBuildCsprojList(TargetModule, csprojMap).ToList()),
-                [TEST_PHASE] = new HashSet<string>(GetTestCsprojList(TargetModule, csprojMap).ToList())
-            };
-            foreach (var analysisPhase in ANALYSIS_PHASE_LIST)
-            {
-                influencedModuleInfo.Add(analysisPhase, new HashSet<string>(GetDependenceModuleList(TargetModule, csprojMap).ToList()));
-            }
-
-            Console.WriteLine("----------------- InfluencedModuleInfo TargetModule -----------------");
-            foreach (string phaseName in influencedModuleInfo.Keys)
-            {
-                Console.WriteLine(string.Format("{0}: [{1}]", phaseName, string.Join(", ", influencedModuleInfo[phaseName].ToList())));
-            }
-            Console.WriteLine("--------------------------------------------------------");
-
-            FilterTaskResult.PhaseInfo = influencedModuleInfo;
-
-            return true;
         }
 
         private string ProcessSinglePattern(string pattern)
@@ -214,7 +191,7 @@ namespace Microsoft.WindowsAzure.Build.Tasks
         private Dictionary<string, HashSet<string>> CalculateInfluencedModuleInfoForEachPhase(List<(Regex, List<string>)> ruleList, Dictionary<string, string[]> csprojMap)
         {
             Dictionary<string, HashSet<string>> influencedModuleInfo = new Dictionary<string, HashSet<string>>();
-
+			
             foreach (string filePath in FilesChanged)
             {
                 List<string> phaseList = new List<string>();
@@ -390,28 +367,36 @@ namespace Microsoft.WindowsAzure.Build.Tasks
 
             Dictionary<string, HashSet<string>> influencedModuleInfo = CalculateInfluencedModuleInfoForEachPhase(ruleList, csprojMap);
             DateTime endOfRegularExpressionTime = DateTime.Now;
+            
+            #region Record the CI plan info to CIPlan.json under the artifacts folder
+            Dictionary<string, List<string>> CIPlan = new Dictionary<string, List<string>>
+            {
+                [BUILD_PHASE] = new List<string>(influencedModuleInfo[BUILD_PHASE]),
+                [TEST_PHASE] = new List<string>(influencedModuleInfo[TEST_PHASE])
+            };
+            foreach (var analysisPhase in ANALYSIS_PHASE_LIST)
+            {
+                CIPlan.Add(analysisPhase, new List<string>(influencedModuleInfo[analysisPhase]));
+            }
+            if (!Directory.Exists(config.ArtifactPipelineInfoFolder))
+            {
+                Directory.CreateDirectory(config.ArtifactPipelineInfoFolder);
+            }
+            File.WriteAllText(Path.Combine(config.ArtifactPipelineInfoFolder, "CIPlan.json"), JsonConvert.SerializeObject(CIPlan, Formatting.Indented));
+            #endregion
 
             influencedModuleInfo = CalculateCsprojForBuildAndTest(influencedModuleInfo, csprojMap);
             DateTime endTime = DateTime.Now;
             Console.WriteLine(string.Format("Takes {0} seconds for RE match, {1} seconds for phase config.", (endOfRegularExpressionTime - startTime).TotalSeconds, (endTime - endOfRegularExpressionTime).TotalSeconds));
 
-            FilterTaskResult.PhaseInfo = influencedModuleInfo;
-
-            if (!Directory.Exists(config.ArtifactPipelineInfoFolder))
-            {
-                Directory.CreateDirectory(config.ArtifactPipelineInfoFolder);
-            }
-            Dictionary<string, HashSet<string>> CIPlan = new Dictionary<string, HashSet<string>>
-            {
-                [BUILD_PHASE] = new HashSet<string>(influencedModuleInfo[BUILD_PHASE].Select(GetModuleNameFromPath).Where(x => x != null)),
-                [TEST_PHASE] = new HashSet<string>(influencedModuleInfo[TEST_PHASE].Select(GetModuleNameFromPath).Where(x => x != null))
-            };
-            foreach (var analysisPhase in ANALYSIS_PHASE_LIST)
-            {
-                CIPlan.Add(analysisPhase, influencedModuleInfo[analysisPhase]);
-            }
-            File.WriteAllText(Path.Combine(config.ArtifactPipelineInfoFolder, "CIPlan.json"), JsonConvert.SerializeObject(CIPlan, Formatting.Indented));
             influencedModuleInfo[TEST_PHASE] = new HashSet<string>(influencedModuleInfo[TEST_PHASE].Where(x => x.EndsWith(".csproj")));
+
+            BuildCsprojList = influencedModuleInfo[BUILD_PHASE].ToArray();
+            TestCsprojList = influencedModuleInfo[TEST_PHASE].ToArray();
+            if (influencedModuleInfo.ContainsKey(SUB_TASK_PHASE))
+            {
+                SubTasks = string.Join("; ", influencedModuleInfo[SUB_TASK_PHASE].ToArray());
+            }
 
             return true;
         }
@@ -437,16 +422,14 @@ namespace Microsoft.WindowsAzure.Build.Tasks
         /// <returns> Returns a value indicating wheter the success status of the task. </returns>
         public override bool Execute()
         {
-            FilterTaskResult = new CIFilterTaskResult();
-
+            BuildCsprojList = new string[0];
+            TestCsprojList = new string[0];
+            SubTasks = "";
             var csprojMap = ReadMapFile(CsprojMapFilePath, "CsprojMapFilePath");
 
+            FilesChanged = File.ReadAllLines(FilesChangedFile);
             Console.WriteLine(string.Format("FilesChanged: {0}", FilesChanged.Length));
-            if (!string.IsNullOrWhiteSpace(TargetModule))
-            {
-                return ProcessTargetModule(csprojMap);
-            }
-            else if (FilesChanged != null)
+            if (FilesChanged != null)
             {
                 if (FilesChanged.Length <= 0)
                 {

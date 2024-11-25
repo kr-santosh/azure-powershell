@@ -713,7 +713,7 @@ function Test-SetAzureStorageAccountStorageV2
         Assert-AreEqual $kind $sto.Kind;        
                     
         $kind = 'StorageV2'
-        Set-AzStorageAccount -ResourceGroupName $rgname -Name $stoname -UpgradeToStorageV2;
+        Set-AzStorageAccount -ResourceGroupName $rgname -Name $stoname -UpgradeToStorageV2 -Force;
         $sto = Get-AzStorageAccount -ResourceGroupName $rgname  -Name $stoname;
         Assert-AreEqual $stoname $sto.StorageAccountName;
         Assert-AreEqual $stotype $sto.Sku.Name;
@@ -947,7 +947,7 @@ function Test-PipingNewUpdateAccount
         Assert-AreEqual $sto.Location $sto2.Location;
         Assert-AreNotEqual $sto.StorageAccountName $sto2.StorageAccountName;
         
-        Get-AzStorageAccount -ResourceGroupName $rgname -Name $stoname | set-AzStorageAccount -UpgradeToStorageV2
+        Get-AzStorageAccount -ResourceGroupName $rgname -Name $stoname | set-AzStorageAccount -UpgradeToStorageV2 -Force
         $global:sto = $sto | set-AzStorageAccount -EnableHttpsTrafficOnly $true
         Assert-AreEqual 'StorageV2' $sto.Kind;
         Assert-AreEqual $true $sto.EnableHttpsTrafficOnly;
@@ -1293,7 +1293,7 @@ function Test-NewSetAzureStorageAccount_LargeFileShare
         Assert-AreEqual "Enabled" $sto.LargeFileSharesState;
         
         #update Account
-        Set-AzStorageAccount -ResourceGroupName $rgname -Name $stoname -EnableLargeFileShare -SkuName $stotype -UpgradeToStorageV2;
+        Set-AzStorageAccount -ResourceGroupName $rgname -Name $stoname -EnableLargeFileShare -SkuName $stotype -UpgradeToStorageV2 -Force;
         
         Retry-IfException { $global:sto = Get-AzStorageAccount -ResourceGroupName $rgname -Name $stoname; }
         Assert-AreEqual $stoname $sto.StorageAccountName;
@@ -1479,7 +1479,13 @@ function Test-NewSetAzureStorageAccountAllowSharedKeyAccess
         Assert-AreEqual $loc.ToLower().Replace(" ", "") $sto.Location;
         Assert-AreEqual $kind $sto.Kind;
         Assert-AreEqual $false $sto.AllowSharedKeyAccess
+
+        # validate the storage account Context is Oauth based
+        Assert-AreEqual $false $sto.Context.StorageAccount.Credentials.IsSharedKey
+        Assert-AreEqual $true $sto.Context.StorageAccount.Credentials.IsToken
+        Assert-AreNotEqual $null $sto.Context.Track2OauthToken 
         
+        #Update account
         Set-AzStorageAccount -ResourceGroupName $rgname -Name $stoname -AllowSharedKeyAccess $true -EnableHttpsTrafficOnly $true 
         
         Retry-IfException { $global:sto = Get-AzStorageAccount -ResourceGroupName $rgname -Name $stoname; }
@@ -1826,7 +1832,7 @@ function Test-StorageBlobInventory
         #create rule objects
         $rule1 = New-AzStorageBlobInventoryPolicyRule -Name test1 -Disabled -BlobType blockBlob,appendBlob -PrefixMatch abc,edf,eqwewqe,eqwewqreewqe,qwewqewqewqewqewadasd -IncludeSnapshot -IncludeBlobVersion `
                     -Destination $containerName -Format Parquet -Schedule Weekly `
-                    -BlobSchemaField name,Creation-Time,Last-Modified,Content-Length,Content-MD5,BlobType,AccessTier,AccessTierChangeTime,Metadata,AccessTierInferred,Tags
+                    -BlobSchemaField name,Creation-Time,Last-Modified,Content-Length,Content-MD5,BlobType,AccessTier,AccessTierChangeTime,Metadata,AccessTierInferred,Tags -CreationTimeLastNDay 3
         $rule2 = New-AzStorageBlobInventoryPolicyRule -Name test2 -Destination $containerName -Disabled -Format Csv -Schedule Daily -ContainerSchemaField Name,Metadata,PublicAccess,Last-mOdified,LeaseStatus,LeaseState,LeaseDuration,HasImmutabilityPolicy,HasLegalHold,Etag,DefaultEncryptionScope,DenyEncryptionScopeOverride -PrefixMatch con1,con2
         $rule3 = New-AzStorageBlobInventoryPolicyRule -Name test3 -Destination $containerName -BlobType appendBlob -PrefixMatch abc1,edf1 -ExcludePrefix aaa1,bbb1  -Format Csv -Schedule Weekly -BlobSchemaField Name,Deleted,RemainingRetentionDays,Content-Type,Content-Language,Cache-Control,Content-Disposition -IncludeDeleted
 
@@ -1851,6 +1857,7 @@ function Test-StorageBlobInventory
         Assert-Null $policy1.Rules[0].Definition.Filters.IncludeDeleted
         Assert-AreEqual 2 $policy1.Rules[0].Definition.Filters.BlobTypes.Count
         Assert-AreEqual 5 $policy1.Rules[0].Definition.Filters.PrefixMatch.Count
+        Assert-AreEqual 3 $policy1.Rules[0].Definition.Filters.CreationTime.LastNDays
         Assert-AreEqual "test2" $policy1.Rules[1].Name
         Assert-AreEqual $false $policy1.Rules[1].Enabled
         Assert-AreEqual $containerName $policy1.Rules[1].Destination

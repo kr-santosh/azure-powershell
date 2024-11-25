@@ -113,6 +113,16 @@ namespace Microsoft.Azure.Commands.Sql.Replication.Model
         public string LicenseType { get; set; }
 
         /// <summary>
+        /// Gets or sets the Auto pause delay of the database
+        /// </summary>
+        public int? AutoPauseDelayInMinutes { get; set; }
+
+        /// <summary>
+        /// Minimal capacity that database will always have allocated, if not paused
+        /// </summary>
+        public double? MinimumCapacity { get; set; }
+
+        /// <summary>
         /// Gets or sets the current backup storage redundancy for the database
         /// </summary>
         public string CurrentBackupStorageRedundancy { get; set; }
@@ -136,5 +146,10 @@ namespace Microsoft.Azure.Commands.Sql.Replication.Model
         /// Gets or sets the zone redundant option of the database.
         /// </summary>
         public bool? ZoneRedundant { get; set; }
+
+        /// <summary>
+        /// Gets or sets the link type of the replication link.
+        /// </summary>
+        public string LinkType { get; set; }
     }
 }

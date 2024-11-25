@@ -12,6 +12,7 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
+using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using System;
 using System.Collections.Generic;
 
@@ -41,7 +42,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         /// Identifies whether this recovery point represents 
         /// an encrypted VM at the time of backup.
         /// </summary>
-        public bool EncryptionEnabled { get; set; }
+        public bool EncryptionEnabled { get; set; }        
 
         /// <summary>
         /// Identifies whether an ILR session is already active 
@@ -85,6 +86,18 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         /// Recovery point move rediness info
         /// </summary>
         public IDictionary<string, RecoveryPointMoveReadinessInfo> RecoveryPointMoveReadinessInfo;
+        
+        /// <summary>
+        /// Gets or sets extended location of the VM recovery point,
+        /// should be null if VM is in public cloud
+        /// </summary>        
+        public ExtendedLocation ExtendedLocation { get; set; }
+
+        /// <summary>
+        /// Identifies whether any of the disks in the VM are using
+        /// Private access network setting
+        /// </summary>
+        public bool? IsPrivateAccessEnabledOnAnyDisk { get; set; }
 
         public AzureVmRecoveryPoint()
         {

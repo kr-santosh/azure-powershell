@@ -15,7 +15,8 @@ Gets or lists Storage blob containers
 ### AccountName (Default)
 ```
 Get-AzRmStorageContainer [-ResourceGroupName] <String> [-StorageAccountName] <String> [-Name <String>]
- [-IncludeDeleted] [-AsJob] [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ [-IncludeDeleted] [-AsJob] [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### AccountObject
@@ -55,8 +56,9 @@ This command gets a Storage blob container with Storage account object and conta
 ```powershell
 Get-AzRmStorageContainer -ResourceGroupName "myResourceGroup" -AccountName "myStorageAccount" -IncludeDeleted
 ```
+
 ```output
-   ResourceGroupName: myResourceGroup, StorageAccountName: myStorageAccount
+ResourceGroupName: myResourceGroup, StorageAccountName: myStorageAccount
 
 Name         PublicAccess LastModified         HasLegalHold HasImmutabilityPolicy Deleted VersionId  
 ----         ------------ ------------         ------------ --------------------- ------- ---------  
@@ -175,7 +177,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

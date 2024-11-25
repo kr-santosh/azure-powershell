@@ -14,133 +14,157 @@ Creates a new Management Group scoped Deployment Stack.
 
 ### ByTemplateFileWithNoParameters (Default)
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateFile <String> [-SkipTemplateParameterPrompt]
- [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateFile <String> [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### ByTemplateFileWithParameterFile
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateFile <String> -TemplateParameterFile <String>
- [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateFile <String> -TemplateParameterFile <String> [-SkipTemplateParameterPrompt] [-QueryString <String>]
+ [-Pre] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateFileWithParameterUri
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateFile <String> -TemplateParameterUri <String>
- [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateFile <String> -TemplateParameterUri <String> [-SkipTemplateParameterPrompt] [-QueryString <String>]
+ [-Pre] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateFileWithParameterObject
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateFile <String> -TemplateParameterObject <Hashtable>
- [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateFile <String> -TemplateParameterObject <Hashtable> [-SkipTemplateParameterPrompt]
+ [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### ByTemplateUriWithParameterFile
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateUri <String> -TemplateParameterFile <String>
- [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateUri <String> -TemplateParameterFile <String> [-SkipTemplateParameterPrompt] [-QueryString <String>]
+ [-Pre] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateUriWithParameterUri
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateUri <String> -TemplateParameterUri <String>
- [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateUri <String> -TemplateParameterUri <String> [-SkipTemplateParameterPrompt] [-QueryString <String>]
+ [-Pre] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateUriWithParameterObject
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateUri <String> -TemplateParameterObject <Hashtable>
- [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateUri <String> -TemplateParameterObject <Hashtable> [-SkipTemplateParameterPrompt]
+ [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### ByTemplateUriWithNoParameters
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateUri <String> [-SkipTemplateParameterPrompt]
- [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateUri <String> [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### ByTemplateSpecWithParameterFile
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateSpecId <String> -TemplateParameterFile <String>
- [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateSpecId <String> -TemplateParameterFile <String> [-SkipTemplateParameterPrompt]
+ [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### ByTemplateSpecWithParameterUri
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateSpecId <String> -TemplateParameterUri <String>
- [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateSpecId <String> -TemplateParameterUri <String> [-SkipTemplateParameterPrompt] [-QueryString <String>]
+ [-Pre] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### ByTemplateSpecWithParameterObject
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateSpecId <String> -TemplateParameterObject <Hashtable>
- [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateSpecId <String> -TemplateParameterObject <Hashtable> [-SkipTemplateParameterPrompt]
+ [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>]
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### ByTemplateSpecWithNoParameters
 ```
-New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String> [-Description <String>]
- -Location <String> [-DeleteAll] [-DeleteResources] [-DeleteResourceGroups]
- -DenySettingsMode <PSDenySettingsMode> [-DenySettingsExcludedPrincipal <String[]>]
- [-DenySettingsExcludedAction <String[]>] [-DenySettingsApplyToChildScopes] -DeploymentSubscriptionId <String>
- [-Tag <Hashtable>] [-Force] [-AsJob] -TemplateSpecId <String> [-SkipTemplateParameterPrompt]
- [-QueryString <String>] [-Pre] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateSpecId <String> [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
+```
+
+### ByParameterFileWithNoTemplate
+```
+New-AzManagementGroupDeploymentStack -Name <String> -ManagementGroupId <String>
+ [-DeploymentSubscriptionId <String>] [-Description <String>] -Location <String>
+ -ActionOnUnmanage <PSActionOnUnmanage> -DenySettingsMode <PSDenySettingsMode>
+ [-DenySettingsExcludedPrincipal <String[]>] [-DenySettingsExcludedAction <String[]>]
+ [-DenySettingsApplyToChildScopes] [-Tag <Hashtable>] [-Force] [-AsJob] [-BypassStackOutOfSyncError]
+ -TemplateParameterFile <String> [-SkipTemplateParameterPrompt] [-QueryString <String>] [-Pre]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -156,10 +180,48 @@ New-AzManagementGroupDeploymentStack -Name MyMGStack -ManagementGroupId MyMangem
 
 Create a new management group scoped deployment stack named 'MyMGStack' in management group 'MyManagementGroup,' with the scope of the underlying deployment being MySubId and deny settings being DenyDelete. 
 
+### Example 2: Use a .bicepparam file to create a stack
+```powershell
+New-AzManagementGroupDeploymentStack -Name MyMGStack -ManagementGroupId MyMangementGroup -DeploymentSubscriptionId MySubId -Location westus -DenySettingsMode DenyDelete -TemplateParameterFile "./parameters.bicepparam"
+```
+
+This command creates a new stack at the management group scope by using a .bicepparam file on disk.
+
 ## PARAMETERS
+
+### -ActionOnUnmanage
+Action to take on resources that become unmanaged on deletion or update of the deployment stack. Possible values include: 'detachAll' (do not delete any unmanaged resources), 'deleteResources' (delete all unmanaged resources that are not RGs or MGs), and 'deleteAll' (delete every unmanaged resource).
+
+```yaml
+Type: Microsoft.Azure.Commands.ResourceManager.Cmdlets.SdkModels.DeploymentStacks.PSActionOnUnmanage
+Parameter Sets: (All)
+Aliases:
+Accepted values: DetachAll, DeleteResources, DeleteAll
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -AsJob
 Run cmdlet in the background.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BypassStackOutOfSyncError
+Bypass errors for the stack being out of sync when running the operation. If the stack is out of sync and this parameter is not set, the operation will fail. Only include this parameter if instructed to do so on a failed stack operation.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -180,51 +242,6 @@ The credentials, account, tenant, and subscription used for communication with A
 Type: Microsoft.Azure.Commands.Common.Authentication.Abstractions.Core.IAzureContextContainer
 Parameter Sets: (All)
 Aliases: AzContext, AzureRmContext, AzureCredential
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeleteAll
-Signal to delete both unmanaged Resources and ResourceGroups after updating stack.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeleteResourceGroups
-Signal to delete unmanaged stack ResourceGroups after updating stack.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeleteResources
-Signal to delete unmanaged stack Resources after updating stack.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
 
 Required: False
 Position: Named
@@ -303,7 +320,7 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -465,7 +482,7 @@ Parameter file to use for the template.
 
 ```yaml
 Type: System.String
-Parameter Sets: ByTemplateFileWithParameterFile, ByTemplateUriWithParameterFile, ByTemplateSpecWithParameterFile
+Parameter Sets: ByTemplateFileWithParameterFile, ByTemplateUriWithParameterFile, ByTemplateSpecWithParameterFile, ByParameterFileWithNoTemplate
 Aliases:
 
 Required: True

@@ -14,7 +14,8 @@ Create an in-memory object for ScaleRuleMetricDimension.
 
 ```
 New-AzAutoscaleScaleRuleMetricDimensionObject -DimensionName <String>
- -Operator <ScaleRuleMetricDimensionOperationType> -Value <String[]> [<CommonParameters>]
+ -Operator <ScaleRuleMetricDimensionOperationType> -Value <String[]>
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -90,7 +91,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.PowerShell.Cmdlets.Monitor.Autoscale.Models.Api20221001.ScaleRuleMetricDimension
 
 ## NOTES
-
-ALIASES
 
 ## RELATED LINKS

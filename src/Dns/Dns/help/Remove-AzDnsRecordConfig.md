@@ -52,7 +52,8 @@ Remove-AzDnsRecordConfig -RecordSet <DnsRecordSet> -Value <String> [-DefaultProf
 ### SRV
 ```
 Remove-AzDnsRecordConfig -RecordSet <DnsRecordSet> -Priority <UInt16> -Target <String> -Port <UInt16>
- -Weight <UInt16> [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+ -Weight <UInt16> [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ### CNAME
@@ -65,6 +66,27 @@ Remove-AzDnsRecordConfig -RecordSet <DnsRecordSet> -Cname <String> [-DefaultProf
 ```
 Remove-AzDnsRecordConfig -RecordSet <DnsRecordSet> -CaaFlags <Byte> -CaaTag <String> -CaaValue <String>
  [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+```
+
+### DS
+```
+Remove-AzDnsRecordConfig -RecordSet <DnsRecordSet> -KeyTag <Int32> -Algorithm <Int32> -DigestType <Int32>
+ -Digest <String> [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
+```
+
+### TLSA
+```
+Remove-AzDnsRecordConfig -RecordSet <DnsRecordSet> -Usage <Int32> -Selector <Int32> -MatchingType <Int32>
+ -CertificateAssociationData <String> [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
+```
+
+### NAPTR
+```
+Remove-AzDnsRecordConfig -RecordSet <DnsRecordSet> -Order <UInt16> -Preference <UInt16> -Flags <String>
+ -Services <String> -Regexp <String> -Replacement <String> [-DefaultProfile <IAzureContextContainer>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -197,7 +219,63 @@ This example removes a TXT record from an existing record set.
 If this is the only record in the record set, the result is an empty record set.
 To remove a record set entirely, see Remove-AzDnsRecordSet.
 
+### Example 9: Remove a DS record from a record set
+```powershell
+$RecordSet = Get-AzDnsRecordSet -Name "www" -RecordType DS -ResourceGroupName "MyResourceGroup" -ZoneName "myzone.com"
+Remove-AzDnsRecordConfig -KeyTag 12345 -Algorithm 3 -DigestType 1 -Digest "49FD46E6C4B45C55D4AC"
+Set-AzDnsRecordSet -RecordSet $RecordSet
+
+# The above sequence can also be piped:
+
+Get-AzDnsRecordSet -Name "www" -RecordType DS -ResourceGroupName "MyResourceGroup" -ZoneName "myzone.com" | Remove-AzDnsRecordConfig -KeyTag 12345 -Algorithm 3 -DigestType 1 -Digest "49FD46E6C4B45C55D4AC"  | Set-AzDnsRecordSet
+```
+
+This example removes a DS record from an existing record set.
+If this is the only record in the record set, the result is an empty record set.
+To remove a record set entirely, see Remove-AzDnsRecordSet.
+
+### Example 10: Remove a TLSA record from a record set
+```powershell
+$RecordSet = Get-AzDnsRecordSet -Name "_443._tcp.www" -RecordType TLSA -ResourceGroupName "MyResourceGroup" -ZoneName "myzone.com"
+Remove-AzDnsRecordConfig -Usage 3 -Selector 1 -MatchingType 1 -CertificateAssociationData "49FD46E6C4B45C55D4AC"
+Set-AzDnsRecordSet -RecordSet $RecordSet
+
+# The above sequence can also be piped:
+
+Get-AzDnsRecordSet -Name "_443._tcp.www" -RecordType TLSA -ResourceGroupName "MyResourceGroup" -ZoneName "myzone.com" | Remove-AzDnsRecordConfig -Usage 3 -Selector 1 -MatchingType 1 -CertificateAssociationData "49FD46E6C4B45C55D4AC"  | Set-AzDnsRecordSet
+```
+
+This example removes a TLSA record from an existing record set.
+If this is the only record in the record set, the result is an empty record set.
+To remove a record set entirely, see Remove-AzDnsRecordSet.
+
+### Example 11: Remove an NAPTR record from a record set
+```powershell
+$RecordSet = Get-AzDnsRecordSet -Name "www" -RecordType NAPTR -ResourceGroupName "MyResourceGroup" -ZoneName "myzone.com"
+Remove-AzDnsRecordConfig -Order 100 -Preference 100 -Flags "s" -Services "http" -Regexp "" -Replacement "www.contoso.com"
+Set-AzDnsRecordSet -RecordSet $RecordSet
+
+# The above sequence can also be piped:
+
+Get-AzDnsRecordSet -Name "www" -RecordType NAPTR -ResourceGroupName "MyResourceGroup" -ZoneName "myzone.com" | Remove-AzDnsRecordConfig -Order 100 -Preference 100 -Flags "s" -Services "http" -Regexp "" -Replacement "www.contoso.com"  | Set-AzDnsRecordSet
+```
+
 ## PARAMETERS
+
+### -Algorithm
+The algorithm field of the DS record to remove.
+
+```yaml
+Type: System.Int32
+Parameter Sets: DS
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
 
 ### -CaaFlags
 The flags for the CAA record to add. Must be a number between 0 and 255.
@@ -244,6 +322,21 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -CertificateAssociationData
+The certificate association data field of the TLSA record to remove.
+
+```yaml
+Type: System.String
+Parameter Sets: TLSA
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -Cname
 Specifies the domain name for a canonical name (CNAME) record.
 
@@ -271,6 +364,36 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Digest
+The digest field of the DS record to remove.
+
+```yaml
+Type: System.String
+Parameter Sets: DS
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -DigestType
+The digest type field of the DS record to remove.
+
+```yaml
+Type: System.Int32
+Parameter Sets: DS
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -319,12 +442,57 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -KeyTag
+The key tag field of the DS record to remove.
+
+```yaml
+Type: System.Int32
+Parameter Sets: DS
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -MatchingType
+The matching type field of the TLSA record to remove.
+
+```yaml
+Type: System.Int32
+Parameter Sets: TLSA
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -Nsdname
 Specifies the name server for a name server (NS) record.
 
 ```yaml
 Type: System.String
 Parameter Sets: NS
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Order
+Specifies the order for a named authority pointer (NAPTR) record.
+
+```yaml
+Type: System.UInt16
+Parameter Sets: NAPTR
 Aliases:
 
 Required: True
@@ -350,11 +518,11 @@ Accept wildcard characters: False
 ```
 
 ### -Preference
-Specifies the preference for an MX record.
+Specifies the preference for an MX/NAPTR record.
 
 ```yaml
 Type: System.UInt16
-Parameter Sets: MX
+Parameter Sets: MX, NAPTR
 Aliases:
 
 Required: True
@@ -409,12 +577,87 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -Regexp
+Specifies the regexp of the named authority pointer (NAPTR) record.
+
+```yaml
+Type: System.String
+Parameter Sets: NAPTR
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Replacement
+Specifies the replacement for a named authority pointer (NAPTR) record.
+
+```yaml
+Type: System.String
+Parameter Sets: NAPTR
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Services
+Specifies the services of the named authority pointer (NAPTR) record.
+
+```yaml
+Type: System.String
+Parameter Sets: NAPTR
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Selector
+The selector field of the TLSA record to remove.
+
+```yaml
+Type: System.Int32
+Parameter Sets: TLSA
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### -Target
 Specifies the target for an SRV record.
 
 ```yaml
 Type: System.String
 Parameter Sets: SRV
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Usage
+The usage field of the TLSA record to remove.
+
+```yaml
+Type: System.Int32
+Parameter Sets: TLSA
 Aliases:
 
 Required: True
@@ -455,7 +698,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

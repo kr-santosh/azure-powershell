@@ -17,19 +17,19 @@ if(($null -eq $TestName) -or ($TestName -contains 'Remove-AzEventHubApplicationG
 Describe 'Remove-AzEventHubApplicationGroup' {
     $t2 = New-AzEventHubThrottlingPolicyConfig -Name t2 -MetricId OutgoingBytes -RateLimitThreshold 20000
 
-    It 'Delete' -Skip {
+    It 'Delete'  {
         $b = New-AzEventHubAuthorizationRule -ResourceGroupName $env.resourceGroup -NamespaceName $env.namespace -name b -Rights @("Manage", "Send", "Listen")
         $SASKey = "NamespaceSASKeyName="+$b.Name
         New-AzEventHubApplicationGroup -NamespaceName $env.namespace -ResourceGroupName $env.resourceGroup -Name appGroup -ClientAppGroupIdentifier $SASKey -Policy $t2
         Remove-AzEventHubApplicationGroup -NamespaceName $env.namespace -ResourceGroupName $env.resourceGroup -Name appGroup
-        { Get-AzEventHubApplicationGroup -NamespaceName $env.namespace -ResourceGroupName $env.resourceGroup -Name appGroup } | Should -Throw
+        { Get-AzEventHubApplicationGroup -NamespaceName $env.namespace -ResourceGroupName $env.resourceGroup -Name appGroup -ErrorAction Stop } | Should -Throw
     }
 
-    It 'DeleteViaIdentity' -Skip {
+    It 'DeleteViaIdentity'  {
         $c = New-AzEventHubAuthorizationRule -ResourceGroupName $env.resourceGroup -NamespaceName $env.namespace -name c -Rights @("Manage", "Send", "Listen")
         $SASKey = "NamespaceSASKeyName="+$c.Name
         $appGroup = New-AzEventHubApplicationGroup -NamespaceName $env.namespace -ResourceGroupName $env.resourceGroup -Name appGroup -ClientAppGroupIdentifier $SASKey -Policy $t2
         Remove-AzEventHubApplicationGroup -InputObject $appGroup
-        { Get-AzEventHubApplicationGroup -NamespaceName $env.namespace -ResourceGroupName $env.resourceGroup -Name appGroup } | Should -Throw
+        { Get-AzEventHubApplicationGroup -NamespaceName $env.namespace -ResourceGroupName $env.resourceGroup -Name appGroup -ErrorAction Stop } | Should -Throw
     }
 }

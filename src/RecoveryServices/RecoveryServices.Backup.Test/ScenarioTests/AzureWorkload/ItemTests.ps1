@@ -28,17 +28,21 @@ function Test-AzureVmWorkloadCrossRegionRestore
 	$vaultId = "/subscriptions/38304e13-357e-405e-9e9a-220351dcce8c/resourceGroups/hiagarg/providers/Microsoft.RecoveryServices/vaults/hiagaVault"
 	$sourceDBName = "model"
 	$location = "centraluseuap"
-	$recoveryPointId = "164200650492022" # $rp[1].RecoveryPointId
+	$recoveryPointId = "174141832383313" # $rp[1].RecoveryPointId
+	$itemName = "SQLDataBase;mssqlserver;model"
+	$containerNameSubstr = "sql-pstest-vm1"
+
 
 	$targetResourceGroup = "clitest-rg-donotuse"
 	$targetVault = "clitest-vault-secondary-donotuse"
-	$targetDBName = "model_restored_6_26_2023_1751"
+	$targetDBName = "model_restored_08_12_2023_1745"
 	$overwrite = "Yes"
 
 	try
 	{   
 		$secvault = Get-AzRecoveryServicesVault -ResourceGroupName $targetResourceGroup -Name $targetVault
-		$item = Get-AzRecoveryServicesBackupItem -BackupManagementType AzureWorkload -WorkloadType MSSQL -VaultId $vaultId -UseSecondaryRegion | Where-Object { $_.Name -match "model" }
+		$item = Get-AzRecoveryServicesBackupItem -BackupManagementType AzureWorkload -WorkloadType MSSQL -VaultId $vaultId -UseSecondaryRegion | Where-Object { $_.Name -eq $itemName -and $_.ContainerName -match $containerNameSubstr}
+
 		$rp = Get-AzRecoveryServicesBackupRecoveryPoint -Item $item[0] -VaultId $vaultId -UseSecondaryRegion -RecoveryPointId $recoveryPointId
 
 		$seccontainer =  Get-AzRecoveryServicesBackupContainer -ContainerType AzureVMAppContainer -VaultId $secvault.ID
@@ -327,33 +331,27 @@ function Test-AzureVmWorkloadEnableAutoProtectableItem
 
 function Test-AzureVmWorkloadBackupProtectionItem
 {
+	$resourceGroupName = "hiagarg"
+	$vaultName = "hiagaVault"	
+	$sourceDBName = "master"
+	$containerFriendlyName = "sql-pstest-vm1"
+
 	try
-	{
+	{   
+		# test trigger adhoc backup
 		$vault = Get-AzRecoveryServicesVault -ResourceGroupName $resourceGroupName -Name $vaultName
-		$container = Register-AzRecoveryServicesBackupContainer `
-			-ResourceId $resourceId `
-			-BackupManagementType AzureWorkload `
-			-WorkloadType MSSQL `
-			-VaultId $vault.ID `
-			-Force
-
-		Enable-Protection $vault $container
-
-		$item = Get-AzRecoveryServicesBackupItem `
-			-VaultId $vault.ID `
-			-Container $container `
-			-WorkloadType MSSQL;
+		$item = Get-AzRecoveryServicesBackupItem -BackupManagementType AzureWorkload -WorkloadType MSSQL -VaultId $vault.ID | Where-Object { $_.Name -match $sourceDBName -and $_.ContainerName -match $containerFriendlyName}
 
 		$backupJob = Backup-AzRecoveryServicesBackupItem `
 			-VaultId $vault.ID `
-			-Item $item `
+			-Item $item[0] `
 			-BackupType "Full" | Wait-AzRecoveryServicesBackupJob -VaultId $vault.ID
 
 		Assert-True { $backupJob.Status -eq "Completed" }
 	}
 	finally
 	{
-		Cleanup-Vault $vault $item $container
+		# no cleanup
 	}
 }
 

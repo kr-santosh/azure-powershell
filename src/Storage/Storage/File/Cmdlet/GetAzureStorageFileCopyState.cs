@@ -12,18 +12,13 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
-using Microsoft.Azure.Storage;
-using XFile = Microsoft.Azure.Storage.File;
-using Microsoft.Azure.Storage.File;
 using System;
 using System.Collections.Concurrent;
 using System.Management.Automation;
 using System.Security.Permissions;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 using Azure.Storage.Files.Shares;
-using Microsoft.WindowsAzure.Commands.Common.Storage.ResourceModel;
 using Microsoft.WindowsAzure.Commands.Storage.Common;
 using Azure.Storage.Files.Shares.Models;
 
@@ -51,13 +46,13 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
 
         [Parameter(
             Position = 0,
-            HelpMessage = "Target file instance", Mandatory = true,
+            Mandatory = true,
             ValueFromPipeline = true,
             ValueFromPipelineByPropertyName = true,
-            ParameterSetName = Constants.FileParameterSetName)]
+            ParameterSetName = Constants.FileParameterSetName,
+            HelpMessage = "ShareFileClient object indicated the file to get copy status.")]
         [ValidateNotNull]
-        [Alias("CloudFile")]
-        public CloudFile File { get; set; }
+        public ShareFileClient ShareFileClient { get; set; }
 
         [Parameter(HelpMessage = "Indicates whether or not to wait util the copying finished.")]
         public SwitchParameter WaitForComplete { get; set; }
@@ -96,9 +91,9 @@ namespace Microsoft.WindowsAzure.Commands.Storage.File.Cmdlet
 
             ShareFileClient file = null;
 
-            if (null != this.File)
+            if (this.ShareFileClient != null)
             {
-                file = AzureStorageFile.GetTrack2FileClient(this.File);
+                file = this.ShareFileClient;
             }
             else
             {

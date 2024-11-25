@@ -15,18 +15,19 @@ Get volume's backup status
 ### ByFieldsParameterSet (Default)
 ```
 Get-AzNetAppFilesVolumeBackupStatus -ResourceGroupName <String> -AccountName <String> -PoolName <String>
- -Name <String> [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
-```
-
-### ByResourceIdParameterSet
-```
-Get-AzNetAppFilesVolumeBackupStatus -ResourceId <String> [-DefaultProfile <IAzureContextContainer>]
+ -Name <String> [-DefaultProfile <IAzureContextContainer>]
  [<CommonParameters>]
 ```
 
 ### ByParentObjectParameterSet
 ```
-Get-AzNetAppFilesVolumeBackupStatus -PoolObject <PSNetAppFilesPool> [-DefaultProfile <IAzureContextContainer>]
+Get-AzNetAppFilesVolumeBackupStatus -Name <String> -PoolObject <PSNetAppFilesPool>
+ [-DefaultProfile <IAzureContextContainer>] [<CommonParameters>]
+```
+
+### ByResourceIdParameterSet
+```
+Get-AzNetAppFilesVolumeBackupStatus -ResourceId <String> [-DefaultProfile <IAzureContextContainer>]
  [<CommonParameters>]
 ```
 
@@ -100,7 +101,7 @@ The name of the ANF volume
 
 ```yaml
 Type: System.String
-Parameter Sets: ByFieldsParameterSet
+Parameter Sets: ByFieldsParameterSet, ByParentObjectParameterSet
 Aliases: VolumeName
 
 Required: True
@@ -197,7 +198,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [Update-AzNetAppFilesBackupPolicy](./Update-AzNetAppFilesBackupPolicy.md)
 [Remove-AzNetAppFilesBackupPolicy](./Remove-AzNetAppFilesBackupPolicy.md)
 [Set-AzNetAppFilesBackupPolicy](./Set-AzNetAppFilesBackupPolicy.md)
-[Get-AzNetAppFilesVault](./Get-AzNetAppFilesVault.md)
 [Get-AzNetAppFilesVolume](./Get-AzNetAppFilesVolume.md)
 [New-AzNetAppFilesVolume](./New-AzNetAppFilesVolume.md)
 [Update-AzNetAppFilesVolume](./Update-AzNetAppFilesVolume.md)

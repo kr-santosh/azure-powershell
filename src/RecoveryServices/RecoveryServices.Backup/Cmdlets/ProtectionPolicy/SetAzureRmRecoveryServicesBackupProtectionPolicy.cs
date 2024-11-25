@@ -96,6 +96,24 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         [ValidateSet("Days", "Months")]
         public string TierAfterDurationType { get; set; }
 
+        /// <summary>
+        /// Custom resource group name to store the instant recovery points of managed virtual machines.
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.AzureBackupResourceGroup)]        
+        public string BackupSnapshotResourceGroup { get; set; }
+
+        /// <summary>
+        /// Custom resource group name suffix to store the instant recovery points of managed virtual machines.
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.AzureBackupResourceGroupSuffix)]        
+        public string BackupSnapshotResourceGroupSuffix { get; set; }
+
+        /// <summary>
+        /// Snapshot consistency type to be used for backup. If set to OnlyCrashConsistent, all associated items will have crash consistent snapshot. Possible values are OnlyCrashConsistent, Default.
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.SnapshotConsistencyType)]
+        public SnapshotConsistencyType SnapshotConsistencyType { get; set; }
+
         public override void ExecuteCmdlet()
         {
             ExecutionBlock(() =>
@@ -134,6 +152,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         Policy.Name));
                 }
 
+                if (SnapshotConsistencyType != 0 &&  Policy.BackupManagementType != BackupManagementType.AzureVM)
+                {
+                    throw new ArgumentException(string.Format(Resources.InvalidParameterSnapshotConsistencyType));
+                }
 
                 // check if smart tiering feature is enabled on this subscription                
                 bool isSmartTieringEnabled = true;                
@@ -184,7 +206,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         { ResourceGuardParams.IsMUAOperation, isMUAOperation },
                         { PolicyParams.ExistingPolicy, servicePolicy},
                         { PolicyParams.TieringPolicy, tieringDetails},
-                        { PolicyParams.IsSmartTieringEnabled, isSmartTieringEnabled}
+                        { PolicyParams.IsSmartTieringEnabled, isSmartTieringEnabled},
+                        { PolicyParams.BackupSnapshotResourceGroup, BackupSnapshotResourceGroup},
+                        { PolicyParams.BackupSnapshotResourceGroupSuffix, BackupSnapshotResourceGroupSuffix},
+                        { PolicyParams.SnapshotConsistencyType, SnapshotConsistencyType}
                     }, ServiceClientAdapter);
 
                 IPsBackupProvider psBackupProvider = providerManager.GetProviderInstance(

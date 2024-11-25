@@ -30,8 +30,7 @@ The **Set-AzSqlServer** cmdlet modifies properties of an Azure SQL Database serv
 
 ### Example 1: Reset the administrator password
 ```powershell
-$ServerPassword = "newpassword"
-$SecureString = ConvertTo-SecureString $ServerPassword -AsPlainText -Force
+$SecureString = ConvertTo-SecureString -String "****" -AsPlainText -Force
 Set-AzSqlServer -ResourceGroupName "ResourceGroup01" -ServerName "Server01" -SqlAdministratorPassword $secureString
 ```
 
@@ -61,7 +60,7 @@ Set-AzSqlServer -AssignIdentity -ResourceGroupName 'ResourceGroup01' -ServerName
 ## PARAMETERS
 
 ### -AssignIdentity
-Generate and assign an Azure Active Directory Identity for this server for use with key management services like Azure KeyVault.
+Generate and assign a Microsoft Entra identity for this server for use with key management services like Azure KeyVault.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

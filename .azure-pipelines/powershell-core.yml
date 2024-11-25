@@ -1,5 +1,5 @@
 variables:
-  WindowsName: windows 
+  WindowsName: windows
   WindowsAgentPoolName: pool-windows-2019
   WindowsAgentPoolVMImage: ''
   LinuxName: linux
@@ -7,12 +7,12 @@ variables:
   LinuxAgentPoolVMImage: ''
   MacOSName: macOS
   MacOSAgentPoolName: 'Azure Pipelines'
-  MacOSAgentPoolVMImage: macOS-11
-  TestFramework: netcoreapp3.1
+  MacOSAgentPoolVMImage: macOS-latest
+  TestFramework: net6.0
   TestTarget: Test
   Configuration: Debug
   DebugLocalBuildTasks: true
-  IsGenerateBased: $[eq(variables['system.pullRequest.targetBranch'], 'generation')]
+  IsGenerateBased: $[startsWith(variables['system.pullRequest.targetBranch'], 'generation')]
   BuildTimeoutInMinutes: 120
   AnalysisTimeoutInMinutes: 120
   TestTimeoutInMinutes: 180
@@ -20,6 +20,7 @@ variables:
   EnableTestCoverage: true
   TestCoverageLocation: $(Build.SourcesDirectory)/artifacts
   PowerShellPlatform: PowerShell Core
+  AZURE_CLIENTS_SHOW_SECRETS_WARNING: true
 
 trigger: none
 
@@ -57,6 +58,7 @@ jobs:
       configuration: ${{ variables.Configuration }}
       testFramework: ${{ variables.TestFramework }}
       powerShellPlatform: ${{ variables.PowerShellPlatform }}
+      IsGenerateBased: ${{ variables.IsGenerateBased }}
 
 - job: Test
   displayName: Test

@@ -24,7 +24,6 @@ using Microsoft.Azure.Commands.HDInsight.Models.Management;
 using Microsoft.Azure.Commands.ResourceManager.Common.ArgumentCompleters;
 using Microsoft.Azure.Management.HDInsight.Models;
 using Microsoft.WindowsAzure.Commands.Common;
-using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -45,6 +44,7 @@ namespace Microsoft.Azure.Commands.HDInsight
         private const string CertificateFilePathSet = "CertificateFilePath";
         private const string CertificateFileContentsSet = "CertificateFileContents";
         private const string DefaultParameterSet = "Default";
+        private const string DefaultClusterVersion = "4.0";
 
         #region These fields are marked obsolete in ClusterCreateParameters
         private string _osType;
@@ -98,6 +98,10 @@ namespace Microsoft.Azure.Commands.HDInsight
             HelpMessage = "Gets or sets the type of the storage account.")]
         public StorageType? StorageAccountType { get; set; }
 
+        [Parameter(
+            HelpMessage = "Enable secure channel or not, it's an optional field.")]
+        public bool? EnableSecureChannel { get; set; }
+
         [Parameter(ValueFromPipeline = true,
             HelpMessage = "The HDInsight cluster configuration to use when creating the new cluster.")]
         public AzureHDInsightConfig Config
@@ -111,6 +115,7 @@ namespace Microsoft.Azure.Commands.HDInsight
                     StorageAccountType = StorageAccountType ?? StorageType.AzureStorage,
                     StorageAccountResourceId = StorageAccountResourceId,
                     StorageAccountKey = StorageAccountKey,
+                    EnableSecureChannel = EnableSecureChannel,
                     WorkerNodeSize = WorkerNodeSize,
                     HeadNodeSize = HeadNodeSize,
                     EdgeNodeSize = EdgeNodeSize,
@@ -173,6 +178,7 @@ namespace Microsoft.Azure.Commands.HDInsight
                 {
                     StorageAccountKey = value.StorageAccountKey;
                 }
+                EnableSecureChannel = value.EnableSecureChannel;
                 WorkerNodeSize = value.WorkerNodeSize;
                 HeadNodeSize = value.HeadNodeSize;
                 EdgeNodeSize = value.EdgeNodeSize;
@@ -312,7 +318,7 @@ namespace Microsoft.Azure.Commands.HDInsight
         [Parameter(HelpMessage = "Gets or sets the Service Principal Certificate Password for accessing Azure Data Lake.")]
         public string CertificatePassword { get; set; }
 
-        [Parameter(HelpMessage = "Gets or sets the Service Principal AAD Tenant Id for accessing Azure Data Lake.")]
+        [Parameter(HelpMessage = "Gets or sets the Service Principal Microsoft Entra Tenant Id for accessing Azure Data Lake.")]
         public Guid AadTenantId { get; set; }
 
         [Parameter(HelpMessage = "Gets or sets Security Profile which is used for creating secure cluster.")]
@@ -331,7 +337,7 @@ namespace Microsoft.Azure.Commands.HDInsight
         public string StorageAccountManagedIdentity { get; set; }
 
         [Parameter(HelpMessage = "Gets or sets the encryption algorithm.")]
-        [PSArgumentCompleter(JsonWebKeyEncryptionAlgorithm.RSAOAEP, JsonWebKeyEncryptionAlgorithm.RSAOAEP256, JsonWebKeyEncryptionAlgorithm.RSA15)]
+        [PSArgumentCompleter(JsonWebKeyEncryptionAlgorithm.RSAOaep, JsonWebKeyEncryptionAlgorithm.RSAOaep256, JsonWebKeyEncryptionAlgorithm.RSA15)]
         public string EncryptionAlgorithm { get; set; }
 
         [Parameter(HelpMessage = "Gets or sets the encryption key name.")]
@@ -368,6 +374,15 @@ namespace Microsoft.Azure.Commands.HDInsight
         [Parameter(HelpMessage = "Gets or sets the private link type.")]
         [PSArgumentCompleter(Management.HDInsight.Models.PrivateLink.Enabled, Management.HDInsight.Models.PrivateLink.Disabled)]
         public string PrivateLink { get; set; }
+
+        [Parameter(HelpMessage = "Gets or sets the ipTag type: Example FirstPartyUsage.")]
+        public string PublicIpTagType { get; set; }
+
+        [Parameter(HelpMessage = "Gets or sets value of the IpTag associated with the public IP. Example HDInsight, SQL, Storage etc")]
+        public string PublicIpTag { get; set; }
+
+        [Parameter(HelpMessage = "A value to describe how the outbound dependencies of a HDInsight cluster are managed. 'Managed' means that the outbound dependencies are managed by the HDInsight service. 'External' means that the outbound dependencies are managed by a customer specific solution.")]
+        public string OutboundDependenciesManagedType { get; set; }
 
         [Parameter(HelpMessage = "Enables HDInsight compute isolation feature.")]
         public SwitchParameter EnableComputeIsolation { get; set; }
@@ -422,7 +437,7 @@ namespace Microsoft.Azure.Commands.HDInsight
 
             if (StorageAccountType == null || StorageAccountType == StorageType.AzureStorage)
             {
-                var azureStorageAccount = ClusterCreateHelper.CreateAzureStorageAccount(ClusterName, StorageAccountResourceId, StorageAccountKey, StorageContainer, this.DefaultContext.Environment.StorageEndpointSuffix);
+                var azureStorageAccount = ClusterCreateHelper.CreateAzureStorageAccount(ClusterName, StorageAccountResourceId, StorageAccountKey, StorageContainer, EnableSecureChannel, this.DefaultContext.Environment.StorageEndpointSuffix);
                 storageProfile.Storageaccounts.Add(azureStorageAccount);
             }
             else if (StorageAccountType == StorageType.AzureDataLakeStore)
@@ -431,7 +446,7 @@ namespace Microsoft.Azure.Commands.HDInsight
             }
             else if (StorageAccountType == StorageType.AzureDataLakeStorageGen2)
             {
-                var adlsgen2Account = ClusterCreateHelper.CreateAdlsGen2StorageAccount(ClusterName, StorageAccountResourceId, StorageAccountKey, StorageFileSystem, StorageAccountManagedIdentity, this.DefaultContext.Environment.StorageEndpointSuffix);
+                var adlsgen2Account = ClusterCreateHelper.CreateAdlsGen2StorageAccount(ClusterName, StorageAccountResourceId, StorageAccountKey, StorageFileSystem, EnableSecureChannel, StorageAccountManagedIdentity, this.DefaultContext.Environment.StorageEndpointSuffix);
                 storageProfile.Storageaccounts.Add(adlsgen2Account);
             }
 
@@ -526,7 +541,7 @@ namespace Microsoft.Azure.Commands.HDInsight
                 {
                     clusterIdentity.UserAssignedIdentities.Add(AssignedIdentity, new UserAssignedIdentity());
                 }
-                if (StorageAccountManagedIdentity != null)
+                if (StorageAccountManagedIdentity != null && !clusterIdentity.UserAssignedIdentities.ContainsKey(StorageAccountManagedIdentity))
                 {
                     clusterIdentity.UserAssignedIdentities.Add(StorageAccountManagedIdentity, new UserAssignedIdentity());
                 }
@@ -541,7 +556,7 @@ namespace Microsoft.Azure.Commands.HDInsight
                     KeyName = EncryptionKeyName,
                     KeyVersion = EncryptionKeyVersion,
                     VaultUri = EncryptionVaultUri,
-                    EncryptionAlgorithm = EncryptionAlgorithm != null ? EncryptionAlgorithm : JsonWebKeyEncryptionAlgorithm.RSAOAEP,
+                    EncryptionAlgorithm = EncryptionAlgorithm != null ? EncryptionAlgorithm : JsonWebKeyEncryptionAlgorithm.RSAOaep,
                     MsiResourceId = AssignedIdentity
                 };
             }
@@ -574,7 +589,19 @@ namespace Microsoft.Azure.Commands.HDInsight
             NetworkProperties networkProperties = null;
             if (ResourceProviderConnection != null || PrivateLink != null)
             {
-                networkProperties = new NetworkProperties(ResourceProviderConnection, PrivateLink);
+                networkProperties = new NetworkProperties(null,resourceProviderConnection:ResourceProviderConnection, PrivateLink);
+            }
+            if (OutboundDependenciesManagedType != null && networkProperties != null)
+            {
+                networkProperties.OutboundDependenciesManagedType = OutboundDependenciesManagedType;
+            }
+            if (PublicIpTag != null && PublicIpTagType != null)
+            {
+                if(networkProperties == null)
+                {
+                    networkProperties = new NetworkProperties();
+                }
+                networkProperties.PublicIPTag = new IpTag(PublicIpTagType, PublicIpTag);
             }
 
             // Handle compute isolation properties
@@ -588,7 +615,7 @@ namespace Microsoft.Azure.Commands.HDInsight
             ClusterCreateParametersExtended createParams = new ClusterCreateParametersExtended
             {
                 Location = Location,
-                //Tags = Tags,  //To Do add this Tags parameter
+                //Tags = Tags, //To Do add this Tags parameter
                 Zones = Zone,
                 Properties = new ClusterCreateProperties
                 {
@@ -599,7 +626,7 @@ namespace Microsoft.Azure.Commands.HDInsight
                         ComponentVersion = clusterComponentVersion,
                         Configurations = clusterConfigurations
                     },
-                    ClusterVersion = Version ?? "default",
+                    ClusterVersion = Version ?? DefaultClusterVersion,
                     KafkaRestProperties = kafkaRestProperties,
                     ComputeProfile = computeProfile,
                     OsType = OSType,

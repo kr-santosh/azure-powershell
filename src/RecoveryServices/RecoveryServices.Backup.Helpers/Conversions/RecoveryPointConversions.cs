@@ -366,6 +366,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                     recoveryPoint.OriginalStorageAccountOption.Value : false,
                 Zones = recoveryPoint.Zones,
                 RehydrationExpiryTime = (DateTime?)null,
+                ExtendedLocation = recoveryPoint.ExtendedLocation,
+                IsPrivateAccessEnabledOnAnyDisk = recoveryPoint.IsPrivateAccessEnabledOnAnyDisk
             };
 
             if (recoveryPoint.RecoveryPointTierDetails != null)
@@ -532,9 +534,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 
             DateTime recoveryPointTime = DateTime.MinValue;
 
-            if (recoveryPoint.RecoveryPointTimeInUTC.HasValue)
+            if (recoveryPoint.RecoveryPointTimeInUtc.HasValue)
             {
-                recoveryPointTime = (DateTime)recoveryPoint.RecoveryPointTimeInUTC;
+                recoveryPointTime = (DateTime)recoveryPoint.RecoveryPointTimeInUtc;
             }
             else
             {
@@ -894,9 +896,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 
             DateTime recoveryPointTime = DateTime.MinValue;
 
-            if (recoveryPoint.RecoveryPointTimeInUTC.HasValue)
+            if (recoveryPoint.RecoveryPointTimeInUtc.HasValue)
             {
-                recoveryPointTime = (DateTime)recoveryPoint.RecoveryPointTimeInUTC;
+                recoveryPointTime = (DateTime)recoveryPoint.RecoveryPointTimeInUtc;
             }
             else
             {

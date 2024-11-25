@@ -38,6 +38,7 @@ namespace Microsoft.Azure.Commands.Batch.Test.ScenarioTests
 
         [Fact]
         [Trait(Category.AcceptanceType, Category.CheckIn)]
+        [Obsolete]
         public void TestCancelCertificateDelete()
         {
             BatchAccountContext context = null;
@@ -56,7 +57,7 @@ namespace Microsoft.Azure.Commands.Batch.Test.ScenarioTests
                     certRef.ThumbprintAlgorithm = BatchTestHelpers.TestCertificateAlgorithm;
                     certRef.Thumbprint = thumbprint;
                     certRef.Visibility = CertificateVisibility.Task;
-                    ScenarioTestHelpers.CreateTestPool(this, context, poolId, targetDedicated: 0, targetLowPriority: 0, certReference: certRef);
+                    ScenarioTestHelpers.CreateTestPoolVirtualMachine(this, context, poolId, targetDedicated: 0, targetLowPriority: 0, certReference: certRef);
                     ScenarioTestHelpers.DeleteTestCertificate(this, context, BatchTestHelpers.TestCertificateAlgorithm, thumbprint);
                     ScenarioTestHelpers.WaitForCertificateToFailDeletion(this, context, BatchTestHelpers.TestCertificateAlgorithm, thumbprint);
                 },

@@ -50,5 +50,19 @@ namespace Microsoft.Azure.Commands.CosmosDB.Test.ScenarioTests.ScenarioTest
         {
             TestRunner.RunTestScript("Test-TableMigrateThroughputCmdlets");
         }
+
+        [Fact(Skip = "Output of DateTime.ToString() is different in MacOs.")]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestTableInAccountCoreFunctionalityNoTimestampBasedRestoreCmdletsV2()
+        {
+            TestRunner.RunTestScript("Test-TableInAccountCoreFunctionalityNoTimestampBasedRestoreCmdletsV2");
+        }
+
+        [Fact(Skip = "Output of DateTime.ToString() is different in MacOs.")]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestTableInAccountRestoreOperationsCmdlets()
+        {
+            TestRunner.RunTestScript("Test-TableInAccountRestoreOperationsCmdlets");
+        }
     }
 }

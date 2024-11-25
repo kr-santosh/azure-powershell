@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System;
 using Microsoft.Azure.Commands.Common.Strategies;
 using CM = Microsoft.Azure.Management.Compute.Models;
+using Microsoft.Azure.Commands.Compute.Common;
 
 namespace Microsoft.Azure.Commands.Compute.Strategies.ComputeRp
 {
@@ -62,7 +63,7 @@ namespace Microsoft.Azure.Commands.Compute.Strategies.ComputeRp
             double? maxPrice,
             string[] scaleInPolicy,
             bool doNotRunExtensionsOnOverprovisionedVMs,
-            bool encryptionAtHost,
+            bool? encryptionAtHost,
             int? platformFaultDomainCount,
             string edgeZone,
             string orchestrationMode,
@@ -74,7 +75,14 @@ namespace Microsoft.Azure.Commands.Compute.Strategies.ComputeRp
             string sharedImageGalleryId,
             string securityType = null,
             bool? enableVtpm = null,
-            bool? enableSecureBoot = null
+            bool? enableSecureBoot = null,
+            bool? enableAutomaticOSUpgradePolicy = null,
+            SkuProfileVMSize[] skuProfileVmSize = null,
+            string skuProfileAllocationStrategy = null,
+            string ifMatch = null,
+            string ifNoneMatch = null,
+            string securityPostureId = null,
+            string[] securityPostureExcludeExtension = null
             )
             => Strategy.CreateResourceConfig(
                 resourceGroup: resourceGroup,
@@ -86,7 +94,8 @@ namespace Microsoft.Azure.Commands.Compute.Strategies.ComputeRp
                         ExtendedLocation = edgeZone == null ? null : new CM.ExtendedLocation(edgeZone, CM.ExtendedLocationTypes.EdgeZone),
                         UpgradePolicy = new UpgradePolicy
                         {
-                            Mode = upgradeMode ?? UpgradeMode.Manual
+                            Mode = upgradeMode ?? UpgradeMode.Manual,
+                            AutomaticOSUpgradePolicy = enableAutomaticOSUpgradePolicy == true ? new AutomaticOSUpgradePolicy { EnableAutomaticOSUpgrade = true } : null
                         },
                         Sku = new Azure.Management.Compute.Models.Sku()
                         {
@@ -99,7 +108,7 @@ namespace Microsoft.Azure.Commands.Compute.Strategies.ComputeRp
                         PlatformFaultDomainCount = platformFaultDomainCount,
                         VirtualMachineProfile = new VirtualMachineScaleSetVMProfile
                         {
-                            SecurityProfile = (encryptionAtHost == true || enableVtpm != null || enableSecureBoot != null || securityType != null) 
+                            SecurityProfile = ((encryptionAtHost == true || enableVtpm != null || enableSecureBoot != null || securityType != null) && (securityType?.ToLower() != ConstantValues.StandardSecurityType)) 
                             ? new SecurityProfile
                             {
                                 EncryptionAtHost = encryptionAtHost,
@@ -116,15 +125,23 @@ namespace Microsoft.Azure.Commands.Compute.Strategies.ComputeRp
                             },
                             StorageProfile = new VirtualMachineScaleSetStorageProfile
                             {
-                                ImageReference = (imageReferenceId == null) ? imageAndOsType?.Image : (imageReferenceId.ToLower().StartsWith("/communitygalleries/") ? new ImageReference
+                                ImageReference = (imageReferenceId == null && sharedImageGalleryId == null) ? imageAndOsType?.Image 
+                                : (sharedImageGalleryId != null ? new ImageReference
+                                {
+                                    SharedGalleryImageId = sharedImageGalleryId
+                                }
+                                : (imageReferenceId.ToLower().StartsWith("/communitygalleries/") ? new ImageReference
                                 {
                                     CommunityGalleryImageId = imageReferenceId,
-                                    SharedGalleryImageId = sharedImageGalleryId
-                                } : new ImageReference
+                                } 
+                                : (imageReferenceId.ToLower().StartsWith("/sharedgalleries/") ? new ImageReference
                                 {
-                                    Id = imageReferenceId,
-                                    SharedGalleryImageId = sharedImageGalleryId
-                                }),
+                                    SharedGalleryImageId = imageReferenceId
+                                }
+                                : new ImageReference
+                                {
+                                    Id = imageReferenceId
+                                }))),
                                 DataDisks = DataDiskStrategy.CreateVmssDataDisks(
                                     imageAndOsType?.DataDiskLuns, dataDisks),
                                 DiskControllerType = diskControllerType
@@ -163,7 +180,12 @@ namespace Microsoft.Azure.Commands.Compute.Strategies.ComputeRp
                             {
                                 CapacityReservationGroup = new Microsoft.Azure.Management.Compute.Models.SubResource(capacityReservationId)
                             },
-                            UserData = userData
+                            UserData = userData,
+                            SecurityPostureReference = (securityPostureId != null || securityPostureExcludeExtension != null) ? new SecurityPostureReference
+                            {
+                                Id = securityPostureId,
+                                ExcludeExtensions = securityPostureExcludeExtension
+                            } : null
                         },
                         ProximityPlacementGroup = proximityPlacementGroup(engine),
                         HostGroup = hostGroup(engine),
@@ -171,12 +193,21 @@ namespace Microsoft.Azure.Commands.Compute.Strategies.ComputeRp
                         {
                             Rules = scaleInPolicy
                         },
+                        SkuProfile = (skuProfileVmSize == null) ? null : new SkuProfile
+                        {
+                            VmSizes = skuProfileVmSize,
+                            AllocationStrategy = skuProfileAllocationStrategy
+                        },
                         DoNotRunExtensionsOnOverprovisionedVMs = doNotRunExtensionsOnOverprovisionedVMs ? true : (bool?)null,
                         OrchestrationMode = orchestrationMode
                     };
                     if (auxAuthHeader != null)
                     {
                         vmss.SetAuxAuthHeader(auxAuthHeader);
+                    }
+                    if (ifMatch != null || ifNoneMatch != null)
+                    {
+                        vmss.SetIfMatchIfNoneMatch(ifMatch, ifNoneMatch);
                     }
                     return vmss;
                 });
@@ -204,95 +235,131 @@ namespace Microsoft.Azure.Commands.Compute.Strategies.ComputeRp
             double? maxPrice,
             string[] scaleInPolicy,
             bool doNotRunExtensionsOnOverprovisionedVMs,
-            bool encryptionAtHost,
+            bool? encryptionAtHost,
             int? platformFaultDomainCount,
             string edgeZone,
             string orchestrationMode,
             string capacityReservationId,
+            Dictionary<string, List<string>> auxAuthHeader,
             bool? enableVtpm = null,
             bool? enableSecureBoot = null,
-            string securityType = null
+            string securityType = null,
+            bool? enableAutomaticOSUpgradePolicy = null,
+            SkuProfileVMSize[] skuProfileVmSize = null,
+            string skuProfileAllocationStrategy = null,
+            string ifMatch = null,
+            string ifNoneMatch = null,
+            string securityPostureId = null,
+            string[] securityPostureExcludeExtension = null
             )
             => Strategy.CreateResourceConfig(
                 resourceGroup: resourceGroup,
                 name: name,
-                createModel: engine => new VirtualMachineScaleSet()
-                {
-                    Zones = zones,
-                    ExtendedLocation = edgeZone == null ? null : new CM.ExtendedLocation(edgeZone, CM.ExtendedLocationTypes.EdgeZone),
-                    Sku = new Azure.Management.Compute.Models.Sku()
+                createModel: engine => {
+                    var vmss = new VirtualMachineScaleSet
                     {
-                        Capacity = instanceCount,
-                        Name = vmSize,
-                    },
-                    Identity = identity,
-                    SinglePlacementGroup = singlePlacementGroup,
-                    AdditionalCapabilities = ultraSSDEnabled ? new AdditionalCapabilities(true) : null,
-                    PlatformFaultDomainCount = platformFaultDomainCount,
-                    VirtualMachineProfile = new VirtualMachineScaleSetVMProfile
-                    {
-                        SecurityProfile = (encryptionAtHost == true || enableVtpm != null || enableSecureBoot != null || securityType != null) 
-                        ? new SecurityProfile
+                        UpgradePolicy = enableAutomaticOSUpgradePolicy != true ? null : new UpgradePolicy
                         {
-                            EncryptionAtHost = encryptionAtHost,
-                            UefiSettings = (enableVtpm != null || enableSecureBoot != null) ? new UefiSettings(enableSecureBoot, enableVtpm) : null,
-                            SecurityType = securityType,
-                        } : null,
-                        OsProfile = new VirtualMachineScaleSetOSProfile
-                        {
-                            ComputerNamePrefix = name.Substring(0, Math.Min(name.Length, 9)),
-                            WindowsConfiguration = imageAndOsType.CreateWindowsConfiguration(),
-                            LinuxConfiguration = imageAndOsType.CreateLinuxConfiguration(),
-                            AdminUsername = adminUsername,
-                            AdminPassword = adminPassword,
-                        },
-                        StorageProfile = new VirtualMachineScaleSetStorageProfile
-                        {
-                            ImageReference = imageAndOsType?.Image,
-                            DataDisks = DataDiskStrategy.CreateVmssDataDisks(
-                                imageAndOsType?.DataDiskLuns, dataDisks)
-                        },
-                        NetworkProfile = new VirtualMachineScaleSetNetworkProfile
-                        {
-                            NetworkApiVersion = flexibleOModeNetworkAPIVersion,
-                            NetworkInterfaceConfigurations = new[]
+                            AutomaticOSUpgradePolicy = new AutomaticOSUpgradePolicy
                             {
-                                new VirtualMachineScaleSetNetworkConfiguration
-                                {
-                                    Name = name,
-                                    IpConfigurations = new []
-                                    {
-                                        new VirtualMachineScaleSetIPConfiguration
-                                        {
-                                            Name = name,
-                                            LoadBalancerBackendAddressPools = new []
-                                            {
-                                                engine.GetReference(backendAdressPool)
-                                            },
-                                            Subnet = engine.GetReference(subnet)
-                                        }
-                                    },
-                                    Primary = true,
-                                    NetworkSecurityGroup = engine.GetReference(networkSecurityGroup)
-                                }
+                                EnableAutomaticOSUpgrade = true
                             }
                         },
-                        Priority = priority,
-                        EvictionPolicy = evictionPolicy,
-                        BillingProfile = (maxPrice == null) ? null : new BillingProfile(maxPrice),
-                        CapacityReservation = (capacityReservationId == null) ? null : new CapacityReservationProfile
+                        Zones = zones,
+                        ExtendedLocation = edgeZone == null ? null : new CM.ExtendedLocation(edgeZone, CM.ExtendedLocationTypes.EdgeZone),
+                        Sku = new Azure.Management.Compute.Models.Sku()
                         {
-                            CapacityReservationGroup = new Microsoft.Azure.Management.Compute.Models.SubResource(capacityReservationId)
-                        }
-                    },
-                    ProximityPlacementGroup = proximityPlacementGroup(engine),
-                    HostGroup = hostGroup(engine),
-                    ScaleInPolicy = (scaleInPolicy == null) ? null : new ScaleInPolicy
+                            Capacity = instanceCount,
+                            Name = vmSize,
+                        },
+                        Identity = identity,
+                        SinglePlacementGroup = singlePlacementGroup,
+                        AdditionalCapabilities = ultraSSDEnabled ? new AdditionalCapabilities(true) : null,
+                        PlatformFaultDomainCount = platformFaultDomainCount,
+                        VirtualMachineProfile = new VirtualMachineScaleSetVMProfile
+                        {
+                            SecurityProfile = ((encryptionAtHost == true || enableVtpm != null || enableSecureBoot != null || securityType != null) && (securityType?.ToLower() != ConstantValues.StandardSecurityType))
+                            ? new SecurityProfile
+                            {
+                                EncryptionAtHost = encryptionAtHost,
+                                UefiSettings = (enableVtpm != null || enableSecureBoot != null) ? new UefiSettings(enableSecureBoot, enableVtpm) : null,
+                                SecurityType = securityType,
+                            } : null,
+                            OsProfile = new VirtualMachineScaleSetOSProfile
+                            {
+                                ComputerNamePrefix = name.Substring(0, Math.Min(name.Length, 9)),
+                                WindowsConfiguration = imageAndOsType.CreateWindowsConfiguration(),
+                                LinuxConfiguration = imageAndOsType.CreateLinuxConfiguration(),
+                                AdminUsername = adminUsername,
+                                AdminPassword = adminPassword,
+                            },
+                            StorageProfile = new VirtualMachineScaleSetStorageProfile
+                            {
+                                ImageReference = imageAndOsType?.Image,
+                                DataDisks = DataDiskStrategy.CreateVmssDataDisks(
+                                    imageAndOsType?.DataDiskLuns, dataDisks)
+                            },
+                            NetworkProfile = new VirtualMachineScaleSetNetworkProfile
+                            {
+                                NetworkApiVersion = flexibleOModeNetworkAPIVersion,
+                                NetworkInterfaceConfigurations = new[]
+                                {
+                                    new VirtualMachineScaleSetNetworkConfiguration
+                                    {
+                                        Name = name,
+                                        IpConfigurations = new []
+                                        {
+                                            new VirtualMachineScaleSetIPConfiguration
+                                            {
+                                                Name = name,
+                                                LoadBalancerBackendAddressPools = new []
+                                                {
+                                                    engine.GetReference(backendAdressPool)
+                                                },
+                                                Subnet = engine.GetReference(subnet)
+                                            }
+                                        },
+                                        Primary = true,
+                                        NetworkSecurityGroup = engine.GetReference(networkSecurityGroup)
+                                    }
+                                }
+                            },
+                            Priority = priority,
+                            EvictionPolicy = evictionPolicy,
+                            BillingProfile = (maxPrice == null) ? null : new BillingProfile(maxPrice),
+                            CapacityReservation = (capacityReservationId == null) ? null : new CapacityReservationProfile
+                            {
+                                CapacityReservationGroup = new Microsoft.Azure.Management.Compute.Models.SubResource(capacityReservationId)
+                            },
+                            SecurityPostureReference = (securityPostureId != null || securityPostureExcludeExtension != null) ? new SecurityPostureReference
+                            {
+                                Id = securityPostureId,
+                                ExcludeExtensions = securityPostureExcludeExtension
+                            } : null
+                        },
+                        ProximityPlacementGroup = proximityPlacementGroup(engine),
+                        HostGroup = hostGroup(engine),
+                        ScaleInPolicy = (scaleInPolicy == null) ? null : new ScaleInPolicy
+                        {
+                            Rules = scaleInPolicy
+                        },
+                        SkuProfile = (skuProfileVmSize == null) ? null : new SkuProfile
+                        {
+                            VmSizes = skuProfileVmSize,
+                            AllocationStrategy = skuProfileAllocationStrategy
+                        },
+                        DoNotRunExtensionsOnOverprovisionedVMs = doNotRunExtensionsOnOverprovisionedVMs ? true : (bool?)null,
+                        OrchestrationMode = orchestrationMode
+                    };
+                    if (auxAuthHeader != null)
                     {
-                        Rules = scaleInPolicy
-                    },
-                    DoNotRunExtensionsOnOverprovisionedVMs = doNotRunExtensionsOnOverprovisionedVMs ? true : (bool?)null,
-                    OrchestrationMode = orchestrationMode
+                        vmss.SetAuxAuthHeader(auxAuthHeader);
+                    }
+                    if (ifMatch != null || ifNoneMatch != null)
+                    {
+                        vmss.SetIfMatchIfNoneMatch(ifMatch, ifNoneMatch);
+                    }
+                    return vmss;
                 });
     }
 }

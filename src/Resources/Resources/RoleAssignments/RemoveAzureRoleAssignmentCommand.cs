@@ -161,6 +161,9 @@ namespace Microsoft.Azure.Commands.Resources
         [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true, ParameterSetName = ParameterSet.RoleAssignment, HelpMessage = "Role Assignment.")]
         public PSRoleAssignment InputObject { get; set; }
 
+        [Parameter(Mandatory = false, HelpMessage = "If specified, skip client side scope validation.")]
+        public SwitchParameter SkipClientSideScopeValidation { get; set; }
+
         public override void ExecuteCmdlet()
         {
             IEnumerable<PSRoleAssignment> roleAssignments = null;
@@ -188,7 +191,7 @@ namespace Microsoft.Azure.Commands.Resources
                     ResourceGroupName = ResourceGroupName,
                     ResourceName = ResourceName,
                     ResourceType = ResourceType,
-                    Subscription = DefaultProfile.DefaultContext.Subscription.Id
+                    Subscription = DefaultProfile.DefaultContext.Subscription?.Id?.ToString()
                 },
                 // we should never expand principal groups in the Delete scenario
                 ExpandPrincipalGroups = false,
@@ -196,7 +199,16 @@ namespace Microsoft.Azure.Commands.Resources
                 IncludeClassicAdministrators = false
             };
 
-            AuthorizationClient.ValidateScope(options.Scope, true);
+            if (options.Scope == null && options.ResourceIdentifier.Subscription == null)
+            {
+                WriteTerminatingError(ProjectResources.ScopeAndSubscriptionNeitherProvided);
+            }
+
+            if (!SkipClientSideScopeValidation.IsPresent)
+            {
+                AuthorizationClient.ValidateScope(options.Scope, true);
+            }
+
             ConfirmAction(
                 string.Format(ProjectResources.RemovingRoleAssignment, ObjectId, Scope, RoleDefinitionName),
                 ObjectId,

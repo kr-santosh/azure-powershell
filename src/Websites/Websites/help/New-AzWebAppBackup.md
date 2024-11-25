@@ -1,6 +1,6 @@
 ---
 external help file: Microsoft.Azure.PowerShell.Cmdlets.Websites.dll-Help.xml
-Module Name: Az.WebSites
+Module Name: Az.Websites
 ms.assetid: D3FE0440-C663-4379-8F5F-2E66EF024E5D
 online version: https://learn.microsoft.com/powershell/module/az.websites/new-azwebappbackup
 schema: 2.0.0
@@ -23,7 +23,8 @@ New-AzWebAppBackup [[-BackupName] <String>] [-ResourceGroupName] <String> [-Name
 ### FromWebApp
 ```
 New-AzWebAppBackup [[-BackupName] <String>] [-WebApp] <PSSite> [-DefaultProfile <IAzureContextContainer>]
- [-StorageAccountUrl] <String> [-Databases <DatabaseBackupSetting[]>] [<CommonParameters>]
+ [-StorageAccountUrl] <String> [-Databases <DatabaseBackupSetting[]>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -36,7 +37,7 @@ The **New-AzWebAppBackup** cmdlet creates an Azure Web App Backup.
 New-AzWebAppBackup -ResourceGroupName "Default-Web-WestUS" -Name "ContosoWebApp" -StorageAccountUrl "https://storageaccount.file.core.windows.net"
 ```
 
-Creates a backup of the specified app ContosoWebApp that is within resource group Default-Web-WestUS in https://storageaccount.file.core.windows.net
+Creates a backup of the specified app ContosoWebApp that is within resource group Default-Web-WestUS in `https://storageaccount.file.core.windows.net`
 
 ### Example 2
 

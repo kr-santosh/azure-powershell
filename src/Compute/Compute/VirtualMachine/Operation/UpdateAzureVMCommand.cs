@@ -1,4 +1,4 @@
-﻿// ----------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------
 //
 // Copyright Microsoft Corporation
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -104,6 +104,12 @@ namespace Microsoft.Azure.Commands.Compute
         public string ProximityPlacementGroupId { get; set; }
 
         [Parameter(
+            Mandatory = false,
+            HelpMessage = "Attached Virtual Machine Scale Set Id.")]
+        [AllowEmptyString]
+        public string VirtualMachineScaleSetId { get; set; }
+
+        [Parameter(
             ValueFromPipelineByPropertyName = true,
             HelpMessage = "The Id of Host")]
         public string HostId { get; set; }
@@ -176,6 +182,18 @@ namespace Microsoft.Azure.Commands.Compute
            Mandatory = false)]
         [ValidateNotNullOrEmpty]
         public bool? EnableSecureBoot { get; set; } = null;
+        
+        [Parameter(
+            Mandatory = false,
+            ValueFromPipelineByPropertyName = true,
+            HelpMessage = "used to make a request conditional for the PUT and other non-safe methods. The server will only return the requested resources if the resource matches one of the listed ETag values. Omit this value to always overwrite the current resource. Specify the last-seen ETag value to prevent accidentally overwriting concurrent changes.")]
+        public string IfMatch { get; set; }
+
+        [Parameter(
+            Mandatory = false,
+            ValueFromPipelineByPropertyName = true,
+            HelpMessage = "Used to make a request conditional for the GET and HEAD methods. The server will only return the requested resources if none of the listed ETag values match the current entity. Used to make a request conditional for the GET and HEAD methods. The server will only return the requested resources if none of the listed ETag values match the current entity. Set to '*' to allow a new record set to be created, but to prevent updating an existing record set. Other values will result in error from server as they are not supported.")]
+        public string IfNoneMatch { get; set; }
 
         public override void ExecuteCmdlet()
         {
@@ -223,7 +241,9 @@ namespace Microsoft.Azure.Commands.Compute
                         Host = this.IsParameterBound(c => c.HostId)
                              ? new SubResource(this.HostId)
                              : this.VM.Host,
-                        VirtualMachineScaleSet = this.VM.VirtualMachineScaleSet,
+                        VirtualMachineScaleSet = this.IsParameterBound(c => c.VirtualMachineScaleSetId)
+                                                ? new SubResource(this.VirtualMachineScaleSetId)
+                                                : this.VM.VirtualMachineScaleSet,
                         AdditionalCapabilities = this.VM.AdditionalCapabilities,
                         EvictionPolicy = this.VM.EvictionPolicy,
                         Priority = this.VM.Priority,
@@ -242,6 +262,12 @@ namespace Microsoft.Azure.Commands.Compute
                     if (parameters.ProximityPlacementGroup != null && string.IsNullOrWhiteSpace(parameters.ProximityPlacementGroup.Id))
                     {
                         parameters.ProximityPlacementGroup.Id = null;
+                    }
+
+                    // when vm.virtualMachineScaleSet.Id is set to null, powershell interprets it as empty so converting it back to null
+                    if (parameters.VirtualMachineScaleSet != null && string.IsNullOrWhiteSpace(parameters.VirtualMachineScaleSet.Id))
+                    {
+                        parameters.VirtualMachineScaleSet.Id = null;
                     }
 
                     if (this.IsParameterBound(c => c.IdentityType))
@@ -403,7 +429,9 @@ namespace Microsoft.Azure.Commands.Compute
                         var op = this.VirtualMachineClient.BeginCreateOrUpdateWithHttpMessagesAsync(
                             this.ResourceGroupName,
                             this.VM.Name,
-                            parameters).GetAwaiter().GetResult();
+                            parameters,
+                            this.IfMatch,
+                            this.IfNoneMatch).GetAwaiter().GetResult();
                         var result = ComputeAutoMapperProfile.Mapper.Map<PSAzureOperationResponse>(op);
                         WriteObject(result);
                     }
@@ -412,7 +440,9 @@ namespace Microsoft.Azure.Commands.Compute
                         var op = this.VirtualMachineClient.CreateOrUpdateWithHttpMessagesAsync(
                             this.ResourceGroupName,
                             this.VM.Name,
-                            parameters).GetAwaiter().GetResult();
+                            parameters,
+                            this.IfMatch,
+                            this.IfNoneMatch).GetAwaiter().GetResult();
                         var result = ComputeAutoMapperProfile.Mapper.Map<PSAzureOperationResponse>(op);
                         WriteObject(result);
                     }
@@ -421,3 +451,4 @@ namespace Microsoft.Azure.Commands.Compute
         }
     }
 }
+

@@ -16,7 +16,8 @@ Lists blobs in a storage account across containers, with a blob tag filter sql e
 Get-AzStorageBlobByTag -TagFilterSqlExpression <String> [-MaxCount <Int32>]
  [-ContinuationToken <BlobContinuationToken>] [-GetBlobProperty] [-Container <String>]
  [-Context <IStorageContext>] [-ServerTimeoutPerRequest <Int32>] [-ClientTimeoutPerRequest <Int32>]
- [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>] [<CommonParameters>]
+ [-DefaultProfile <IAzureContextContainer>] [-ConcurrentTaskCount <Int32>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,10 +27,11 @@ The **Get-AzStorageBlobByTag** cmdlet lists blobs in a storage account across co
 
 ### Example 1: List all blobs match a specific blob tag, across containers.
 ```powershell
-Get-AzStorageBlobByTag -TagFilterSqlExpression """tag1""='value1'" -Context $ctx 
+Get-AzStorageBlobByTag -TagFilterSqlExpression """tag1""='value1'" -Context $ctx
 ```
+
 ```output
-   AccountName: storageaccountname, ContainerName: containername1
+AccountName: storageaccountname, ContainerName: containername1
 
 Name                 BlobType  Length          ContentType                    LastModified         AccessTier SnapshotTime                 IsDeleted  VersionId                     
 ----                 --------  ------          -----------                    ------------         ---------- ------------                 ---------  ---------                     
@@ -50,8 +52,9 @@ This command lists all blobs in a storage account, which contains a tag with nam
 ```powershell
 Get-AzStorageBlobByTag -Container 'containername' -TagFilterSqlExpression """tag1""='value1'" -Context $ctx
 ```
+
 ```output
-   AccountName: storageaccountname, ContainerName: containername
+AccountName: storageaccountname, ContainerName: containername
 
 Name                 BlobType  Length          ContentType                    LastModified         AccessTier SnapshotTime                 IsDeleted  VersionId                     
 ----                 --------  ------          -----------                    ------------         ---------- ------------                 ---------  ---------                     
@@ -65,8 +68,9 @@ This command lists blobs in a container and match a specific blob tag.
 ```powershell
 Get-AzStorageBlobByTag -TagFilterSqlExpression """tag1""='value1'" -GetBlobProperty
 ```
+
 ```output
-   AccountName: storageaccountname, ContainerName: containername1
+AccountName: storageaccountname, ContainerName: containername1
 
 Name                 BlobType  Length          ContentType                    LastModified         AccessTier SnapshotTime                 IsDeleted  VersionId                     
 ----                 --------  ------          -----------                    ------------         ---------- ------------                 ---------  ---------                     

@@ -14,7 +14,8 @@ Retrieve the List of database migrations attached to the service.
 
 ```
 Get-AzDataMigrationSqlServiceMigration -ResourceGroupName <String> -SqlMigrationServiceName <String>
- [-SubscriptionId <String[]>] [-DefaultProfile <PSObject>] [-PassThru] [<CommonParameters>]
+ [-SubscriptionId <String[]>] [-DefaultProfile <PSObject>] [-PassThru]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -126,7 +127,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Microsoft.Azure.PowerShell.Cmdlets.DataMigration.Models.Api20220330Preview.IDatabaseMigration
 
 ## NOTES
-
-ALIASES
 
 ## RELATED LINKS

@@ -24,6 +24,7 @@ using Microsoft.Azure.Commands.ResourceManager.Common.ArgumentCompleters;
 using Microsoft.Azure.Management.CosmosDB.Models;
 using Microsoft.Extensions.Azure;
 using Newtonsoft.Json.Converters;
+using SDKModel = Microsoft.Azure.Management.CosmosDB.Models;
 
 namespace Microsoft.Azure.Commands.CosmosDB
 {
@@ -62,6 +63,13 @@ namespace Microsoft.Azure.Commands.CosmosDB
         [Parameter(Mandatory = false, HelpMessage = Constants.AsJobHelpMessage)]
         public SwitchParameter AsJob { get; set; }
 
+        [Parameter(Mandatory = false, HelpMessage = Constants.PublicNetworkAccessHelpMessage)]
+        [PSArgumentCompleter(SDKModel.PublicNetworkAccess.Disabled, SDKModel.PublicNetworkAccess.Enabled)]
+        public string PublicNetworkAccess { get; set; }
+        
+        [Parameter(Mandatory = false, HelpMessage = Constants.DisableTtlHelpMessage)]
+        public bool? DisableTtl { get; set; }
+
         public override void ExecuteCmdlet()
         {
             DateTime utcRestoreDateTime;
@@ -93,15 +101,19 @@ namespace Microsoft.Azure.Commands.CosmosDB
                     if (restorableAccount.CreationTime.HasValue &&
                         restorableAccount.CreationTime < utcRestoreDateTime)
                     {
-                        if (restorableAccount.DeletionTime.HasValue && restorableAccount.DeletionTime >= utcRestoreDateTime)
+                        if (restorableAccount.DeletionTime.HasValue)
                         {
-                            sourceAccountToRestore = restorableAccount;
-                            isSourceRestorableAccountDeleted = true;
-                            break;
+                            if (restorableAccount.DeletionTime >= utcRestoreDateTime)
+                            {
+                                sourceAccountToRestore = restorableAccount;
+                                isSourceRestorableAccountDeleted = true;
+                                break;
+                            }
                         }
                         else
                         {
                             sourceAccountToRestore = restorableAccount;
+                            isSourceRestorableAccountDeleted = false;
                             break;
                         }
                     }
@@ -210,7 +222,8 @@ namespace Microsoft.Azure.Commands.CosmosDB
                 RestoreTimestampInUtc = utcRestoreDateTime,
                 DatabasesToRestore = DatabasesToRestore,
                 TablesToRestore = TablesToRestore,
-                GremlinDatabasesToRestore = GremlinDatabasesToRestore
+                GremlinDatabasesToRestore = GremlinDatabasesToRestore,
+                DisableTtl = DisableTtl
             };
 
             Collection<Location> LocationCollection = new Collection<Location>();
@@ -227,7 +240,8 @@ namespace Microsoft.Azure.Commands.CosmosDB
             {
                 Kind = apiKind,
                 CreateMode = CreateMode.Restore,
-                RestoreParameters = restoreParameters.ToSDKModel()
+                RestoreParameters = restoreParameters.ToSDKModel(),
+                PublicNetworkAccess = PublicNetworkAccess
             };
 
             if (ShouldProcess(TargetDatabaseAccountName,

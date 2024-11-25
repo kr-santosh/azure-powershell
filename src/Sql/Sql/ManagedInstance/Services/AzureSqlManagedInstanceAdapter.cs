@@ -43,6 +43,11 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
         private AzureSqlManagedInstanceCommunicator Communicator { get; set; }
 
         /// <summary>
+        /// The Sql client default type for the active directory admin
+        /// </summary>
+        private static readonly string ActiveDirectoryAdministratorDefaultType = "ActiveDirectory";
+
+        /// <summary>
         /// Gets or sets the Azure profile
         /// </summary>
         public IAzureContext Context { get; set; }
@@ -154,7 +159,7 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
                 AdministratorLoginPassword = model.AdministratorPassword != null ? ConversionUtilities.SecureStringToString(model.AdministratorPassword) : null,
                 Sku = model.Sku != null ? new Management.Sql.Models.Sku(model.Sku.Name, model.Sku.Tier) : null,
                 LicenseType = model.LicenseType,
-                StorageSizeInGB = model.StorageSizeInGB,
+                StorageSizeInGb = model.StorageSizeInGB,
                 SubnetId = model.SubnetId,
                 VCores = model.VCores,
                 Identity = model.Identity,
@@ -173,7 +178,12 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
                 PrimaryUserAssignedIdentityId = model.PrimaryUserAssignedIdentityId,
                 KeyId = model.KeyId,
                 ZoneRedundant = model.ZoneRedundant,
-                ServicePrincipal = ResourceServicePrincipalHelper.UnwrapServicePrincipalObject(model.ServicePrincipal)
+                ServicePrincipal = ResourceServicePrincipalHelper.UnwrapServicePrincipalObject(model.ServicePrincipal),
+                DatabaseFormat = model.DatabaseFormat,
+                PricingModel = model.PricingModel,
+                IsGeneralPurposeV2 = model.IsGeneralPurposeV2,
+                StorageIOps = model.StorageIOps,
+                AuthenticationMetadata = model.AuthenticationMetadata
             });
 
             return CreateManagedInstanceModelFromResponse(resp);
@@ -193,11 +203,11 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
                 AdministratorLoginPassword = model.AdministratorPassword != null ? ConversionUtilities.SecureStringToString(model.AdministratorPassword) : null,
                 Sku = model.Sku != null ? new Management.Sql.Models.Sku(model.Sku.Name, model.Sku.Tier) : null,
                 LicenseType = model.LicenseType,
-                StorageSizeInGB = model.StorageSizeInGB,
+                StorageSizeInGb = model.StorageSizeInGB,
                 SubnetId = model.SubnetId,
                 VCores = model.VCores,
                 PublicDataEndpointEnabled = model.PublicDataEndpointEnabled,
-                ProxyOverride = model.ProxyOverride,
+                ProxyOverride = model.ProxyOverride
             });
 
             return CreateManagedInstanceModelFromResponse(resp);
@@ -211,6 +221,26 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
         public void RemoveManagedInstance(string resourceGroupName, string managedInstanceName)
         {
             Communicator.Remove(resourceGroupName, managedInstanceName);
+        }
+
+        /// <summary>
+        /// Starts a managed instance.
+        /// </summary>
+        /// <param name="resourceGroupName">The resource group name</param>
+        /// <param name="name">The name of the managed instance</param>
+        public void StartManagedInstance(string resourceGroupName, string name)
+        {
+            Communicator.Start(resourceGroupName, name);
+        }
+
+        /// <summary>
+        /// Stops a managed instance.
+        /// </summary>
+        /// <param name="resourceGroupName">The resource group name</param>
+        /// <param name="name">The name of the managed instance</param>
+        public void StopManagedInstance(string resourceGroupName, string name)
+        {
+            Communicator.Stop(resourceGroupName, name);
         }
 
         /// <summary>
@@ -239,7 +269,8 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
             managedInstance.SubnetId = resp.SubnetId;
             managedInstance.LicenseType = resp.LicenseType;
             managedInstance.VCores = resp.VCores;
-            managedInstance.StorageSizeInGB = resp.StorageSizeInGB;
+            managedInstance.StorageSizeInGB = resp.StorageSizeInGb;
+            managedInstance.StorageIOps = resp.StorageIOps;
             managedInstance.Collation = resp.Collation;
             managedInstance.PublicDataEndpointEnabled = resp.PublicDataEndpointEnabled;
             managedInstance.ProxyOverride = resp.ProxyOverride;
@@ -262,6 +293,8 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
             managedInstance.Sku = sku;
             managedInstance.Administrators = resp.Administrators;
 
+            managedInstance.IsGeneralPurposeV2 = resp.IsGeneralPurposeV2;
+
             if (managedInstance.Administrators != null && managedInstance.Administrators.AdministratorType == null)
             {
                 managedInstance.Administrators.AdministratorType = "ActiveDirectory";
@@ -269,6 +302,10 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
             managedInstance.PrimaryUserAssignedIdentityId = resp.PrimaryUserAssignedIdentityId;
             managedInstance.KeyId = resp.KeyId;
             managedInstance.ZoneRedundant = resp.ZoneRedundant;
+            managedInstance.DatabaseFormat = resp.DatabaseFormat;
+            managedInstance.PricingModel = resp.PricingModel;
+            managedInstance.ExternalGovernanceStatus = resp.ExternalGovernanceStatus;
+            managedInstance.AuthenticationMetadata = resp.AuthenticationMetadata;
 
             return managedInstance;
         }
@@ -305,7 +342,7 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
 
             Guid? objectId = input.Sid;
             string displayName = input.Login;
-            bool? adOnlyAuth = input.AzureADOnlyAuthentication;
+            bool? adOnlyAuth = input.AzureAdOnlyAuthentication;
 
             // Gets the default Tenant id for the subscriptions
             Guid tenantId = GetTenantId();
@@ -382,7 +419,8 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
                     Sid = new Guid(app.AppId),
                     TenantId = tenantId,
                     PrincipalType = "Application",
-                    AzureADOnlyAuthentication = adOnlyAuth
+                    AzureAdOnlyAuthentication = adOnlyAuth,
+                    AdministratorType = ActiveDirectoryAdministratorDefaultType
                 };
             }
 
@@ -394,7 +432,8 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
                     Sid = new Guid(group.Id),
                     TenantId = tenantId,
                     PrincipalType = "Group",
-                    AzureADOnlyAuthentication = adOnlyAuth
+                    AzureAdOnlyAuthentication = adOnlyAuth,
+                    AdministratorType = ActiveDirectoryAdministratorDefaultType
                 };
             }
 
@@ -423,7 +462,7 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
                 userList = MicrosoftGraphClient.FilterUsers(filter).Where(gr => string.Equals(gr.UserPrincipalName, displayName, StringComparison.OrdinalIgnoreCase));
             }
 
-            // No user was found. Check if the display name is a guest user. 
+            // No user was found. Check if the display name is a guest user.
             if (userList == null || userList.Count() == 0)
             {
                 // Check if the display name is the UPN
@@ -454,11 +493,12 @@ namespace Microsoft.Azure.Commands.Sql.ManagedInstance.Adapter
 
                 return new ManagedInstanceExternalAdministrator()
                 {
-                    Login = displayName,
+                    Login = obj.Mail,
                     Sid = new Guid(obj.Id),
                     TenantId = tenantId,
                     PrincipalType = "User",
-                    AzureADOnlyAuthentication = adOnlyAuth
+                    AzureAdOnlyAuthentication = adOnlyAuth,
+                    AdministratorType = ActiveDirectoryAdministratorDefaultType
                 };
             }
         }

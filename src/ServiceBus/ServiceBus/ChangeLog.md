@@ -20,6 +20,20 @@
 -->
 ## Upcoming Release
 
+## Version 4.0.1
+* Migrated ServiceBus SDK to generated SDK
+    - Removed "Microsoft.Azure.Management.ServiceBus" Version "5.0.0" PackageReference
+    - Added ServiceBus.Management.Sdk ProjectReference 
+
+## Version 4.0.0
+* Moved cmdlets to V4.
+
+## Version 3.1.1
+* Introduced secrets detection feature to safeguard sensitive data.
+
+## Version 3.1.0
+* Added Breaking Change Warning for parameter datatype change.
+
 ## Version 3.0.0
 * Aliased `New-AzServiceBusNamespace`, `Remove-AzServiceBusNamespace`, `Set-AzServiceBusNamespace`, `Get-AzServiceBusNamespace` with `New-AzServiceBusNamespaceV2`, `Remove-AzServiceBusNamespaceV2`, `Set-AzServiceBusNamespaceV2`, `Get-AzServiceBusNamespaceV2` respectively.
 * Replaced `New-AzServiceBusEncryptionConfig` by `New-AzServiceBusKeyVaultPropertiesObject`
